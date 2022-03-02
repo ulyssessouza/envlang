@@ -2,53 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
-	"github.com/ulyssessouza/envlang/parser"
+	"github.com/ulyssessouza/envlang/handlers"
 )
 
-type envVarListener struct {
-	*parser.BaseEnvLangListener
-}
-
-func (l *envVarListener) ExitEntry(c *parser.EntryContext) {
-	value := "NO_VALUE!"
-	valueType := "NO_VALUE_TYPE!"
-
-	id := c.Identifier().GetText()
-	hasAssign := true
-	if c.Assign() == nil || c.Assign().IsEmpty() {
-		hasAssign = false
-	}
-	if hasAssign && c.Value() == nil {
-		value = ""
-	}
-
-	if c.Value() != nil {
-		value = c.Value().GetText()
-		switch c.Value().GetOp().GetTokenType() {
-		case parser.EnvLangParserTEXT:
-			valueType = "TEXT"
-		case parser.EnvLangParserDQSTRING:
-			valueType = "DOUBLE_QUOTED"
-		case parser.EnvLangParserSQSTRING:
-			valueType = "SINGLE_QUOTED"
-		default:
-			panic(fmt.Sprintf("unexpected op: %s", c.Value().GetOp().GetText()))
-		}
-	}
-
-	fmt.Printf(
-		"%q >>> %q >>> %q\n",
-		valueType,
-		id,
-		value,
-	)
-}
-
 func main() {
-	// Setup the input
-	is := antlr.NewInputStream(`
+	is := `
 
 
 A=aaa
@@ -73,17 +34,40 @@ multi
 line
 entry"
 
+MYVAR = "before ${MYVALVAR} after $SECONDVAR opa ${UNKNOWNVAR}"
 
-N1=42
-N2="42"`)
+M = "foo${A} bar"
 
-	// Create the Lexer
-	lexer := parser.NewEnvLangLexer(is)
-	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+N1=41
 
-	// Create the Parser
-	p := parser.NewEnvLangParser(stream)
+N2="42"
 
-	// Finally parse the expression
-	antlr.ParseTreeWalkerDefault.Walk(&envVarListener{}, p.EnvFile())
+N3="ASSSASA43"
+
+
+`
+
+	// is := `N2="ASSSASA42"`
+	disableLogs()
+
+	for k, v := range handlers.GetVariables(is) {
+		val := "<nil>"
+		if v != nil {
+			val = *v
+		}
+		fmt.Printf(
+			"%10q >>> %q\n",
+			k,
+			val,
+		)
+	}
+}
+
+func disableLogs() {
+	f, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	log.SetOutput(f)
 }
