@@ -2,8 +2,8 @@ grammar EnvLangValue;
 
 dqstring : content* (CRLF* | EOF)  ;
 
-strictVar : '${' TEXT_NO_SPACE* '}';
-simpleVar : '$' TEXT_NO_SPACE* ;
+strictVar : '${' TEXT_NO_SPACE+ '}';
+simpleVar : '$' TEXT_NO_SPACE+ ;
 
 variable : strictVar | simpleVar ;
 
@@ -19,6 +19,7 @@ dQEscape : '""' ;
 special
     : '{'
     | '}'
+    | '$'
     ;
 
 content

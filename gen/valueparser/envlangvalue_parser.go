@@ -15,37 +15,36 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 11, 76, 4,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 11, 74, 4,
 	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 4,
 	8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 3, 2, 7, 2, 22, 10, 2, 12, 2, 14, 2,
 	25, 11, 2, 3, 2, 7, 2, 28, 10, 2, 12, 2, 14, 2, 31, 11, 2, 3, 2, 5, 2,
-	34, 10, 2, 3, 3, 3, 3, 7, 3, 38, 10, 3, 12, 3, 14, 3, 41, 11, 3, 3, 3,
-	3, 3, 3, 4, 3, 4, 7, 4, 47, 10, 4, 12, 4, 14, 4, 50, 11, 4, 3, 5, 3, 5,
-	5, 5, 54, 10, 5, 3, 6, 3, 6, 7, 6, 58, 10, 6, 12, 6, 14, 6, 61, 11, 6,
-	3, 7, 3, 7, 3, 8, 3, 8, 3, 9, 3, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10,
-	5, 10, 74, 10, 10, 3, 10, 2, 2, 11, 2, 4, 6, 8, 10, 12, 14, 16, 18, 2,
-	3, 4, 2, 4, 4, 8, 8, 2, 77, 2, 23, 3, 2, 2, 2, 4, 35, 3, 2, 2, 2, 6, 44,
-	3, 2, 2, 2, 8, 53, 3, 2, 2, 2, 10, 55, 3, 2, 2, 2, 12, 62, 3, 2, 2, 2,
-	14, 64, 3, 2, 2, 2, 16, 66, 3, 2, 2, 2, 18, 73, 3, 2, 2, 2, 20, 22, 5,
-	18, 10, 2, 21, 20, 3, 2, 2, 2, 22, 25, 3, 2, 2, 2, 23, 21, 3, 2, 2, 2,
-	23, 24, 3, 2, 2, 2, 24, 33, 3, 2, 2, 2, 25, 23, 3, 2, 2, 2, 26, 28, 7,
-	11, 2, 2, 27, 26, 3, 2, 2, 2, 28, 31, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 29,
-	30, 3, 2, 2, 2, 30, 34, 3, 2, 2, 2, 31, 29, 3, 2, 2, 2, 32, 34, 7, 2, 2,
-	3, 33, 29, 3, 2, 2, 2, 33, 32, 3, 2, 2, 2, 34, 3, 3, 2, 2, 2, 35, 39, 7,
-	3, 2, 2, 36, 38, 7, 9, 2, 2, 37, 36, 3, 2, 2, 2, 38, 41, 3, 2, 2, 2, 39,
-	37, 3, 2, 2, 2, 39, 40, 3, 2, 2, 2, 40, 42, 3, 2, 2, 2, 41, 39, 3, 2, 2,
-	2, 42, 43, 7, 4, 2, 2, 43, 5, 3, 2, 2, 2, 44, 48, 7, 5, 2, 2, 45, 47, 7,
-	9, 2, 2, 46, 45, 3, 2, 2, 2, 47, 50, 3, 2, 2, 2, 48, 46, 3, 2, 2, 2, 48,
-	49, 3, 2, 2, 2, 49, 7, 3, 2, 2, 2, 50, 48, 3, 2, 2, 2, 51, 54, 5, 4, 3,
-	2, 52, 54, 5, 6, 4, 2, 53, 51, 3, 2, 2, 2, 53, 52, 3, 2, 2, 2, 54, 9, 3,
-	2, 2, 2, 55, 59, 7, 9, 2, 2, 56, 58, 7, 10, 2, 2, 57, 56, 3, 2, 2, 2, 58,
-	61, 3, 2, 2, 2, 59, 57, 3, 2, 2, 2, 59, 60, 3, 2, 2, 2, 60, 11, 3, 2, 2,
-	2, 61, 59, 3, 2, 2, 2, 62, 63, 7, 6, 2, 2, 63, 13, 3, 2, 2, 2, 64, 65,
-	7, 7, 2, 2, 65, 15, 3, 2, 2, 2, 66, 67, 9, 2, 2, 2, 67, 17, 3, 2, 2, 2,
-	68, 74, 5, 14, 8, 2, 69, 74, 5, 8, 5, 2, 70, 74, 5, 12, 7, 2, 71, 74, 5,
-	16, 9, 2, 72, 74, 5, 10, 6, 2, 73, 68, 3, 2, 2, 2, 73, 69, 3, 2, 2, 2,
-	73, 70, 3, 2, 2, 2, 73, 71, 3, 2, 2, 2, 73, 72, 3, 2, 2, 2, 74, 19, 3,
-	2, 2, 2, 10, 23, 29, 33, 39, 48, 53, 59, 73,
+	34, 10, 2, 3, 3, 3, 3, 6, 3, 38, 10, 3, 13, 3, 14, 3, 39, 3, 3, 3, 3, 3,
+	4, 3, 4, 6, 4, 46, 10, 4, 13, 4, 14, 4, 47, 3, 5, 3, 5, 5, 5, 52, 10, 5,
+	3, 6, 3, 6, 7, 6, 56, 10, 6, 12, 6, 14, 6, 59, 11, 6, 3, 7, 3, 7, 3, 8,
+	3, 8, 3, 9, 3, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 5, 10, 72, 10, 10,
+	3, 10, 2, 2, 11, 2, 4, 6, 8, 10, 12, 14, 16, 18, 2, 3, 4, 2, 4, 5, 8, 8,
+	2, 75, 2, 23, 3, 2, 2, 2, 4, 35, 3, 2, 2, 2, 6, 43, 3, 2, 2, 2, 8, 51,
+	3, 2, 2, 2, 10, 53, 3, 2, 2, 2, 12, 60, 3, 2, 2, 2, 14, 62, 3, 2, 2, 2,
+	16, 64, 3, 2, 2, 2, 18, 71, 3, 2, 2, 2, 20, 22, 5, 18, 10, 2, 21, 20, 3,
+	2, 2, 2, 22, 25, 3, 2, 2, 2, 23, 21, 3, 2, 2, 2, 23, 24, 3, 2, 2, 2, 24,
+	33, 3, 2, 2, 2, 25, 23, 3, 2, 2, 2, 26, 28, 7, 11, 2, 2, 27, 26, 3, 2,
+	2, 2, 28, 31, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 29, 30, 3, 2, 2, 2, 30, 34,
+	3, 2, 2, 2, 31, 29, 3, 2, 2, 2, 32, 34, 7, 2, 2, 3, 33, 29, 3, 2, 2, 2,
+	33, 32, 3, 2, 2, 2, 34, 3, 3, 2, 2, 2, 35, 37, 7, 3, 2, 2, 36, 38, 7, 9,
+	2, 2, 37, 36, 3, 2, 2, 2, 38, 39, 3, 2, 2, 2, 39, 37, 3, 2, 2, 2, 39, 40,
+	3, 2, 2, 2, 40, 41, 3, 2, 2, 2, 41, 42, 7, 4, 2, 2, 42, 5, 3, 2, 2, 2,
+	43, 45, 7, 5, 2, 2, 44, 46, 7, 9, 2, 2, 45, 44, 3, 2, 2, 2, 46, 47, 3,
+	2, 2, 2, 47, 45, 3, 2, 2, 2, 47, 48, 3, 2, 2, 2, 48, 7, 3, 2, 2, 2, 49,
+	52, 5, 4, 3, 2, 50, 52, 5, 6, 4, 2, 51, 49, 3, 2, 2, 2, 51, 50, 3, 2, 2,
+	2, 52, 9, 3, 2, 2, 2, 53, 57, 7, 9, 2, 2, 54, 56, 7, 10, 2, 2, 55, 54,
+	3, 2, 2, 2, 56, 59, 3, 2, 2, 2, 57, 55, 3, 2, 2, 2, 57, 58, 3, 2, 2, 2,
+	58, 11, 3, 2, 2, 2, 59, 57, 3, 2, 2, 2, 60, 61, 7, 6, 2, 2, 61, 13, 3,
+	2, 2, 2, 62, 63, 7, 7, 2, 2, 63, 15, 3, 2, 2, 2, 64, 65, 9, 2, 2, 2, 65,
+	17, 3, 2, 2, 2, 66, 72, 5, 14, 8, 2, 67, 72, 5, 8, 5, 2, 68, 72, 5, 12,
+	7, 2, 69, 72, 5, 16, 9, 2, 70, 72, 5, 10, 6, 2, 71, 66, 3, 2, 2, 2, 71,
+	67, 3, 2, 2, 2, 71, 68, 3, 2, 2, 2, 71, 69, 3, 2, 2, 2, 71, 70, 3, 2, 2,
+	2, 72, 19, 3, 2, 2, 2, 10, 23, 29, 33, 39, 47, 51, 57, 71,
 }
 var literalNames = []string{
 	"", "'${'", "'}'", "'$'", "' '", "'\"\"'", "'{'",
@@ -372,22 +371,22 @@ func (p *EnvLangValueParser) StrictVar() (localctx IStrictVarContext) {
 		p.SetState(33)
 		p.Match(EnvLangValueParserT__0)
 	}
-	p.SetState(37)
+	p.SetState(35)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == EnvLangValueParserTEXT_NO_SPACE {
+	for ok := true; ok; ok = _la == EnvLangValueParserTEXT_NO_SPACE {
 		{
 			p.SetState(34)
 			p.Match(EnvLangValueParserTEXT_NO_SPACE)
 		}
 
-		p.SetState(39)
+		p.SetState(37)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(40)
+		p.SetState(39)
 		p.Match(EnvLangValueParserT__1)
 	}
 
@@ -487,22 +486,25 @@ func (p *EnvLangValueParser) SimpleVar() (localctx ISimpleVarContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(42)
+		p.SetState(41)
 		p.Match(EnvLangValueParserT__2)
 	}
-	p.SetState(46)
+	p.SetState(43)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
-
-	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
-		if _alt == 1 {
+	_alt = 1
+	for ok := true; ok; ok = _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+		switch _alt {
+		case 1:
 			{
-				p.SetState(43)
+				p.SetState(42)
 				p.Match(EnvLangValueParserTEXT_NO_SPACE)
 			}
 
+		default:
+			panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 		}
-		p.SetState(48)
+
+		p.SetState(45)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
 	}
@@ -611,21 +613,21 @@ func (p *EnvLangValueParser) Variable() (localctx IVariableContext) {
 		}
 	}()
 
-	p.SetState(51)
+	p.SetState(49)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case EnvLangValueParserT__0:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(49)
+			p.SetState(47)
 			p.StrictVar()
 		}
 
 	case EnvLangValueParserT__2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(50)
+			p.SetState(48)
 			p.SimpleVar()
 		}
 
@@ -732,20 +734,20 @@ func (p *EnvLangValueParser) Text() (localctx ITextContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(53)
+		p.SetState(51)
 		p.Match(EnvLangValueParserTEXT_NO_SPACE)
 	}
-	p.SetState(57)
+	p.SetState(55)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == EnvLangValueParserTEXT_ANY {
 		{
-			p.SetState(54)
+			p.SetState(52)
 			p.Match(EnvLangValueParserTEXT_ANY)
 		}
 
-		p.SetState(59)
+		p.SetState(57)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -835,7 +837,7 @@ func (p *EnvLangValueParser) Space() (localctx ISpaceContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(60)
+		p.SetState(58)
 		p.Match(EnvLangValueParserT__3)
 	}
 
@@ -924,7 +926,7 @@ func (p *EnvLangValueParser) DQEscape() (localctx IDQEscapeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(62)
+		p.SetState(60)
 		p.Match(EnvLangValueParserT__4)
 	}
 
@@ -1014,10 +1016,10 @@ func (p *EnvLangValueParser) Special() (localctx ISpecialContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(64)
+		p.SetState(62)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(_la == EnvLangValueParserT__1 || _la == EnvLangValueParserT__5) {
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EnvLangValueParserT__1)|(1<<EnvLangValueParserT__2)|(1<<EnvLangValueParserT__5))) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1159,47 +1161,44 @@ func (p *EnvLangValueParser) Content() (localctx IContentContext) {
 		}
 	}()
 
-	p.SetState(71)
+	p.SetState(69)
 	p.GetErrorHandler().Sync(p)
-
-	switch p.GetTokenStream().LA(1) {
-	case EnvLangValueParserT__4:
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext()) {
+	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(66)
+			p.SetState(64)
 			p.DQEscape()
 		}
 
-	case EnvLangValueParserT__0, EnvLangValueParserT__2:
+	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(67)
+			p.SetState(65)
 			p.Variable()
 		}
 
-	case EnvLangValueParserT__3:
+	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(68)
+			p.SetState(66)
 			p.Space()
 		}
 
-	case EnvLangValueParserT__1, EnvLangValueParserT__5:
+	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(69)
+			p.SetState(67)
 			p.Special()
 		}
 
-	case EnvLangValueParserTEXT_NO_SPACE:
+	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(70)
+			p.SetState(68)
 			p.Text()
 		}
 
-	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx

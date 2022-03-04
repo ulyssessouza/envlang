@@ -10,7 +10,7 @@ import (
 )
 
 func TestFull(t *testing.T) {
-	log.SetLevel(log.PanicLevel)
+	log.SetLevel(log.DebugLevel)
 	is := `
 
 
@@ -51,6 +51,10 @@ N4=44AS4sA44
 
 SPECIAL1 = "{{{ ${A} }}}"
 SPECIAL2 = "{{{ $A }}}"
+SPECIAL3 = "{{{ $ }}}"
+SPECIAL4 = "{{{ $ $ $}}}"
+SPECIAL5 = "{{{ $$ }}}"
+SPECIAL6 = "{{{ $$$ }}}"
 
 `
 	expected := map[string]*string{
@@ -73,6 +77,10 @@ SPECIAL2 = "{{{ $A }}}"
 		"N4":       strPtr("44AS4sA44"),
 		"SPECIAL1": strPtr("{{{ aaa }}}"),
 		"SPECIAL2": strPtr("{{{ aaa }}}"),
+		"SPECIAL3": strPtr("{{{ $ }}}"),
+		"SPECIAL4": strPtr("{{{ $ $ $}}}"),
+		"SPECIAL5": strPtr("{{{ $$ }}}"),
+		"SPECIAL6": strPtr("{{{ $$$ }}}"),
 	}
 
 	d := dao.NewDefaultDao()
