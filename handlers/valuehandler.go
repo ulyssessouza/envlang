@@ -62,12 +62,21 @@ func (l *envLangValueListener) ExitSimpleVar(c *valueparser.SimpleVarContext) {
 
 func (l *envLangValueListener) ExitText(c *valueparser.TextContext) {
 	log.Debugf("ExitText: %#v\n", c.GetText())
-	l.result += c.GetText()
+	l.Append(c.GetText())
 }
 
 func (l *envLangValueListener) ExitSpace(c *valueparser.SpaceContext) {
 	log.Debugf("ExitSpace: %#v\n", c.GetText())
-	l.result += c.GetText()
+	l.Append(c.GetText())
+}
+
+func (l *envLangValueListener) ExitSpecial(c *valueparser.SpecialContext) {
+	log.Debugf("ExitSpecial: %#v\n", c.GetText())
+	l.Append(c.GetText())
+}
+
+func (l *envLangValueListener) Append(s string) {
+	l.result += s
 }
 
 func newEnvLangValueListener(d dao.EnvLangDao) *envLangValueListener {

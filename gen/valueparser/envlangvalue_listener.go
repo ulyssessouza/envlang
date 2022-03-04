@@ -28,6 +28,9 @@ type EnvLangValueListener interface {
 	// EnterDQEscape is called when entering the dQEscape production.
 	EnterDQEscape(c *DQEscapeContext)
 
+	// EnterSpecial is called when entering the special production.
+	EnterSpecial(c *SpecialContext)
+
 	// EnterContent is called when entering the content production.
 	EnterContent(c *ContentContext)
 
@@ -51,6 +54,9 @@ type EnvLangValueListener interface {
 
 	// ExitDQEscape is called when exiting the dQEscape production.
 	ExitDQEscape(c *DQEscapeContext)
+
+	// ExitSpecial is called when exiting the special production.
+	ExitSpecial(c *SpecialContext)
 
 	// ExitContent is called when exiting the content production.
 	ExitContent(c *ContentContext)

@@ -62,6 +62,12 @@ func (s *BaseEnvLangValueListener) EnterDQEscape(ctx *DQEscapeContext) {}
 // ExitDQEscape is called when production dQEscape is exited.
 func (s *BaseEnvLangValueListener) ExitDQEscape(ctx *DQEscapeContext) {}
 
+// EnterSpecial is called when production special is entered.
+func (s *BaseEnvLangValueListener) EnterSpecial(ctx *SpecialContext) {}
+
+// ExitSpecial is called when production special is exited.
+func (s *BaseEnvLangValueListener) ExitSpecial(ctx *SpecialContext) {}
+
 // EnterContent is called when production content is entered.
 func (s *BaseEnvLangValueListener) EnterContent(ctx *ContentContext) {}
 
