@@ -22,8 +22,8 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 
 func (l *envLangValueListener) ExitStrictVar(c *valueparser.StrictVarContext) {
 	varName := ""
-
 	log.Debugf("ExitStrictVar: %#v\n", c.GetText())
+
 	logVarName := "\tVarName: '"
 	for _, t := range c.AllTEXT_NO_SPACE() {
 		logVarName += t.GetText()

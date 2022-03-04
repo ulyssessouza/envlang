@@ -70,7 +70,7 @@ N4=44AS4sA44
 		"N4":    strPtr("44AS4sA44"),
 	}
 
-	d := dao.NewDefaultEnvLangDao()
+	d := dao.NewDefaultDao()
 	assert.DeepEqual(t, expected, GetVariables(d, is))
 }
 
