@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"log"
-
 	"github.com/antlr/antlr4/runtime/Go/antlr"
-	"github.com/ulyssessouza/envlang/parsers/valueparser"
+	log "github.com/sirupsen/logrus"
+	"github.com/ulyssessouza/envlang/dao"
+	"github.com/ulyssessouza/envlang/gen/valueparser"
 )
 
 var _ valueparser.EnvLangValueListener = &envLangValueListener{}
@@ -12,7 +12,7 @@ var _ valueparser.EnvLangValueListener = &envLangValueListener{}
 type envLangValueListener struct {
 	valueparser.BaseEnvLangValueListener
 
-	env    func(k string) (string, bool)
+	d      dao.EnvLangDao
 	result string
 }
 
@@ -21,43 +21,43 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 }
 
 func (l *envLangValueListener) ExitStrictVar(c *valueparser.StrictVarContext) {
-	log.Printf("ExitStrictVar: %#v\n", c.GetText())
-
 	varName := ""
-	log.Printf("ExitStrictVar: %#v\n", c.GetText())
 
-	log.Printf("\tVarName: '")
+	log.Printf("ExitStrictVar: %#v\n", c.GetText())
+	logVarName := "\tVarName: '"
 	for _, t := range c.AllTEXT_NO_SPACE() {
-		log.Printf("%s", t.GetText())
+		logVarName += t.GetText()
 		varName += t.GetText()
 	}
-	log.Println("'")
+	log.Println(logVarName + "'")
 
-	varVal, ok := l.env(varName)
+	varVal, ok := l.d.Get(varName)
 	if !ok {
-		varVal = ""
+		v := ""
+		varVal = &v
 	}
 
-	l.result += varVal
+	l.result += *varVal
 }
 
 func (l *envLangValueListener) ExitSimpleVar(c *valueparser.SimpleVarContext) {
 	varName := ""
 	log.Printf("ExitSimpleVar: %#v\n", c.GetText())
 
-	log.Printf("\tVarName: '")
+	logVarName := "\tVarName: '"
 	for _, t := range c.AllTEXT_NO_SPACE() {
-		log.Printf("%s", t.GetText())
+		logVarName += t.GetText()
 		varName += t.GetText()
 	}
-	log.Println("'")
+	log.Println(logVarName + "'")
 
-	varVal, ok := l.env(varName)
+	varVal, ok := l.d.Get(varName)
 	if !ok {
-		varVal = ""
+		v := ""
+		varVal = &v
 	}
 
-	l.result += varVal
+	l.result += *varVal
 }
 
 func (l *envLangValueListener) ExitText(c *valueparser.TextContext) {
@@ -70,27 +70,19 @@ func (l *envLangValueListener) ExitSpace(c *valueparser.SpaceContext) {
 	l.result += c.GetText()
 }
 
-func (l *envLangValueListener) ExitContent(c *valueparser.ContentContext) {
-	// log.Printf("ExitContent: %#v\n", c.GetText())
+func newEnvLangValueListener(d dao.EnvLangDao) *envLangValueListener {
+	return &envLangValueListener{
+		d: d,
+	}
 }
 
-var listener = &envLangValueListener{
-	env: func(k string) (string, bool) {
-		m := map[string]string{
-			"MYVALVAR":  "foo",
-			"SECONDVAR": "bar",
-		}
-		r, ok := m[k]
-		return r, ok
-	},
-}
-
-func getValue(s string) string {
+func GetValue(d dao.EnvLangDao, s string) string {
 	is := antlr.NewInputStream(s)
 	lexer := valueparser.NewEnvLangValueLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	parser := valueparser.NewEnvLangValueParser(stream)
 	parser.BuildParseTrees = true
+	listener := newEnvLangValueListener(d)
 	antlr.ParseTreeWalkerDefault.Walk(listener, parser.Dqstring())
 	result := listener.result
 	listener.result = ""
