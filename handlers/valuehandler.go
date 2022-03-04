@@ -17,19 +17,19 @@ type envLangValueListener struct {
 }
 
 func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
-	log.Printf("ExitVariable: %#v\n", c.GetText())
+	log.Debugf("ExitVariable: %#v\n", c.GetText())
 }
 
 func (l *envLangValueListener) ExitStrictVar(c *valueparser.StrictVarContext) {
 	varName := ""
 
-	log.Printf("ExitStrictVar: %#v\n", c.GetText())
+	log.Debugf("ExitStrictVar: %#v\n", c.GetText())
 	logVarName := "\tVarName: '"
 	for _, t := range c.AllTEXT_NO_SPACE() {
 		logVarName += t.GetText()
 		varName += t.GetText()
 	}
-	log.Println(logVarName + "'")
+	log.Debugln(logVarName + "'")
 
 	varVal, ok := l.d.Get(varName)
 	if !ok {
@@ -42,14 +42,14 @@ func (l *envLangValueListener) ExitStrictVar(c *valueparser.StrictVarContext) {
 
 func (l *envLangValueListener) ExitSimpleVar(c *valueparser.SimpleVarContext) {
 	varName := ""
-	log.Printf("ExitSimpleVar: %#v\n", c.GetText())
+	log.Debugf("ExitSimpleVar: %#v\n", c.GetText())
 
 	logVarName := "\tVarName: '"
 	for _, t := range c.AllTEXT_NO_SPACE() {
 		logVarName += t.GetText()
 		varName += t.GetText()
 	}
-	log.Println(logVarName + "'")
+	log.Debugln(logVarName + "'")
 
 	varVal, ok := l.d.Get(varName)
 	if !ok {
@@ -61,12 +61,12 @@ func (l *envLangValueListener) ExitSimpleVar(c *valueparser.SimpleVarContext) {
 }
 
 func (l *envLangValueListener) ExitText(c *valueparser.TextContext) {
-	log.Printf("ExitText: %#v\n", c.GetText())
+	log.Debugf("ExitText: %#v\n", c.GetText())
 	l.result += c.GetText()
 }
 
 func (l *envLangValueListener) ExitSpace(c *valueparser.SpaceContext) {
-	log.Printf("ExitSpace: %#v\n", c.GetText())
+	log.Debugf("ExitSpace: %#v\n", c.GetText())
 	l.result += c.GetText()
 }
 

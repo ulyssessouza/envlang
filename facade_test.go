@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"testing"
 
 	log "github.com/sirupsen/logrus"
@@ -11,7 +10,7 @@ import (
 )
 
 func TestFull(t *testing.T) {
-	// disableLogs()
+	log.SetLevel(log.PanicLevel)
 	is := `
 
 
@@ -73,14 +72,6 @@ N4=44AS4sA44
 
 	d := dao.NewDefaultEnvLangDao()
 	assert.DeepEqual(t, expected, GetVariables(d, is))
-}
-
-func disableLogs() {
-	f, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
-	if err != nil {
-		log.Println(err)
-	}
-	log.SetOutput(f)
 }
 
 func strPtr(s string) *string {
