@@ -1,80 +1,100 @@
-// Code generated from EnvLangFile.g4 by ANTLR 4.9.3. DO NOT EDIT.
+// Code generated from EnvLangFile.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package fileparser // EnvLangFile
 import (
 	"fmt"
-	"reflect"
 	"strconv"
+	"sync"
 
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 )
 
 // Suppress unused import errors
 var _ = fmt.Printf
-var _ = reflect.Copy
 var _ = strconv.Itoa
-
-var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 9, 59, 4,
-	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 3,
-	2, 7, 2, 16, 10, 2, 12, 2, 14, 2, 19, 11, 2, 3, 2, 3, 2, 7, 2, 23, 10,
-	2, 12, 2, 14, 2, 26, 11, 2, 6, 2, 28, 10, 2, 13, 2, 14, 2, 29, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 5, 3, 37, 10, 3, 3, 3, 7, 3, 40, 10, 3, 12, 3, 14,
-	3, 43, 11, 3, 3, 3, 5, 3, 46, 10, 3, 3, 4, 3, 4, 3, 5, 3, 5, 3, 6, 3, 6,
-	3, 7, 5, 7, 55, 10, 7, 3, 7, 3, 7, 3, 7, 2, 2, 8, 2, 4, 6, 8, 10, 12, 2,
-	3, 3, 2, 6, 8, 2, 60, 2, 17, 3, 2, 2, 2, 4, 31, 3, 2, 2, 2, 6, 47, 3, 2,
-	2, 2, 8, 49, 3, 2, 2, 2, 10, 51, 3, 2, 2, 2, 12, 54, 3, 2, 2, 2, 14, 16,
-	5, 12, 7, 2, 15, 14, 3, 2, 2, 2, 16, 19, 3, 2, 2, 2, 17, 15, 3, 2, 2, 2,
-	17, 18, 3, 2, 2, 2, 18, 27, 3, 2, 2, 2, 19, 17, 3, 2, 2, 2, 20, 24, 5,
-	4, 3, 2, 21, 23, 5, 12, 7, 2, 22, 21, 3, 2, 2, 2, 23, 26, 3, 2, 2, 2, 24,
-	22, 3, 2, 2, 2, 24, 25, 3, 2, 2, 2, 25, 28, 3, 2, 2, 2, 26, 24, 3, 2, 2,
-	2, 27, 20, 3, 2, 2, 2, 28, 29, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 29, 30,
-	3, 2, 2, 2, 30, 3, 3, 2, 2, 2, 31, 36, 5, 6, 4, 2, 32, 33, 5, 8, 5, 2,
-	33, 34, 5, 10, 6, 2, 34, 37, 3, 2, 2, 2, 35, 37, 5, 8, 5, 2, 36, 32, 3,
-	2, 2, 2, 36, 35, 3, 2, 2, 2, 36, 37, 3, 2, 2, 2, 37, 45, 3, 2, 2, 2, 38,
-	40, 5, 12, 7, 2, 39, 38, 3, 2, 2, 2, 40, 43, 3, 2, 2, 2, 41, 39, 3, 2,
-	2, 2, 41, 42, 3, 2, 2, 2, 42, 46, 3, 2, 2, 2, 43, 41, 3, 2, 2, 2, 44, 46,
-	7, 2, 2, 3, 45, 41, 3, 2, 2, 2, 45, 44, 3, 2, 2, 2, 46, 5, 3, 2, 2, 2,
-	47, 48, 7, 6, 2, 2, 48, 7, 3, 2, 2, 2, 49, 50, 7, 3, 2, 2, 50, 9, 3, 2,
-	2, 2, 51, 52, 9, 2, 2, 2, 52, 11, 3, 2, 2, 2, 53, 55, 7, 4, 2, 2, 54, 53,
-	3, 2, 2, 2, 54, 55, 3, 2, 2, 2, 55, 56, 3, 2, 2, 2, 56, 57, 7, 5, 2, 2,
-	57, 13, 3, 2, 2, 2, 9, 17, 24, 29, 36, 41, 45, 54,
-}
-var literalNames = []string{
-	"", "'='", "'\r'", "'\n'", "", "", "", "' '",
-}
-var symbolicNames = []string{
-	"", "", "", "", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
-}
-
-var ruleNames = []string{
-	"envFile", "entry", "identifier", "assign", "value", "nl",
-}
+var _ = sync.Once{}
 
 type EnvLangFileParser struct {
 	*antlr.BaseParser
 }
 
-// NewEnvLangFileParser produces a new parser instance for the optional input antlr.TokenStream.
-//
-// The *EnvLangFileParser instance produced may be reused by calling the SetInputStream method.
-// The initial parser configuration is expensive to construct, and the object is not thread-safe;
-// however, if used within a Golang sync.Pool, the construction cost amortizes well and the
-// objects can be used in a thread-safe manner.
-func NewEnvLangFileParser(input antlr.TokenStream) *EnvLangFileParser {
-	this := new(EnvLangFileParser)
-	deserializer := antlr.NewATNDeserializer(nil)
-	deserializedATN := deserializer.DeserializeFromUInt16(parserATN)
-	decisionToDFA := make([]*antlr.DFA, len(deserializedATN.DecisionToState))
-	for index, ds := range deserializedATN.DecisionToState {
-		decisionToDFA[index] = antlr.NewDFA(ds, index)
-	}
-	this.BaseParser = antlr.NewBaseParser(input)
+var EnvLangFileParserStaticData struct {
+	once                   sync.Once
+	serializedATN          []int32
+	LiteralNames           []string
+	SymbolicNames          []string
+	RuleNames              []string
+	PredictionContextCache *antlr.PredictionContextCache
+	atn                    *antlr.ATN
+	decisionToDFA          []*antlr.DFA
+}
 
-	this.Interpreter = antlr.NewParserATNSimulator(this, deserializedATN, decisionToDFA, antlr.NewPredictionContextCache())
-	this.RuleNames = ruleNames
-	this.LiteralNames = literalNames
-	this.SymbolicNames = symbolicNames
+func envlangfileParserInit() {
+	staticData := &EnvLangFileParserStaticData
+	staticData.LiteralNames = []string{
+		"", "'='", "'\\r'", "'\\n'", "", "", "", "' '",
+	}
+	staticData.SymbolicNames = []string{
+		"", "", "", "", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
+	}
+	staticData.RuleNames = []string{
+		"envFile", "entry", "identifier", "assign", "value", "nl",
+	}
+	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
+	staticData.serializedATN = []int32{
+		4, 1, 7, 57, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 4,
+		2, 5, 7, 5, 1, 0, 5, 0, 14, 8, 0, 10, 0, 12, 0, 17, 9, 0, 1, 0, 1, 0, 5,
+		0, 21, 8, 0, 10, 0, 12, 0, 24, 9, 0, 4, 0, 26, 8, 0, 11, 0, 12, 0, 27,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 35, 8, 1, 1, 1, 5, 1, 38, 8, 1, 10,
+		1, 12, 1, 41, 9, 1, 1, 1, 3, 1, 44, 8, 1, 1, 2, 1, 2, 1, 3, 1, 3, 1, 4,
+		1, 4, 1, 5, 3, 5, 53, 8, 5, 1, 5, 1, 5, 1, 5, 0, 0, 6, 0, 2, 4, 6, 8, 10,
+		0, 1, 1, 0, 4, 6, 58, 0, 15, 1, 0, 0, 0, 2, 29, 1, 0, 0, 0, 4, 45, 1, 0,
+		0, 0, 6, 47, 1, 0, 0, 0, 8, 49, 1, 0, 0, 0, 10, 52, 1, 0, 0, 0, 12, 14,
+		3, 10, 5, 0, 13, 12, 1, 0, 0, 0, 14, 17, 1, 0, 0, 0, 15, 13, 1, 0, 0, 0,
+		15, 16, 1, 0, 0, 0, 16, 25, 1, 0, 0, 0, 17, 15, 1, 0, 0, 0, 18, 22, 3,
+		2, 1, 0, 19, 21, 3, 10, 5, 0, 20, 19, 1, 0, 0, 0, 21, 24, 1, 0, 0, 0, 22,
+		20, 1, 0, 0, 0, 22, 23, 1, 0, 0, 0, 23, 26, 1, 0, 0, 0, 24, 22, 1, 0, 0,
+		0, 25, 18, 1, 0, 0, 0, 26, 27, 1, 0, 0, 0, 27, 25, 1, 0, 0, 0, 27, 28,
+		1, 0, 0, 0, 28, 1, 1, 0, 0, 0, 29, 34, 3, 4, 2, 0, 30, 31, 3, 6, 3, 0,
+		31, 32, 3, 8, 4, 0, 32, 35, 1, 0, 0, 0, 33, 35, 3, 6, 3, 0, 34, 30, 1,
+		0, 0, 0, 34, 33, 1, 0, 0, 0, 34, 35, 1, 0, 0, 0, 35, 43, 1, 0, 0, 0, 36,
+		38, 3, 10, 5, 0, 37, 36, 1, 0, 0, 0, 38, 41, 1, 0, 0, 0, 39, 37, 1, 0,
+		0, 0, 39, 40, 1, 0, 0, 0, 40, 44, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 42, 44,
+		5, 0, 0, 1, 43, 39, 1, 0, 0, 0, 43, 42, 1, 0, 0, 0, 44, 3, 1, 0, 0, 0,
+		45, 46, 5, 4, 0, 0, 46, 5, 1, 0, 0, 0, 47, 48, 5, 1, 0, 0, 48, 7, 1, 0,
+		0, 0, 49, 50, 7, 0, 0, 0, 50, 9, 1, 0, 0, 0, 51, 53, 5, 2, 0, 0, 52, 51,
+		1, 0, 0, 0, 52, 53, 1, 0, 0, 0, 53, 54, 1, 0, 0, 0, 54, 55, 5, 3, 0, 0,
+		55, 11, 1, 0, 0, 0, 7, 15, 22, 27, 34, 39, 43, 52,
+	}
+	deserializer := antlr.NewATNDeserializer(nil)
+	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
+	atn := staticData.atn
+	staticData.decisionToDFA = make([]*antlr.DFA, len(atn.DecisionToState))
+	decisionToDFA := staticData.decisionToDFA
+	for index, state := range atn.DecisionToState {
+		decisionToDFA[index] = antlr.NewDFA(state, index)
+	}
+}
+
+// EnvLangFileParserInit initializes any static state used to implement EnvLangFileParser. By default the
+// static state used to implement the parser is lazily initialized during the first call to
+// NewEnvLangFileParser(). You can call this function if you wish to initialize the static state ahead
+// of time.
+func EnvLangFileParserInit() {
+	staticData := &EnvLangFileParserStaticData
+	staticData.once.Do(envlangfileParserInit)
+}
+
+// NewEnvLangFileParser produces a new parser instance for the optional input antlr.TokenStream.
+func NewEnvLangFileParser(input antlr.TokenStream) *EnvLangFileParser {
+	EnvLangFileParserInit()
+	this := new(EnvLangFileParser)
+	this.BaseParser = antlr.NewBaseParser(input)
+	staticData := &EnvLangFileParserStaticData
+	this.Interpreter = antlr.NewParserATNSimulator(this, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
+	this.RuleNames = staticData.RuleNames
+	this.LiteralNames = staticData.LiteralNames
+	this.SymbolicNames = staticData.SymbolicNames
 	this.GrammarFileName = "EnvLangFile.g4"
 
 	return this
@@ -109,20 +129,31 @@ type IEnvFileContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	AllNl() []INlContext
+	Nl(i int) INlContext
+	AllEntry() []IEntryContext
+	Entry(i int) IEntryContext
+
 	// IsEnvFileContext differentiates from other interfaces.
 	IsEnvFileContext()
 }
 
 type EnvFileContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyEnvFileContext() *EnvFileContext {
 	var p = new(EnvFileContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_envFile
 	return p
+}
+
+func InitEmptyEnvFileContext(p *EnvFileContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_envFile
 }
 
 func (*EnvFileContext) IsEnvFileContext() {}
@@ -130,7 +161,7 @@ func (*EnvFileContext) IsEnvFileContext() {}
 func NewEnvFileContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EnvFileContext {
 	var p = new(EnvFileContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_envFile
@@ -141,12 +172,20 @@ func NewEnvFileContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 func (s *EnvFileContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *EnvFileContext) AllNl() []INlContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*INlContext)(nil)).Elem())
-	var tst = make([]INlContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(INlContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]INlContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(INlContext); ok {
 			tst[i] = t.(INlContext)
+			i++
 		}
 	}
 
@@ -154,7 +193,17 @@ func (s *EnvFileContext) AllNl() []INlContext {
 }
 
 func (s *EnvFileContext) Nl(i int) INlContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*INlContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(INlContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -164,12 +213,20 @@ func (s *EnvFileContext) Nl(i int) INlContext {
 }
 
 func (s *EnvFileContext) AllEntry() []IEntryContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IEntryContext)(nil)).Elem())
-	var tst = make([]IEntryContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IEntryContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]IEntryContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IEntryContext); ok {
 			tst[i] = t.(IEntryContext)
+			i++
 		}
 	}
 
@@ -177,7 +234,17 @@ func (s *EnvFileContext) AllEntry() []IEntryContext {
 }
 
 func (s *EnvFileContext) Entry(i int) IEntryContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IEntryContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEntryContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -207,32 +274,16 @@ func (s *EnvFileContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) EnvFile() (localctx IEnvFileContext) {
-	this := p
-	_ = this
-
 	localctx = NewEnvFileContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 0, EnvLangFileParserRULE_envFile)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(15)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == EnvLangFileParserT__1 || _la == EnvLangFileParserT__2 {
@@ -243,10 +294,16 @@ func (p *EnvLangFileParser) EnvFile() (localctx IEnvFileContext) {
 
 		p.SetState(17)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 	}
 	p.SetState(25)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == EnvLangFileParserTEXT {
@@ -256,6 +313,9 @@ func (p *EnvLangFileParser) EnvFile() (localctx IEnvFileContext) {
 		}
 		p.SetState(22)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 
 		for _la == EnvLangFileParserT__1 || _la == EnvLangFileParserT__2 {
@@ -266,15 +326,31 @@ func (p *EnvLangFileParser) EnvFile() (localctx IEnvFileContext) {
 
 			p.SetState(24)
 			p.GetErrorHandler().Sync(p)
+			if p.HasError() {
+				goto errorExit
+			}
 			_la = p.GetTokenStream().LA(1)
 		}
 
 		p.SetState(27)
 		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
 		_la = p.GetTokenStream().LA(1)
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IEntryContext is an interface to support dynamic dispatch.
@@ -284,20 +360,33 @@ type IEntryContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	Identifier() IIdentifierContext
+	EOF() antlr.TerminalNode
+	Assign() IAssignContext
+	Value() IValueContext
+	AllNl() []INlContext
+	Nl(i int) INlContext
+
 	// IsEntryContext differentiates from other interfaces.
 	IsEntryContext()
 }
 
 type EntryContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyEntryContext() *EntryContext {
 	var p = new(EntryContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_entry
 	return p
+}
+
+func InitEmptyEntryContext(p *EntryContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_entry
 }
 
 func (*EntryContext) IsEntryContext() {}
@@ -305,7 +394,7 @@ func (*EntryContext) IsEntryContext() {}
 func NewEntryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EntryContext {
 	var p = new(EntryContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_entry
@@ -316,7 +405,13 @@ func NewEntryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 func (s *EntryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *EntryContext) Identifier() IIdentifierContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IIdentifierContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IIdentifierContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -330,7 +425,13 @@ func (s *EntryContext) EOF() antlr.TerminalNode {
 }
 
 func (s *EntryContext) Assign() IAssignContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IAssignContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IAssignContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -340,7 +441,13 @@ func (s *EntryContext) Assign() IAssignContext {
 }
 
 func (s *EntryContext) Value() IValueContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IValueContext)(nil)).Elem(), 0)
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IValueContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -350,12 +457,20 @@ func (s *EntryContext) Value() IValueContext {
 }
 
 func (s *EntryContext) AllNl() []INlContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*INlContext)(nil)).Elem())
-	var tst = make([]INlContext, len(ts))
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(INlContext); ok {
+			len++
+		}
+	}
 
-	for i, t := range ts {
-		if t != nil {
+	tst := make([]INlContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(INlContext); ok {
 			tst[i] = t.(INlContext)
+			i++
 		}
 	}
 
@@ -363,7 +478,17 @@ func (s *EntryContext) AllNl() []INlContext {
 }
 
 func (s *EntryContext) Nl(i int) INlContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*INlContext)(nil)).Elem(), i)
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(INlContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
 	if t == nil {
 		return nil
@@ -393,28 +518,8 @@ func (s *EntryContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) Entry() (localctx IEntryContext) {
-	this := p
-	_ = this
-
 	localctx = NewEntryContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, EnvLangFileParserRULE_entry)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -425,7 +530,7 @@ func (p *EnvLangFileParser) Entry() (localctx IEntryContext) {
 	p.SetState(34)
 	p.GetErrorHandler().Sync(p)
 
-	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(30)
 			p.Assign()
@@ -435,21 +540,34 @@ func (p *EnvLangFileParser) Entry() (localctx IEntryContext) {
 			p.Value()
 		}
 
-	} else if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 2 {
+	} else if p.HasError() { // JIM
+		goto errorExit
+	} else if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) == 2 {
 		{
 			p.SetState(33)
 			p.Assign()
 		}
 
+	} else if p.HasError() { // JIM
+		goto errorExit
 	}
 	p.SetState(43)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
+	if p.HasError() {
+		goto errorExit
+	}
+
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext()) {
 	case 1:
 		p.SetState(39)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
-
+		if p.HasError() {
+			goto errorExit
+		}
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 4, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
@@ -460,18 +578,40 @@ func (p *EnvLangFileParser) Entry() (localctx IEntryContext) {
 			}
 			p.SetState(41)
 			p.GetErrorHandler().Sync(p)
-			_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 4, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 
 	case 2:
 		{
 			p.SetState(42)
 			p.Match(EnvLangFileParserEOF)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IIdentifierContext is an interface to support dynamic dispatch.
@@ -481,20 +621,28 @@ type IIdentifierContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Getter signatures
+	TEXT() antlr.TerminalNode
+
 	// IsIdentifierContext differentiates from other interfaces.
 	IsIdentifierContext()
 }
 
 type IdentifierContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyIdentifierContext() *IdentifierContext {
 	var p = new(IdentifierContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_identifier
 	return p
+}
+
+func InitEmptyIdentifierContext(p *IdentifierContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_identifier
 }
 
 func (*IdentifierContext) IsIdentifierContext() {}
@@ -502,7 +650,7 @@ func (*IdentifierContext) IsIdentifierContext() {}
 func NewIdentifierContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *IdentifierContext {
 	var p = new(IdentifierContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_identifier
@@ -537,35 +685,29 @@ func (s *IdentifierContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) Identifier() (localctx IIdentifierContext) {
-	this := p
-	_ = this
-
 	localctx = NewIdentifierContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, EnvLangFileParserRULE_identifier)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(45)
 		p.Match(EnvLangFileParserTEXT)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IAssignContext is an interface to support dynamic dispatch.
@@ -574,21 +716,25 @@ type IAssignContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
-
 	// IsAssignContext differentiates from other interfaces.
 	IsAssignContext()
 }
 
 type AssignContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyAssignContext() *AssignContext {
 	var p = new(AssignContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_assign
 	return p
+}
+
+func InitEmptyAssignContext(p *AssignContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_assign
 }
 
 func (*AssignContext) IsAssignContext() {}
@@ -596,7 +742,7 @@ func (*AssignContext) IsAssignContext() {}
 func NewAssignContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *AssignContext {
 	var p = new(AssignContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_assign
@@ -626,35 +772,29 @@ func (s *AssignContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) Assign() (localctx IAssignContext) {
-	this := p
-	_ = this
-
 	localctx = NewAssignContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, EnvLangFileParserRULE_assign)
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(47)
 		p.Match(EnvLangFileParserT__0)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // IValueContext is an interface to support dynamic dispatch.
@@ -670,21 +810,31 @@ type IValueContext interface {
 	// SetOp sets the op token.
 	SetOp(antlr.Token)
 
+	// Getter signatures
+	DQSTRING() antlr.TerminalNode
+	SQSTRING() antlr.TerminalNode
+	TEXT() antlr.TerminalNode
+
 	// IsValueContext differentiates from other interfaces.
 	IsValueContext()
 }
 
 type ValueContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 	op     antlr.Token
 }
 
 func NewEmptyValueContext() *ValueContext {
 	var p = new(ValueContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_value
 	return p
+}
+
+func InitEmptyValueContext(p *ValueContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_value
 }
 
 func (*ValueContext) IsValueContext() {}
@@ -692,7 +842,7 @@ func (*ValueContext) IsValueContext() {}
 func NewValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ValueContext {
 	var p = new(ValueContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_value
@@ -739,28 +889,9 @@ func (s *ValueContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) Value() (localctx IValueContext) {
-	this := p
-	_ = this
-
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 8, EnvLangFileParserRULE_value)
 	var _la int
-
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
 
 	p.EnterOuterAlt(localctx, 1)
 	{
@@ -772,7 +903,7 @@ func (p *EnvLangFileParser) Value() (localctx IValueContext) {
 
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<EnvLangFileParserTEXT)|(1<<EnvLangFileParserDQSTRING)|(1<<EnvLangFileParserSQSTRING))) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&112) != 0) {
 			var _ri = p.GetErrorHandler().RecoverInline(p)
 
 			localctx.(*ValueContext).op = _ri
@@ -782,7 +913,17 @@ func (p *EnvLangFileParser) Value() (localctx IValueContext) {
 		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }
 
 // INlContext is an interface to support dynamic dispatch.
@@ -791,21 +932,25 @@ type INlContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
-
 	// IsNlContext differentiates from other interfaces.
 	IsNlContext()
 }
 
 type NlContext struct {
-	*antlr.BaseParserRuleContext
+	antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
 func NewEmptyNlContext() *NlContext {
 	var p = new(NlContext)
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
 	p.RuleIndex = EnvLangFileParserRULE_nl
 	return p
+}
+
+func InitEmptyNlContext(p *NlContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangFileParserRULE_nl
 }
 
 func (*NlContext) IsNlContext() {}
@@ -813,7 +958,7 @@ func (*NlContext) IsNlContext() {}
 func NewNlContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *NlContext {
 	var p = new(NlContext)
 
-	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
 
 	p.parser = parser
 	p.RuleIndex = EnvLangFileParserRULE_nl
@@ -843,45 +988,47 @@ func (s *NlContext) ExitRule(listener antlr.ParseTreeListener) {
 }
 
 func (p *EnvLangFileParser) Nl() (localctx INlContext) {
-	this := p
-	_ = this
-
 	localctx = NewNlContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, EnvLangFileParserRULE_nl)
 	var _la int
 
-	defer func() {
-		p.ExitRule()
-	}()
-
-	defer func() {
-		if err := recover(); err != nil {
-			if v, ok := err.(antlr.RecognitionException); ok {
-				localctx.SetException(v)
-				p.GetErrorHandler().ReportError(p, v)
-				p.GetErrorHandler().Recover(p, v)
-			} else {
-				panic(err)
-			}
-		}
-	}()
-
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(52)
 	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == EnvLangFileParserT__1 {
 		{
 			p.SetState(51)
 			p.Match(EnvLangFileParserT__1)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	}
 	{
 		p.SetState(54)
 		p.Match(EnvLangFileParserT__2)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
 	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
 }

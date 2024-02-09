@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/fileparser"
 	"github.com/ulyssessouza/envlang/handlers"

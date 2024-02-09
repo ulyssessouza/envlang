@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/antlr4-go/antlr/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/valueparser"

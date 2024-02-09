@@ -1,66 +1,18 @@
-// Code generated from EnvLangFile.g4 by ANTLR 4.9.3. DO NOT EDIT.
+// Code generated from EnvLangFile.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package fileparser
 
 import (
 	"fmt"
+	"github.com/antlr4-go/antlr/v4"
+	"sync"
 	"unicode"
-
-	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 // Suppress unused import error
 var _ = fmt.Printf
+var _ = sync.Once{}
 var _ = unicode.IsLetter
-
-var serializedLexerAtn = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 2, 9, 56, 8,
-	1, 4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9,
-	7, 4, 8, 9, 8, 3, 2, 3, 2, 3, 3, 3, 3, 3, 4, 3, 4, 3, 5, 3, 5, 7, 5, 26,
-	10, 5, 12, 5, 14, 5, 29, 11, 5, 3, 6, 3, 6, 3, 6, 3, 6, 7, 6, 35, 10, 6,
-	12, 6, 14, 6, 38, 11, 6, 3, 6, 3, 6, 3, 7, 3, 7, 3, 7, 3, 7, 7, 7, 46,
-	10, 7, 12, 7, 14, 7, 49, 11, 7, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8, 3, 8, 2,
-	2, 9, 3, 3, 5, 4, 7, 5, 9, 6, 11, 7, 13, 8, 15, 9, 3, 2, 6, 9, 2, 12, 12,
-	15, 15, 34, 34, 36, 36, 41, 41, 46, 46, 63, 63, 8, 2, 12, 12, 15, 15, 36,
-	36, 41, 41, 46, 46, 63, 63, 3, 2, 36, 36, 3, 2, 41, 41, 2, 60, 2, 3, 3,
-	2, 2, 2, 2, 5, 3, 2, 2, 2, 2, 7, 3, 2, 2, 2, 2, 9, 3, 2, 2, 2, 2, 11, 3,
-	2, 2, 2, 2, 13, 3, 2, 2, 2, 2, 15, 3, 2, 2, 2, 3, 17, 3, 2, 2, 2, 5, 19,
-	3, 2, 2, 2, 7, 21, 3, 2, 2, 2, 9, 23, 3, 2, 2, 2, 11, 30, 3, 2, 2, 2, 13,
-	41, 3, 2, 2, 2, 15, 52, 3, 2, 2, 2, 17, 18, 7, 63, 2, 2, 18, 4, 3, 2, 2,
-	2, 19, 20, 7, 15, 2, 2, 20, 6, 3, 2, 2, 2, 21, 22, 7, 12, 2, 2, 22, 8,
-	3, 2, 2, 2, 23, 27, 10, 2, 2, 2, 24, 26, 10, 3, 2, 2, 25, 24, 3, 2, 2,
-	2, 26, 29, 3, 2, 2, 2, 27, 25, 3, 2, 2, 2, 27, 28, 3, 2, 2, 2, 28, 10,
-	3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 30, 36, 7, 36, 2, 2, 31, 32, 7, 36, 2,
-	2, 32, 35, 7, 36, 2, 2, 33, 35, 10, 4, 2, 2, 34, 31, 3, 2, 2, 2, 34, 33,
-	3, 2, 2, 2, 35, 38, 3, 2, 2, 2, 36, 34, 3, 2, 2, 2, 36, 37, 3, 2, 2, 2,
-	37, 39, 3, 2, 2, 2, 38, 36, 3, 2, 2, 2, 39, 40, 7, 36, 2, 2, 40, 12, 3,
-	2, 2, 2, 41, 47, 7, 41, 2, 2, 42, 43, 7, 41, 2, 2, 43, 46, 7, 41, 2, 2,
-	44, 46, 10, 5, 2, 2, 45, 42, 3, 2, 2, 2, 45, 44, 3, 2, 2, 2, 46, 49, 3,
-	2, 2, 2, 47, 45, 3, 2, 2, 2, 47, 48, 3, 2, 2, 2, 48, 50, 3, 2, 2, 2, 49,
-	47, 3, 2, 2, 2, 50, 51, 7, 41, 2, 2, 51, 14, 3, 2, 2, 2, 52, 53, 7, 34,
-	2, 2, 53, 54, 3, 2, 2, 2, 54, 55, 8, 8, 2, 2, 55, 16, 3, 2, 2, 2, 8, 2,
-	27, 34, 36, 45, 47, 3, 8, 2, 2,
-}
-
-var lexerChannelNames = []string{
-	"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
-}
-
-var lexerModeNames = []string{
-	"DEFAULT_MODE",
-}
-
-var lexerLiteralNames = []string{
-	"", "'='", "'\r'", "'\n'", "", "", "", "' '",
-}
-
-var lexerSymbolicNames = []string{
-	"", "", "", "", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
-}
-
-var lexerRuleNames = []string{
-	"T__0", "T__1", "T__2", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
-}
 
 type EnvLangFileLexer struct {
 	*antlr.BaseLexer
@@ -69,28 +21,95 @@ type EnvLangFileLexer struct {
 	// TODO: EOF string
 }
 
-// NewEnvLangFileLexer produces a new lexer instance for the optional input antlr.CharStream.
-//
-// The *EnvLangFileLexer instance produced may be reused by calling the SetInputStream method.
-// The initial lexer configuration is expensive to construct, and the object is not thread-safe;
-// however, if used within a Golang sync.Pool, the construction cost amortizes well and the
-// objects can be used in a thread-safe manner.
-func NewEnvLangFileLexer(input antlr.CharStream) *EnvLangFileLexer {
-	l := new(EnvLangFileLexer)
-	lexerDeserializer := antlr.NewATNDeserializer(nil)
-	lexerAtn := lexerDeserializer.DeserializeFromUInt16(serializedLexerAtn)
-	lexerDecisionToDFA := make([]*antlr.DFA, len(lexerAtn.DecisionToState))
-	for index, ds := range lexerAtn.DecisionToState {
-		lexerDecisionToDFA[index] = antlr.NewDFA(ds, index)
-	}
-	l.BaseLexer = antlr.NewBaseLexer(input)
-	l.Interpreter = antlr.NewLexerATNSimulator(l, lexerAtn, lexerDecisionToDFA, antlr.NewPredictionContextCache())
+var EnvLangFileLexerLexerStaticData struct {
+	once                   sync.Once
+	serializedATN          []int32
+	ChannelNames           []string
+	ModeNames              []string
+	LiteralNames           []string
+	SymbolicNames          []string
+	RuleNames              []string
+	PredictionContextCache *antlr.PredictionContextCache
+	atn                    *antlr.ATN
+	decisionToDFA          []*antlr.DFA
+}
 
-	l.channelNames = lexerChannelNames
-	l.modeNames = lexerModeNames
-	l.RuleNames = lexerRuleNames
-	l.LiteralNames = lexerLiteralNames
-	l.SymbolicNames = lexerSymbolicNames
+func envlangfilelexerLexerInit() {
+	staticData := &EnvLangFileLexerLexerStaticData
+	staticData.ChannelNames = []string{
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
+	}
+	staticData.ModeNames = []string{
+		"DEFAULT_MODE",
+	}
+	staticData.LiteralNames = []string{
+		"", "'='", "'\\r'", "'\\n'", "", "", "", "' '",
+	}
+	staticData.SymbolicNames = []string{
+		"", "", "", "", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
+	}
+	staticData.RuleNames = []string{
+		"T__0", "T__1", "T__2", "TEXT", "DQSTRING", "SQSTRING", "SPACE",
+	}
+	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
+	staticData.serializedATN = []int32{
+		4, 0, 7, 54, 6, -1, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2,
+		4, 7, 4, 2, 5, 7, 5, 2, 6, 7, 6, 1, 0, 1, 0, 1, 1, 1, 1, 1, 2, 1, 2, 1,
+		3, 1, 3, 5, 3, 24, 8, 3, 10, 3, 12, 3, 27, 9, 3, 1, 4, 1, 4, 1, 4, 1, 4,
+		5, 4, 33, 8, 4, 10, 4, 12, 4, 36, 9, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1,
+		5, 5, 5, 44, 8, 5, 10, 5, 12, 5, 47, 9, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6,
+		1, 6, 0, 0, 7, 1, 1, 3, 2, 5, 3, 7, 4, 9, 5, 11, 6, 13, 7, 1, 0, 4, 7,
+		0, 10, 10, 13, 13, 32, 32, 34, 34, 39, 39, 44, 44, 61, 61, 6, 0, 10, 10,
+		13, 13, 34, 34, 39, 39, 44, 44, 61, 61, 1, 0, 34, 34, 1, 0, 39, 39, 58,
+		0, 1, 1, 0, 0, 0, 0, 3, 1, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 7, 1, 0, 0, 0,
+		0, 9, 1, 0, 0, 0, 0, 11, 1, 0, 0, 0, 0, 13, 1, 0, 0, 0, 1, 15, 1, 0, 0,
+		0, 3, 17, 1, 0, 0, 0, 5, 19, 1, 0, 0, 0, 7, 21, 1, 0, 0, 0, 9, 28, 1, 0,
+		0, 0, 11, 39, 1, 0, 0, 0, 13, 50, 1, 0, 0, 0, 15, 16, 5, 61, 0, 0, 16,
+		2, 1, 0, 0, 0, 17, 18, 5, 13, 0, 0, 18, 4, 1, 0, 0, 0, 19, 20, 5, 10, 0,
+		0, 20, 6, 1, 0, 0, 0, 21, 25, 8, 0, 0, 0, 22, 24, 8, 1, 0, 0, 23, 22, 1,
+		0, 0, 0, 24, 27, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 25, 26, 1, 0, 0, 0, 26,
+		8, 1, 0, 0, 0, 27, 25, 1, 0, 0, 0, 28, 34, 5, 34, 0, 0, 29, 30, 5, 34,
+		0, 0, 30, 33, 5, 34, 0, 0, 31, 33, 8, 2, 0, 0, 32, 29, 1, 0, 0, 0, 32,
+		31, 1, 0, 0, 0, 33, 36, 1, 0, 0, 0, 34, 32, 1, 0, 0, 0, 34, 35, 1, 0, 0,
+		0, 35, 37, 1, 0, 0, 0, 36, 34, 1, 0, 0, 0, 37, 38, 5, 34, 0, 0, 38, 10,
+		1, 0, 0, 0, 39, 45, 5, 39, 0, 0, 40, 41, 5, 39, 0, 0, 41, 44, 5, 39, 0,
+		0, 42, 44, 8, 3, 0, 0, 43, 40, 1, 0, 0, 0, 43, 42, 1, 0, 0, 0, 44, 47,
+		1, 0, 0, 0, 45, 43, 1, 0, 0, 0, 45, 46, 1, 0, 0, 0, 46, 48, 1, 0, 0, 0,
+		47, 45, 1, 0, 0, 0, 48, 49, 5, 39, 0, 0, 49, 12, 1, 0, 0, 0, 50, 51, 5,
+		32, 0, 0, 51, 52, 1, 0, 0, 0, 52, 53, 6, 6, 0, 0, 53, 14, 1, 0, 0, 0, 6,
+		0, 25, 32, 34, 43, 45, 1, 6, 0, 0,
+	}
+	deserializer := antlr.NewATNDeserializer(nil)
+	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
+	atn := staticData.atn
+	staticData.decisionToDFA = make([]*antlr.DFA, len(atn.DecisionToState))
+	decisionToDFA := staticData.decisionToDFA
+	for index, state := range atn.DecisionToState {
+		decisionToDFA[index] = antlr.NewDFA(state, index)
+	}
+}
+
+// EnvLangFileLexerInit initializes any static state used to implement EnvLangFileLexer. By default the
+// static state used to implement the lexer is lazily initialized during the first call to
+// NewEnvLangFileLexer(). You can call this function if you wish to initialize the static state ahead
+// of time.
+func EnvLangFileLexerInit() {
+	staticData := &EnvLangFileLexerLexerStaticData
+	staticData.once.Do(envlangfilelexerLexerInit)
+}
+
+// NewEnvLangFileLexer produces a new lexer instance for the optional input antlr.CharStream.
+func NewEnvLangFileLexer(input antlr.CharStream) *EnvLangFileLexer {
+	EnvLangFileLexerInit()
+	l := new(EnvLangFileLexer)
+	l.BaseLexer = antlr.NewBaseLexer(input)
+	staticData := &EnvLangFileLexerLexerStaticData
+	l.Interpreter = antlr.NewLexerATNSimulator(l, staticData.atn, staticData.decisionToDFA, staticData.PredictionContextCache)
+	l.channelNames = staticData.ChannelNames
+	l.modeNames = staticData.ModeNames
+	l.RuleNames = staticData.RuleNames
+	l.LiteralNames = staticData.LiteralNames
+	l.SymbolicNames = staticData.SymbolicNames
 	l.GrammarFileName = "EnvLangFile.g4"
 	// TODO: l.EOF = antlr.TokenEOF
 
