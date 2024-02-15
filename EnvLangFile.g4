@@ -1,17 +1,15 @@
 grammar EnvLangFile;
 
-envFile: nl* (entry nl*)+ ;
+envFile: NL* (entry NL*)+ ;
 
-entry : identifier (assign value | assign)? (nl* | EOF) ;
+entry : identifier (ASSIGN value | ASSIGN)? (NL* | EOF) ;
 
 identifier : TEXT;
 
-assign : '=';
-
 value : op=(DQSTRING | SQSTRING | TEXT) ;
 
-nl : '\r'? '\n';
-
+ASSIGN : '=';
+NL : '\r'? '\n';
 TEXT   : ~[=,\r\n"' ]~[=,\r\n"']* ;
 DQSTRING : '"' ('""'|~'"')* '"' ;
 SQSTRING : '\'' ('\'\''|~'\'')* '\'' ;

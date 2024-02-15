@@ -8,30 +8,30 @@ import (
 	"github.com/ulyssessouza/envlang/gen/fileparser"
 )
 
-var _ fileparser.EnvLangFileListener = &envLangFileListener{}
+var _ fileparser.EnvLangFileListener = &EnvLangFileListener{}
 
-type envLangFileListener struct {
+type EnvLangFileListener struct {
 	*fileparser.BaseEnvLangFileListener
 
 	d dao.EnvLangDao
 }
 
-func NewEnvLangFileListener(d dao.EnvLangDao) *envLangFileListener {
-	return &envLangFileListener{
+func NewEnvLangFileListener(d dao.EnvLangDao) *EnvLangFileListener {
+	return &EnvLangFileListener{
 		d: d,
 	}
 }
 
-func (l envLangFileListener) GetVariables() map[string]*string {
+func (l EnvLangFileListener) GetVariables() map[string]*string {
 	return l.d.ExportMap()
 }
 
-func (l *envLangFileListener) ExitEntry(c *fileparser.EntryContext) {
+func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 	var valuePtr *string = nil
 
 	id := strings.TrimSpace(c.Identifier().GetText())
 	hasAssign := true
-	if c.Assign() == nil || c.Assign().IsEmpty() {
+	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
 		hasAssign = false
 	}
 	if hasAssign && c.Value() == nil {
@@ -44,11 +44,11 @@ func (l *envLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 		switch c.Value().GetOp().GetTokenType() {
 		case fileparser.EnvLangFileParserSQSTRING: // Not evaluating variables inside single quoted values
 			valuePtr = &v
+		case fileparser.EnvLangFileParserDQSTRING:
+			v = v[1 : len(v)-1] // Removing quotes
+			fallthrough
 		case fileparser.EnvLangFileParserTEXT:
 			v := GetValue(l.d, v)
-			valuePtr = &v
-		case fileparser.EnvLangFileParserDQSTRING:
-			v := GetValue(l.d, v[1:len(v)-1])
 			valuePtr = &v
 		default:
 			panic(fmt.Sprintf("unexpected op: %s", c.Value().GetOp().GetText()))

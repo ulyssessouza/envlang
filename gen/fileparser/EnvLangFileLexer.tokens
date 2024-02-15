@@ -1,11 +1,8 @@
-T__0=1
-T__1=2
-T__2=3
-TEXT=4
-DQSTRING=5
-SQSTRING=6
-SPACE=7
+ASSIGN=1
+NL=2
+TEXT=3
+DQSTRING=4
+SQSTRING=5
+SPACE=6
 '='=1
-'\r'=2
-'\n'=3
-' '=7
+' '=6

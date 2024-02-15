@@ -16,14 +16,8 @@ type EnvLangFileListener interface {
 	// EnterIdentifier is called when entering the identifier production.
 	EnterIdentifier(c *IdentifierContext)
 
-	// EnterAssign is called when entering the assign production.
-	EnterAssign(c *AssignContext)
-
 	// EnterValue is called when entering the value production.
 	EnterValue(c *ValueContext)
-
-	// EnterNl is called when entering the nl production.
-	EnterNl(c *NlContext)
 
 	// ExitEnvFile is called when exiting the envFile production.
 	ExitEnvFile(c *EnvFileContext)
@@ -34,12 +28,6 @@ type EnvLangFileListener interface {
 	// ExitIdentifier is called when exiting the identifier production.
 	ExitIdentifier(c *IdentifierContext)
 
-	// ExitAssign is called when exiting the assign production.
-	ExitAssign(c *AssignContext)
-
 	// ExitValue is called when exiting the value production.
 	ExitValue(c *ValueContext)
-
-	// ExitNl is called when exiting the nl production.
-	ExitNl(c *NlContext)
 }

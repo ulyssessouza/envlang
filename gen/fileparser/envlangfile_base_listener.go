@@ -38,20 +38,8 @@ func (s *BaseEnvLangFileListener) EnterIdentifier(ctx *IdentifierContext) {}
 // ExitIdentifier is called when production identifier is exited.
 func (s *BaseEnvLangFileListener) ExitIdentifier(ctx *IdentifierContext) {}
 
-// EnterAssign is called when production assign is entered.
-func (s *BaseEnvLangFileListener) EnterAssign(ctx *AssignContext) {}
-
-// ExitAssign is called when production assign is exited.
-func (s *BaseEnvLangFileListener) ExitAssign(ctx *AssignContext) {}
-
 // EnterValue is called when production value is entered.
 func (s *BaseEnvLangFileListener) EnterValue(ctx *ValueContext) {}
 
 // ExitValue is called when production value is exited.
 func (s *BaseEnvLangFileListener) ExitValue(ctx *ValueContext) {}
-
-// EnterNl is called when production nl is entered.
-func (s *BaseEnvLangFileListener) EnterNl(ctx *NlContext) {}
-
-// ExitNl is called when production nl is exited.
-func (s *BaseEnvLangFileListener) ExitNl(ctx *NlContext) {}
