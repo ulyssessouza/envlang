@@ -1,17 +1,43 @@
 grammar EnvLangFile;
 
-envFile: NL* (entry NL*)+ ;
+envFile
+	: CRLF* (entry CRLF*)+
+	;
 
-entry : identifier (ASSIGN value | ASSIGN)? (NL* | EOF) ;
+entry
+	: identifier (ASSIGN value | ASSIGN)? (SPACE* CRLF* | EOF)
+	;
 
-identifier : TEXT;
+identifier
+	: TEXT
+	;
 
-value : op=(DQSTRING | SQSTRING | TEXT) ;
+value
+	: str=(DQSTRING | SQSTRING | TEXT)
+	;
 
-ASSIGN : '=';
-NL : '\r'? '\n';
-TEXT   : ~[=,\r\n"' ]~[=,\r\n"']* ;
-DQSTRING : '"' ('""'|~'"')* '"' ;
-SQSTRING : '\'' ('\'\''|~'\'')* '\'' ;
+ASSIGN
+	: '='
+	;
 
-SPACE : ' ' -> skip;
+CRLF
+	: '\r'? '\n'
+	| '\r'
+	;
+
+TEXT
+	: ~[=,\r\n"' ]~[=,\r\n"']*
+	;
+
+DQSTRING
+	: '"' ('""' | ~'"')* '"'
+	;
+
+SQSTRING
+	: '\'' ('\'\'' | ~'\'')* '\''
+	;
+
+SPACE
+	:
+	' ' -> skip
+	;

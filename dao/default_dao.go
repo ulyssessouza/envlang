@@ -10,12 +10,37 @@ var _ EnvLangDao = &DefaultDao{}
 type DefaultDao struct {
 	sync.RWMutex
 
-	m map[string]*string
+	env map[string]*string
+	m   map[string]*string
 }
 
 func NewDefaultDao() EnvLangDao {
 	return &DefaultDao{
-		m: make(map[string]*string),
+		m:   make(map[string]*string),
+		env: make(map[string]*string),
+	}
+}
+
+func NewDefaultDaoFromEnv(env []string) EnvLangDao {
+	d := &DefaultDao{
+		m:   make(map[string]*string),
+		env: make(map[string]*string),
+	}
+	for _, e := range env {
+		splitEnv := strings.SplitN(e, "=", 2)
+		v := splitEnv[1]
+		d.env[splitEnv[0]] = &v
+	}
+	return d
+}
+
+func NewDefaultDaoFromMap(env map[string]*string) EnvLangDao {
+	if env == nil {
+		env = make(map[string]*string)
+	}
+	return &DefaultDao{
+		m:   make(map[string]*string),
+		env: env,
 	}
 }
 
@@ -48,6 +73,9 @@ func (d *DefaultDao) Get(k string) (*string, bool) {
 	defer d.RUnlock()
 
 	v, ok := d.m[k]
+	if !ok {
+		v, ok = d.env[k]
+	}
 	return v, ok
 }
 

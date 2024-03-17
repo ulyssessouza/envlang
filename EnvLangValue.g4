@@ -1,36 +1,58 @@
 grammar EnvLangValue;
 
-dqstring : content* (CRLF* | EOF)  ;
+dqstring
+	: content* (SPACE* | CRLF* | EOF)
+	;
 
-strictVar : '${' TEXT_NO_SPACE+ '}';
-simpleVar : '$' TEXT_NO_SPACE+ ;
-
-variable : strictVar | simpleVar ;
-
-TEXT_NO_SPACE : [a-zA-Z0-9_] ;
-TEXT_ANY      : [a-zA-Z0-9_\n] ;
-
-text : TEXT_NO_SPACE TEXT_ANY* ;
-
-space : ' ';
-
-dQEscape : '""' ;
-
-special
-    : '{'
-    | '}'
-    | '$'
-    ;
+variable
+	: var=(STRICT_VAR | SIMPLE_VAR)
+	;
 
 content
-    : dQEscape
-    | variable
-    | space
-    | special
-    | text
-    ;
+	: variable
+	| STR
+	| SPACE
+	| CRLF
+	;
+
+STRICT_VAR
+	: '${' SPACE* VAR_ID SPACE* '}'
+	;
+
+SIMPLE_VAR
+	: '$' VAR_ID
+	;
+
+STR
+	: FIRST_CHAR REST_OF_STRING*
+	;
+
+SPACE
+	: ' '
+	| '\t'
+	;
 
 CRLF
-    : '\r'? '\n'
-    | '\r'
-    ;
+	: '\r'? '\n'
+	| '\r'
+	;
+
+fragment FIRST_CHAR
+	: ~[,\\."'\r\n ]
+	;
+
+fragment REST_OF_STRING
+	: ~[\\'"$\r\n ]
+	;
+
+fragment VAR_ID
+	: [0-9]+ // Only numbers
+	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
+	;
+
+// Catch all rule.
+// This is used to avoid the error message "no viable alternative at input '<EOF>'". Just for debugging.
+ANY
+	: .
+	;
+
