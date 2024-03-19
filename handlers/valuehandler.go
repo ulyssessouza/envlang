@@ -29,15 +29,15 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	fullText := c.GetText()
 	log.Debugf("ExitVariable: %s", fullText)
 
-	vName := ""
-	var_ := c.GetVar_()
-	switch var_.GetTokenType() {
+	var vName string
+	varr := c.GetVar_()
+	switch varr.GetTokenType() {
 	case valueparser.EnvLangValueParserSIMPLE_VAR:
-		vName = var_.GetText()[1:]
+		vName = varr.GetText()[1:]
 	case valueparser.EnvLangValueParserSTRICT_VAR:
-		vName = strings.TrimSpace(var_.GetText()[2 : len(var_.GetText())-1])
+		vName = strings.TrimSpace(varr.GetText()[2 : len(varr.GetText())-1])
 	default:
-		panic("unexpected token: " + var_.GetText())
+		panic("unexpected token: " + varr.GetText())
 	}
 
 	value, ok := l.d.Get(vName)

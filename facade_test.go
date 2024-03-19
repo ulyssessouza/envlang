@@ -13,6 +13,7 @@ func init() {
 	log.SetLevel(log.DebugLevel)
 }
 
+//nolint:funlen
 func TestGetValue(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -188,7 +189,6 @@ A = "aaa ${B} ccc "
 			d := dao.NewDefaultDaoFromMap(tt.envState)
 			assert.DeepEqual(t, tt.expected, GetVariables(d, tt.input))
 		})
-
 	}
 }
 
