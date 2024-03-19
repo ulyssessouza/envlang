@@ -13,6 +13,7 @@ func init() {
 	log.SetLevel(log.DebugLevel)
 }
 
+//nolint:funlen
 func TestGetValue(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -172,13 +173,22 @@ A = "aaa ${B} ccc "
 				"B": strPtr("bbb "),
 			},
 		},
+		{
+			"SpecialWithVariable",
+			`SPECIAL1 = "{{{ ${A} }}}"`,
+			map[string]*string{
+				"SPECIAL1": strPtr("{{{ aaa }}}"),
+			},
+			map[string]*string{
+				"A": strPtr("aaa"),
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			d := dao.NewDefaultDaoFromMap(tt.envState)
 			assert.DeepEqual(t, tt.expected, GetVariables(d, tt.input))
 		})
-
 	}
 }
 

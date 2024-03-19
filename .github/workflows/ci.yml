@@ -30,3 +30,6 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         slug: ulyssessouza/envlang
+
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v4.0.0

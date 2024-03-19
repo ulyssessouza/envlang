@@ -5,6 +5,11 @@ import (
 	"sync"
 )
 
+const (
+	pairSeparator = "="
+	pairNumber    = 2
+)
+
 var _ EnvLangDao = &DefaultDao{}
 
 type DefaultDao struct {
@@ -26,8 +31,9 @@ func NewDefaultDaoFromEnv(env []string) EnvLangDao {
 		m:   make(map[string]*string),
 		env: make(map[string]*string),
 	}
+
 	for _, e := range env {
-		splitEnv := strings.SplitN(e, "=", 2)
+		splitEnv := strings.SplitN(e, pairSeparator, pairNumber)
 		v := splitEnv[1]
 		d.env[splitEnv[0]] = &v
 	}
@@ -49,7 +55,7 @@ func (d *DefaultDao) ImportList(env []string) {
 	defer d.Unlock()
 
 	for _, e := range env {
-		splitEnv := strings.SplitN(e, "=", 2)
+		splitEnv := strings.SplitN(e, pairSeparator, pairNumber)
 		v := splitEnv[1]
 		d.m[splitEnv[0]] = &v
 	}
@@ -60,6 +66,7 @@ func (d *DefaultDao) ImportMap(m map[string]string) {
 	defer d.Unlock()
 
 	for k, v := range m {
+		v := v
 		d.m[k] = &v
 	}
 }

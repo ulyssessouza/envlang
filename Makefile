@@ -1,4 +1,4 @@
-all: clean gen test
+all: clean gen test lint
 	@echo "All done!"
 
 test:
@@ -18,3 +18,6 @@ grun:
 	antlr4 EnvLangValue.g4
 	javac -cp "/usr/share/java/antlr-4.13.1-complete.jar:$CLASSPATH" EnvLangValue*.java
 	java -Xmx500M -cp "/usr/share/java/antlr-4.13.1-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig EnvLangValue dqstrings -tokens
+
+lint:
+	golangci-lint run ./... --timeout 2m

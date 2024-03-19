@@ -27,7 +27,7 @@ func (l *EnvLangFileListener) GetVariables() map[string]*string {
 }
 
 func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
-	var valuePtr *string = nil
+	var valuePtr *string
 
 	id := strings.TrimSpace(c.Identifier().GetText())
 	if id == "" {
@@ -52,7 +52,7 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 			v = v[1 : len(v)-1] // Removing quotes
 			fallthrough
 		case fileparser.EnvLangFileParserTEXT:
-			v := GetValue(l.d, v)
+			v = GetValue(l.d, v)
 			valuePtr = &v
 		default:
 			panic(fmt.Sprintf("unexpected string: %s", c.Value().GetStr().GetText()))
