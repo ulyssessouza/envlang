@@ -2,7 +2,7 @@ all: clean gen test
 	@echo "All done!"
 
 test:
-	@gotestsum --format testname -- -failfast ./...
+	@gotestsum --format testname -- -failfast -race -covermode=atomic -coverprofile=coverage.out ./...
 
 gen:
 	@antlr4 -Dlanguage=Go -o gen/fileparser -package fileparser EnvLangFile.g4
