@@ -10,26 +10,8 @@ type EnvLangValueListener interface {
 	// EnterDqstring is called when entering the dqstring production.
 	EnterDqstring(c *DqstringContext)
 
-	// EnterStrictVar is called when entering the strictVar production.
-	EnterStrictVar(c *StrictVarContext)
-
-	// EnterSimpleVar is called when entering the simpleVar production.
-	EnterSimpleVar(c *SimpleVarContext)
-
 	// EnterVariable is called when entering the variable production.
 	EnterVariable(c *VariableContext)
-
-	// EnterText is called when entering the text production.
-	EnterText(c *TextContext)
-
-	// EnterSpace is called when entering the space production.
-	EnterSpace(c *SpaceContext)
-
-	// EnterDQEscape is called when entering the dQEscape production.
-	EnterDQEscape(c *DQEscapeContext)
-
-	// EnterSpecial is called when entering the special production.
-	EnterSpecial(c *SpecialContext)
 
 	// EnterContent is called when entering the content production.
 	EnterContent(c *ContentContext)
@@ -37,26 +19,8 @@ type EnvLangValueListener interface {
 	// ExitDqstring is called when exiting the dqstring production.
 	ExitDqstring(c *DqstringContext)
 
-	// ExitStrictVar is called when exiting the strictVar production.
-	ExitStrictVar(c *StrictVarContext)
-
-	// ExitSimpleVar is called when exiting the simpleVar production.
-	ExitSimpleVar(c *SimpleVarContext)
-
 	// ExitVariable is called when exiting the variable production.
 	ExitVariable(c *VariableContext)
-
-	// ExitText is called when exiting the text production.
-	ExitText(c *TextContext)
-
-	// ExitSpace is called when exiting the space production.
-	ExitSpace(c *SpaceContext)
-
-	// ExitDQEscape is called when exiting the dQEscape production.
-	ExitDQEscape(c *DQEscapeContext)
-
-	// ExitSpecial is called when exiting the special production.
-	ExitSpecial(c *SpecialContext)
 
 	// ExitContent is called when exiting the content production.
 	ExitContent(c *ContentContext)
