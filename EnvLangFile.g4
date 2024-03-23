@@ -38,6 +38,5 @@ SQSTRING
 	;
 
 SPACE
-	:
-	' ' -> skip
+	: ' ' -> skip
 	;

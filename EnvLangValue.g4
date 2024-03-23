@@ -41,27 +41,6 @@ STR
 	: FIRST_CHAR REST_OF_STRING*
 	;
 
-PESO_SIGN
-	: '$'
-	;
-
-FIRST_CHAR
-	: ~[,\\."'\r\n ]
-	;
-
-REST_OF_STRING
-	: ~[\\'"$\r\n ]
-	;
-
-NUMBER
-	: [0-9]+
-	;
-
-VAR_ID
-	: NUMBER // Only numbers
-	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
-	;
-
 SPACE
 	: ' '
 	| '\t'
@@ -78,3 +57,19 @@ ANY
 	: .
 	;
 
+fragment FIRST_CHAR
+	: ~[,\\."'\r\n ]
+	;
+
+fragment REST_OF_STRING
+	: ~[\\'"$\r\n ]
+	;
+
+fragment NUMBER
+	: [0-9]+
+	;
+
+fragment VAR_ID
+	: NUMBER // Only numbers
+	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
+	;
