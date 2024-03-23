@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"testing"
 
 	log "github.com/sirupsen/logrus"
@@ -11,6 +12,14 @@ import (
 
 func init() {
 	log.SetLevel(log.DebugLevel)
+}
+
+func TestGetFromReader(t *testing.T) {
+	expected := map[string]*string{
+		"A": strPtr("aaa"),
+	}
+	d := dao.NewDefaultDaoFromMap(nil)
+	assert.DeepEqual(t, expected, GetVariablesFromInputStream(d, strings.NewReader(`A=aaa`)))
 }
 
 //nolint:funlen
