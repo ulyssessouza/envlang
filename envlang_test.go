@@ -246,6 +246,7 @@ A = "aaa ${B} ccc "
 	}
 }
 
+//nolint:funlen
 func TestFull(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
 	is := `
@@ -300,6 +301,14 @@ SPECIAL4 = "{{{ $ $ $}}}"
 SPECIAL5 = "{{{ $$ }}}"
 SPECIAL6 = "{{{ $$$ }}}"
 
+SPECIAL_CHAR_A=unquoted phrase special ã char
+SPECIAL_CHAR_C=unquoted phrase special ç char
+SPECIAL_CHAR_E=unquoted phrase special è char
+
+VAR-WITH-DASHES="dashes"
+VAR.WITH.DOTS="dots"
+VAR_WITH_UNDERSCORES="underscores"
+
 EMPTY_VAR=""
 
 VAR_DEFAULT_UNSET = "${UNSET_VAR-uuu}"
@@ -341,6 +350,12 @@ export EQUALS='postgres://localhost:5432/database?sslmode=disable'
 		"OPTION_B":                     strPtr("\\n"),
 		"EQUALS":                       strPtr("postgres://localhost:5432/database?sslmode=disable"),
 		"VAR_TO_BE_LOADED_FROM_OS_ENV": strPtr("loaded_from_os_env"),
+		"VAR-WITH-DASHES":              strPtr("dashes"),
+		"VAR.WITH.DOTS":                strPtr("dots"),
+		"VAR_WITH_UNDERSCORES":         strPtr("underscores"),
+		"SPECIAL_CHAR_A":               strPtr("unquoted phrase special ã char"),
+		"SPECIAL_CHAR_C":               strPtr("unquoted phrase special ç char"),
+		"SPECIAL_CHAR_E":               strPtr("unquoted phrase special è char"),
 	}
 
 	d := dao.NewDefaultDaoFromMap(map[string]*string{

@@ -41,7 +41,7 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 	if strings.HasPrefix(id, "#") {
 		return
 	}
-	re := regexp.MustCompile(`^[0-9a-zA-Z_]+$`)
+	re := regexp.MustCompile(`^[0-9a-zA-Z_\-.]+$`)
 	if !re.MatchString(id) {
 		return
 	}
