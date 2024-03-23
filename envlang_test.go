@@ -228,6 +228,14 @@ A = "aaa ${B} ccc "
 				"EMPTY_VAR": strPtr(""),
 			},
 		},
+		{
+			"PrefixExport",
+			`export A = aaa"`,
+			map[string]*string{
+				"A": strPtr("aaa"),
+			},
+			nil,
+		},
 	}
 
 	for _, tt := range tests {
@@ -256,7 +264,7 @@ H="my_value"
 
 I = bar baz
 
-
+export EXPORTED_VAR = exported_value
 
 J = "foo bar"
 
@@ -322,6 +330,7 @@ VAR_DEFAULT_EMPTY = "${EMPTY_VAR:-eee}"
 		"VAR_DEFAULT_UNSET":          strPtr("uuu"),
 		"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr(""),
 		"VAR_DEFAULT_EMPTY":          strPtr("eee"),
+		"EXPORTED_VAR":               strPtr("exported_value"),
 	}
 
 	d := dao.NewDefaultDao()

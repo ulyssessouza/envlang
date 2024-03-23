@@ -33,6 +33,11 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 	if id == "" {
 		return
 	}
+
+	// TODO: Implement the logic to handle the export keyword in the grammar file
+	id, _ = strings.CutPrefix(id, "export ")
+	id = strings.TrimSpace(id)
+
 	hasAssign := true
 	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
 		hasAssign = false
