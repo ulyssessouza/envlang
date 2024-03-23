@@ -10,18 +10,18 @@ type EnvLangValueListener interface {
 	// EnterDqstring is called when entering the dqstring production.
 	EnterDqstring(c *DqstringContext)
 
-	// EnterVariable is called when entering the variable production.
-	EnterVariable(c *VariableContext)
-
 	// EnterContent is called when entering the content production.
 	EnterContent(c *ContentContext)
+
+	// EnterVariable is called when entering the variable production.
+	EnterVariable(c *VariableContext)
 
 	// ExitDqstring is called when exiting the dqstring production.
 	ExitDqstring(c *DqstringContext)
 
-	// ExitVariable is called when exiting the variable production.
-	ExitVariable(c *VariableContext)
-
 	// ExitContent is called when exiting the content production.
 	ExitContent(c *ContentContext)
+
+	// ExitVariable is called when exiting the variable production.
+	ExitVariable(c *VariableContext)
 }

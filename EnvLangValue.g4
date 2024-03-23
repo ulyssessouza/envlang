@@ -4,10 +4,6 @@ dqstring
 	: content* (SPACE* | CRLF* | EOF)
 	;
 
-variable
-	: var=(STRICT_VAR | SIMPLE_VAR)
-	;
-
 content
 	: variable
 	| STR
@@ -15,7 +11,25 @@ content
 	| CRLF
 	;
 
-STRICT_VAR
+variable
+	: var=
+	(
+	  STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
+	| STRICT_VAR_WITH_DEFAULT_IF_UNSET
+	| SIMPLE_STRICT_VAR
+	| SIMPLE_VAR
+	)
+	;
+
+STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
+	: '${' SPACE* VAR_ID ':-' STR SPACE* '}'
+	;
+
+STRICT_VAR_WITH_DEFAULT_IF_UNSET
+	: '${' SPACE* VAR_ID '-' STR SPACE* '}'
+	;
+
+SIMPLE_STRICT_VAR
 	: '${' SPACE* VAR_ID SPACE* '}'
 	;
 
@@ -27,6 +41,27 @@ STR
 	: FIRST_CHAR REST_OF_STRING*
 	;
 
+PESO_SIGN
+	: '$'
+	;
+
+FIRST_CHAR
+	: ~[,\\."'\r\n ]
+	;
+
+REST_OF_STRING
+	: ~[\\'"$\r\n ]
+	;
+
+NUMBER
+	: [0-9]+
+	;
+
+VAR_ID
+	: NUMBER // Only numbers
+	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
+	;
+
 SPACE
 	: ' '
 	| '\t'
@@ -35,19 +70,6 @@ SPACE
 CRLF
 	: '\r'? '\n'
 	| '\r'
-	;
-
-fragment FIRST_CHAR
-	: ~[,\\."'\r\n ]
-	;
-
-fragment REST_OF_STRING
-	: ~[\\'"$\r\n ]
-	;
-
-fragment VAR_ID
-	: [0-9]+ // Only numbers
-	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
 	;
 
 // Catch all rule.

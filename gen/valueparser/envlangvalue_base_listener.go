@@ -26,14 +26,14 @@ func (s *BaseEnvLangValueListener) EnterDqstring(ctx *DqstringContext) {}
 // ExitDqstring is called when production dqstring is exited.
 func (s *BaseEnvLangValueListener) ExitDqstring(ctx *DqstringContext) {}
 
-// EnterVariable is called when production variable is entered.
-func (s *BaseEnvLangValueListener) EnterVariable(ctx *VariableContext) {}
-
-// ExitVariable is called when production variable is exited.
-func (s *BaseEnvLangValueListener) ExitVariable(ctx *VariableContext) {}
-
 // EnterContent is called when production content is entered.
 func (s *BaseEnvLangValueListener) EnterContent(ctx *ContentContext) {}
 
 // ExitContent is called when production content is exited.
 func (s *BaseEnvLangValueListener) ExitContent(ctx *ContentContext) {}
+
+// EnterVariable is called when production variable is entered.
+func (s *BaseEnvLangValueListener) EnterVariable(ctx *VariableContext) {}
+
+// ExitVariable is called when production variable is exited.
+func (s *BaseEnvLangValueListener) ExitVariable(ctx *VariableContext) {}
