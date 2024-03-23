@@ -37,6 +37,9 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 	// TODO: Implement the logic to handle the export keyword in the grammar file
 	id, _ = strings.CutPrefix(id, "export ")
 	id = strings.TrimSpace(id)
+	if strings.HasPrefix(id, "#") {
+		return
+	}
 
 	hasAssign := true
 	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
@@ -47,6 +50,7 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 		valuePtr = &v
 	}
 
+	toTrim := true
 	if c.Value() != nil {
 		v := strings.TrimSpace(c.Value().GetText())
 		switch c.Value().GetStr().GetTokenType() {
@@ -55,8 +59,15 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 			valuePtr = &v
 		case fileparser.EnvLangFileParserDQSTRING:
 			v = v[1 : len(v)-1] // Removing quotes
+			toTrim = false
 			fallthrough
 		case fileparser.EnvLangFileParserTEXT:
+			if strings.Index(v, "#") != 0 {
+				v = strings.SplitN(v, "#", pair)[0]
+				if toTrim {
+					v = strings.TrimSpace(v)
+				}
+			}
 			v = GetValue(l.d, v)
 			valuePtr = &v
 		default:

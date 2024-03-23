@@ -249,18 +249,17 @@ A = "aaa ${B} ccc "
 func TestFull(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
 	is := `
+# my comment
 
-
-A=aaa
-B="bbb"
+A=aaa # my inline comment on A
+B="bbb" # my inline comment on B
 C =ccc
 D= ddd
-E='eee'
+E='eee' # my inline comment on E
 F=
 G
 
 H="my_value"
-
 
 I = bar baz
 
