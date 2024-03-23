@@ -14,11 +14,13 @@ jobs:
 
     - name: Set up Go
       uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: 'go.mod'
 
     - name: Gotestsum installer
       uses: autero1/action-gotestsum@v2.0.0
       with:
-        go-version-file: 'go.mod'
+        gotestsum_version: '1.11.0'
 
     - name: Test
       run: make test
