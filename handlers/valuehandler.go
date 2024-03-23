@@ -55,7 +55,7 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	case valueparser.EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET:
 		vName, defaultValue := l.getNameAndDefault(varToken)
 		value, ok := l.d.Get(vName)
-		if !ok {
+		if !ok || value == nil {
 			l.append(defaultValue)
 			return
 		}
