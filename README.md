@@ -46,7 +46,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	d := dao.NewDefaultDaoFromMap(nil)
+	d := dao.NewDefaultDao()
 	vars := envlang.GetVariablesFromInputStream(d, file)
 	fmt.Printf("FOO=%q\n", *vars["FOO"])
 	fmt.Printf("BAR=%q\n", *vars["BAR"])
