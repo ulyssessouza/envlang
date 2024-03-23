@@ -7,6 +7,10 @@ import (
 	"github.com/ulyssessouza/envlang/gen/valueparser"
 )
 
+const (
+	pair = 2
+)
+
 var _ valueparser.EnvLangValueListener = &envLangValueListener{}
 
 type envLangValueListener struct {

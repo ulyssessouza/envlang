@@ -183,7 +183,44 @@ A = "aaa ${B} ccc "
 				"A": strPtr("aaa"),
 			},
 		},
+		{
+			"SpecialWithPesoSign",
+			`SPECIAL3 = "{{{ $ }}}"`,
+			map[string]*string{
+				"SPECIAL3": strPtr("{{{ $ }}}"),
+			},
+			nil,
+		},
+		{
+			"VariableWithDefaultForEmpty",
+			`VAR_DEFAULT_UNSET_OR_EMPTY = "${EMPTY_VAR:-eee}"`,
+			map[string]*string{
+				"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr("eee"),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
+			"VariableWithDefaultForUnset",
+			`VAR_DEFAULT_UNSET_OR_EMPTY = "${UNSET_VAR-uuu}"`,
+			map[string]*string{
+				"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr("uuu"),
+			},
+			nil,
+		},
+		{
+			"VariableWithDefaultForUnset",
+			`VAR_DEFAULT_UNSET_OR_EMPTY = "${EMPTY_VAR-uuu}"`,
+			map[string]*string{
+				"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr(""),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			d := dao.NewDefaultDaoFromMap(tt.envState)
@@ -231,6 +268,8 @@ N3=43AS3sA43
 
 N4=44AS4sA44
 
+SIMPLE_SPACING = aaa ${B} ccc
+
 
 SPECIAL1 = "{{{ ${A} }}}"
 SPECIAL2 = "{{{ $A }}}"
@@ -239,31 +278,41 @@ SPECIAL4 = "{{{ $ $ $}}}"
 SPECIAL5 = "{{{ $$ }}}"
 SPECIAL6 = "{{{ $$$ }}}"
 
+EMPTY_VAR=""
+
+VAR_DEFAULT_UNSET = "${UNSET_VAR-uuu}"
+VAR_DEFAULT_UNSET_OR_EMPTY = "${EMPTY_VAR-eee}"
+VAR_DEFAULT_EMPTY = "${EMPTY_VAR:-eee}"
 `
 	expected := map[string]*string{
-		"A":        strPtr("aaa"),
-		"B":        strPtr("bbb"),
-		"C":        strPtr("ccc"),
-		"D":        strPtr("ddd"),
-		"E":        strPtr("eee"),
-		"F":        strPtr(""),
-		"G":        nil,
-		"H":        strPtr("my_value"),
-		"I":        strPtr("bar baz"),
-		"J":        strPtr("foo bar"),
-		"L":        strPtr("my\nmulti\nline\nentry"),
-		"M":        strPtr("foo aaa bar"),
-		"MYVAR":    strPtr("before bar baz after foo bar opa "),
-		"N1":       strPtr("41"),
-		"N2":       strPtr("42"),
-		"N3":       strPtr("43AS3sA43"),
-		"N4":       strPtr("44AS4sA44"),
-		"SPECIAL1": strPtr("{{{ aaa }}}"),
-		"SPECIAL2": strPtr("{{{ aaa }}}"),
-		"SPECIAL3": strPtr("{{{ $ }}}"),
-		"SPECIAL4": strPtr("{{{ $ $ $}}}"),
-		"SPECIAL5": strPtr("{{{ $$ }}}"),
-		"SPECIAL6": strPtr("{{{ $$$ }}}"),
+		"A":                          strPtr("aaa"),
+		"B":                          strPtr("bbb"),
+		"C":                          strPtr("ccc"),
+		"D":                          strPtr("ddd"),
+		"E":                          strPtr("eee"),
+		"F":                          strPtr(""),
+		"G":                          nil,
+		"H":                          strPtr("my_value"),
+		"I":                          strPtr("bar baz"),
+		"J":                          strPtr("foo bar"),
+		"L":                          strPtr("my\nmulti\nline\nentry"),
+		"M":                          strPtr("foo aaa bar"),
+		"MYVAR":                      strPtr("before bar baz after foo bar opa "),
+		"N1":                         strPtr("41"),
+		"N2":                         strPtr("42"),
+		"N3":                         strPtr("43AS3sA43"),
+		"N4":                         strPtr("44AS4sA44"),
+		"SIMPLE_SPACING":             strPtr("aaa bbb ccc"),
+		"SPECIAL1":                   strPtr("{{{ aaa }}}"),
+		"SPECIAL2":                   strPtr("{{{ aaa }}}"),
+		"SPECIAL3":                   strPtr("{{{ $ }}}"),
+		"SPECIAL4":                   strPtr("{{{ $ $ $}}}"),
+		"SPECIAL5":                   strPtr("{{{ $$ }}}"),
+		"SPECIAL6":                   strPtr("{{{ $$$ }}}"),
+		"EMPTY_VAR":                  strPtr(""),
+		"VAR_DEFAULT_UNSET":          strPtr("uuu"),
+		"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr(""),
+		"VAR_DEFAULT_EMPTY":          strPtr("eee"),
 	}
 
 	d := dao.NewDefaultDao()
