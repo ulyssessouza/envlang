@@ -44,7 +44,7 @@ import (
 func main() {
 	file, err := os.Open("input.env")
 	if err != nil {
-		return
+		panic(err)
 	}
 	d := dao.NewDefaultDaoFromMap(nil)
 	vars := envlang.GetVariablesFromInputStream(d, file)
