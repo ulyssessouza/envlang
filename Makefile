@@ -20,4 +20,4 @@ grun:
 	java -Xmx500M -cp "/usr/share/java/antlr-4.13.1-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig EnvLangValue dqstrings -tokens
 
 lint:
-	golangci-lint run ./... --timeout 2m
+	@golangci-lint run ./... --timeout 2m
