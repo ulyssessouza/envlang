@@ -1,4 +1,4 @@
-package main
+package envlang
 
 import (
 	"strings"
