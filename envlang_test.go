@@ -249,7 +249,12 @@ A = "aaa ${B} ccc "
 func TestFull(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
 	is := `
+INVALID LINE
+
 # my comment
+	# my tab comment
+
+VAR_TO_BE_LOADED_FROM_OS_ENV
 
 A=aaa # my inline comment on A
 B="bbb" # my inline comment on B
@@ -286,6 +291,7 @@ N4=44AS4sA44
 
 SIMPLE_SPACING = aaa ${B} ccc
 
+export OPTION_B='\n'
 
 SPECIAL1 = "{{{ ${A} }}}"
 SPECIAL2 = "{{{ $A }}}"
@@ -299,40 +305,47 @@ EMPTY_VAR=""
 VAR_DEFAULT_UNSET = "${UNSET_VAR-uuu}"
 VAR_DEFAULT_UNSET_OR_EMPTY = "${EMPTY_VAR-eee}"
 VAR_DEFAULT_EMPTY = "${EMPTY_VAR:-eee}"
+
+export EQUALS='postgres://localhost:5432/database?sslmode=disable'
 `
 	expected := map[string]*string{
-		"A":                          strPtr("aaa"),
-		"B":                          strPtr("bbb"),
-		"C":                          strPtr("ccc"),
-		"D":                          strPtr("ddd"),
-		"E":                          strPtr("eee"),
-		"F":                          strPtr(""),
-		"G":                          nil,
-		"H":                          strPtr("my_value"),
-		"I":                          strPtr("bar baz"),
-		"J":                          strPtr("foo bar"),
-		"L":                          strPtr("my\nmulti\nline\nentry"),
-		"M":                          strPtr("foo aaa bar"),
-		"MYVAR":                      strPtr("before bar baz after foo bar opa "),
-		"N1":                         strPtr("41"),
-		"N2":                         strPtr("42"),
-		"N3":                         strPtr("43AS3sA43"),
-		"N4":                         strPtr("44AS4sA44"),
-		"SIMPLE_SPACING":             strPtr("aaa bbb ccc"),
-		"SPECIAL1":                   strPtr("{{{ aaa }}}"),
-		"SPECIAL2":                   strPtr("{{{ aaa }}}"),
-		"SPECIAL3":                   strPtr("{{{ $ }}}"),
-		"SPECIAL4":                   strPtr("{{{ $ $ $}}}"),
-		"SPECIAL5":                   strPtr("{{{ $$ }}}"),
-		"SPECIAL6":                   strPtr("{{{ $$$ }}}"),
-		"EMPTY_VAR":                  strPtr(""),
-		"VAR_DEFAULT_UNSET":          strPtr("uuu"),
-		"VAR_DEFAULT_UNSET_OR_EMPTY": strPtr(""),
-		"VAR_DEFAULT_EMPTY":          strPtr("eee"),
-		"EXPORTED_VAR":               strPtr("exported_value"),
+		"A":                            strPtr("aaa"),
+		"B":                            strPtr("bbb"),
+		"C":                            strPtr("ccc"),
+		"D":                            strPtr("ddd"),
+		"E":                            strPtr("eee"),
+		"F":                            strPtr(""),
+		"G":                            nil,
+		"H":                            strPtr("my_value"),
+		"I":                            strPtr("bar baz"),
+		"J":                            strPtr("foo bar"),
+		"L":                            strPtr("my\nmulti\nline\nentry"),
+		"M":                            strPtr("foo aaa bar"),
+		"MYVAR":                        strPtr("before bar baz after foo bar opa "),
+		"N1":                           strPtr("41"),
+		"N2":                           strPtr("42"),
+		"N3":                           strPtr("43AS3sA43"),
+		"N4":                           strPtr("44AS4sA44"),
+		"SIMPLE_SPACING":               strPtr("aaa bbb ccc"),
+		"SPECIAL1":                     strPtr("{{{ aaa }}}"),
+		"SPECIAL2":                     strPtr("{{{ aaa }}}"),
+		"SPECIAL3":                     strPtr("{{{ $ }}}"),
+		"SPECIAL4":                     strPtr("{{{ $ $ $}}}"),
+		"SPECIAL5":                     strPtr("{{{ $$ }}}"),
+		"SPECIAL6":                     strPtr("{{{ $$$ }}}"),
+		"EMPTY_VAR":                    strPtr(""),
+		"VAR_DEFAULT_UNSET":            strPtr("uuu"),
+		"VAR_DEFAULT_UNSET_OR_EMPTY":   strPtr(""),
+		"VAR_DEFAULT_EMPTY":            strPtr("eee"),
+		"EXPORTED_VAR":                 strPtr("exported_value"),
+		"OPTION_B":                     strPtr("\\n"),
+		"EQUALS":                       strPtr("postgres://localhost:5432/database?sslmode=disable"),
+		"VAR_TO_BE_LOADED_FROM_OS_ENV": strPtr("loaded_from_os_env"),
 	}
 
-	d := dao.NewDefaultDao()
+	d := dao.NewDefaultDaoFromMap(map[string]*string{
+		"VAR_TO_BE_LOADED_FROM_OS_ENV": strPtr("loaded_from_os_env"),
+	})
 	assert.DeepEqual(t, expected, GetVariables(d, is))
 }
 

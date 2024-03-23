@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/ulyssessouza/envlang/dao"
@@ -34,16 +35,26 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 		return
 	}
 
-	// TODO: Implement the logic to handle the export keyword in the grammar file
+	// TODO: Implement this logic in the grammar file
 	id, _ = strings.CutPrefix(id, "export ")
 	id = strings.TrimSpace(id)
 	if strings.HasPrefix(id, "#") {
 		return
 	}
+	re := regexp.MustCompile(`^[0-9a-zA-Z_]+$`)
+	if !re.MatchString(id) {
+		return
+	}
+	// TODO: END
 
 	hasAssign := true
 	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
 		hasAssign = false
+		gotFromDAO, ok := l.d.Get(id)
+		if ok && gotFromDAO != nil {
+			l.d.Put(id, gotFromDAO)
+			return
+		}
 	}
 	if hasAssign && c.Value() == nil {
 		v := ""
