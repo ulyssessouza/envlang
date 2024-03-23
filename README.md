@@ -78,3 +78,9 @@ Please note that it used `%q` to print empty strings, as the default `fmt.Printf
 ## License
 
 This project is licensed under the [MIT](LICENSE) License - see the LICENSE.md file for details
+
+
+_________________
+
+
+Made with love ❤️. PRs are welcome 🚀
