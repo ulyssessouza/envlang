@@ -2,7 +2,7 @@
 
 ## Description
 
-Envlang is a simple language for defining environment variables. It is designed to be easy to read and write, and to be easy to use in a variety of contexts. 
+Envlang is a Go library that tries to treat environment variables as a proper language. By having a proper grammar, it can parse and evaluate expressions that are based on environment variables.
 It's meant to be configurable through a simple API that lets you define your own Data Access Objects (DAOs) and use them to access the environment variables you need so they can serve as connectors to anything you need.
 
 ## Getting Started
@@ -51,7 +51,7 @@ func main() {
 	fmt.Printf("FOO=%q\n", *vars["FOO"])
 	fmt.Printf("BAR=%q\n", *vars["BAR"])
 	fmt.Printf("BAZ=%q\n", *vars["BAZ"])
-	fmt.Printf("EMPTY=%q\n", *vars["EMPTY"]) // Use %q to print empty strings
+	fmt.Printf("EMPTY=%q\n", *vars["EMPTY"])
 	fmt.Printf("UNSET=%q\n", vars["UNSET"])
 	fmt.Printf("VAR1=%q\n", *vars["VAR1"])
 	fmt.Printf("VAR2=%q\n", *vars["VAR2"])
