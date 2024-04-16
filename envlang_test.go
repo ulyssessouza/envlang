@@ -1,6 +1,7 @@
 package envlang
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -20,6 +21,15 @@ func TestGetFromReader(t *testing.T) {
 	}
 	d := dao.NewDefaultDaoFromMap(nil)
 	assert.DeepEqual(t, expected, GetVariablesFromInputStream(d, strings.NewReader(`A=aaa`)))
+}
+
+func TestLoad(t *testing.T) {
+	const envlangOsLoadVariable = "ENVLANG_TEST_OSLOAD_VARIABLE"
+	err := Load("./fixtures/load.env")
+	assert.NilError(t, err)
+	osLoaded, ok := os.LookupEnv(envlangOsLoadVariable)
+	assert.Assert(t, ok)
+	assert.Equal(t, osLoaded, "ENVLANG_TEST_OSLOAD_VALUE")
 }
 
 //nolint:funlen
