@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/antlr4-go/antlr/v4"
+	antlr "github.com/antlr4-go/antlr/v4"
 	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/fileparser"
 	"github.com/ulyssessouza/envlang/handlers"

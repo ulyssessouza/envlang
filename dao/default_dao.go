@@ -66,7 +66,6 @@ func (d *DefaultDao) ImportMap(m map[string]string) {
 	defer d.Unlock()
 
 	for k, v := range m {
-		v := v
 		d.m[k] = &v
 	}
 }
