@@ -17,6 +17,8 @@ type DefaultDao struct {
 
 	env map[string]*string
 	m   map[string]*string
+
+	lookupFn LookupFn
 }
 
 func NewDefaultDao() EnvLangDao {
@@ -26,7 +28,17 @@ func NewDefaultDao() EnvLangDao {
 	}
 }
 
-func NewDefaultDaoFromEnv(env []string) EnvLangDao {
+type EnvlangDaoOptionsFn func(d EnvLangDao)
+
+func WithLookupFn(fn LookupFn) EnvlangDaoOptionsFn {
+	return func(d EnvLangDao) {
+		if d, ok := d.(*DefaultDao); ok {
+			d.lookupFn = fn
+		}
+	}
+}
+
+func NewDefaultDaoFromEnv(env []string, opts ...EnvlangDaoOptionsFn) EnvLangDao {
 	d := &DefaultDao{
 		m:   make(map[string]*string),
 		env: make(map[string]*string),
@@ -37,6 +49,11 @@ func NewDefaultDaoFromEnv(env []string) EnvLangDao {
 		v := splitEnv[1]
 		d.env[splitEnv[0]] = &v
 	}
+
+	for _, opt := range opts {
+		opt(d)
+	}
+
 	return d
 }
 
@@ -77,6 +94,12 @@ func (d *DefaultDao) ExportMap() map[string]*string {
 func (d *DefaultDao) Get(k string) (*string, bool) {
 	d.RLock()
 	defer d.RUnlock()
+
+	if d.lookupFn != nil {
+		if v, ok := d.lookupFn(k); ok {
+			return &v, true
+		}
+	}
 
 	v, ok := d.m[k]
 	if !ok {
