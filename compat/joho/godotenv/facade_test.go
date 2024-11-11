@@ -1,4 +1,4 @@
-package compat_env
+package godotenv
 
 import (
 	"os"
@@ -39,7 +39,7 @@ func TestEnvVariablePrecedence(t *testing.T) {
 	for _, test := range testcases {
 		t.Run(test.name, func(t *testing.T) {
 			wd := t.TempDir()
-			err := os.WriteFile(filepath.Join(wd, ".env"), []byte(test.dotEnv), 0o700)
+			err := os.WriteFile(filepath.Join(wd, ".env"), []byte(test.dotEnv), 0o600)
 			assert.NilError(t, err)
 
 			envMap, err := GetEnvFromFile(env2Map(test.osEnv), []string{filepath.Join(wd, ".env")})

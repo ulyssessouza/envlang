@@ -1,4 +1,4 @@
-package compat_env
+package godotenv
 
 import (
 	"bytes"
@@ -11,6 +11,7 @@ import (
 	"github.com/ulyssessouza/envlang/dao"
 )
 
+//nolint:gocognit
 func GetEnvFromFile(currentEnv map[string]string, filenames []string) (map[string]string, error) {
 	envMap := make(map[string]string)
 
@@ -23,7 +24,7 @@ func GetEnvFromFile(currentEnv map[string]string, filenames []string) (map[strin
 
 		s, err := os.Stat(dotEnvFile)
 		if os.IsNotExist(err) {
-			return envMap, fmt.Errorf("Couldn't find env file: %s", dotEnvFile)
+			return envMap, fmt.Errorf("couldn't find env file: %s", dotEnvFile)
 		}
 		if err != nil {
 			return envMap, err
@@ -38,7 +39,7 @@ func GetEnvFromFile(currentEnv map[string]string, filenames []string) (map[strin
 
 		b, err := os.ReadFile(dotEnvFile)
 		if os.IsNotExist(err) {
-			return nil, fmt.Errorf("Couldn't read env file: %s", dotEnvFile)
+			return nil, fmt.Errorf("couldn't read env file: %s", dotEnvFile)
 		}
 		if err != nil {
 			return envMap, err
@@ -63,8 +64,6 @@ func GetEnvFromFile(currentEnv map[string]string, filenames []string) (map[strin
 	return envMap, nil
 }
 
-var utf8BOM = []byte("\uFEFF")
-
 // Parse reads an env file from io.Reader, returning a map of keys and values.
 func Parse(r io.Reader) (map[string]string, error) {
 	return ParseWithLookup(r, nil)
@@ -79,6 +78,7 @@ func ParseWithLookup(r io.Reader, lookupFn dao.LookupFn) (map[string]string, err
 
 	// seek past the UTF-8 BOM if it exists (particularly on Windows, some
 	// editors tend to add it, and it'll cause parsing to fail)
+	utf8BOM := []byte("\uFEFF")
 	data = bytes.TrimPrefix(data, utf8BOM)
 
 	return UnmarshalBytesWithLookup(data, lookupFn)
