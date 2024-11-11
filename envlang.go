@@ -3,6 +3,7 @@ package envlang
 import (
 	"io"
 	"os"
+	"strings"
 
 	antlr "github.com/antlr4-go/antlr/v4"
 	"github.com/ulyssessouza/envlang/dao"
@@ -24,8 +25,10 @@ func Load(paths ...string) error {
 	if len(paths) == 0 {
 		paths = []string{defaultEnvFile}
 	}
-
 	for _, p := range paths {
+		if strings.TrimSpace(p) == "" {
+			continue
+		}
 		f, err := os.Open(p)
 		if err != nil {
 			return err
