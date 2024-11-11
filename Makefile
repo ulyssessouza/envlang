@@ -20,8 +20,8 @@ clean:
 	@rm -rf gen
 
 setup:
-	go install gotest.tools/gotestsum@v1.11.0
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	go install gotest.tools/gotestsum@v1.12.0
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.0
 
 vendor:
 	go mod vendor

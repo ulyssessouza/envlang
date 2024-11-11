@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-	envlang.Load()
+	envlang.Load() //nolint:errcheck // This is not necessary to check
 }
