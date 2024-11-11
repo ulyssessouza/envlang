@@ -112,6 +112,12 @@ func (d *DefaultDao) Put(k string, v *string) {
 	d.Lock()
 	defer d.Unlock()
 
+	if d.lookupFn != nil {
+		if lookupValue, ok := d.lookupFn(k); ok {
+			v = &lookupValue
+		}
+	}
+
 	d.m[k] = v
 }
 
