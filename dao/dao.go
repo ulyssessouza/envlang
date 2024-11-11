@@ -1,5 +1,7 @@
 package dao
 
+type LookupFn func(string) (string, bool)
+
 type EnvLangDao interface {
 	ImportList([]string)
 	ImportMap(map[string]string)
