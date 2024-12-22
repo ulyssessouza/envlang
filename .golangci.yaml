@@ -135,13 +135,18 @@ linters-settings:
   nolintlint:
     # Exclude following linters from requiring an explanation.
     # Default: []
-    allow-no-explanation: [ funlen, gocognit, lll ]
+    allow-no-explanation: [ funlen, gocognit, lll, errcheck ]
     # Enable to require an explanation of nonzero length after each nolint directive.
     # Default: false
     require-explanation: true
     # Enable to require nolint directives to mention the specific linter being suppressed.
     # Default: false
     require-specific: true
+
+  revive:
+    rules:
+      - name: blank-imports
+        disabled: true
 
   rowserrcheck:
     # database/sql is always checked
