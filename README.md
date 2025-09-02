@@ -73,7 +73,7 @@ VAR3="default_value_for_empty"
 VAR4="default_value_for_unset"
 ```
 
-Please note that it used `%q` to print empty strings, as the default `fmt.Printf` will not print them.
+Please note that it used `%q` to print empty strings, as `%s` would not print anything.
 
 ## License
 
