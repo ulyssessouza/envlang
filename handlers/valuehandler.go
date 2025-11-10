@@ -3,7 +3,6 @@ package handlers
 import (
 	"strings"
 
-	antlr "github.com/antlr4-go/antlr/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/ulyssessouza/envlang/gen/valueparser"
 )
@@ -21,66 +20,91 @@ func (l *envLangValueListener) ExitDqstring(c *valueparser.DqstringContext) {
 func (l *envLangValueListener) ExitContent(c *valueparser.ContentContext) {
 	fullText := c.GetText()
 	log.Debugf("ExitContent: %s", fullText)
-	if c.Variable() == nil {
-		l.append(c.GetText())
+
+	// Variables are handled by ExitVariable
+	if c.Variable() != nil {
+		return
 	}
+
+	// Handle escaped characters
+	if c.EscapedChar() != nil {
+		escaped := c.GetText()
+		if len(escaped) == 2 && escaped[0] == '\\' {
+			switch escaped[1] {
+			case 'n':
+				l.append("\n")
+			case 't':
+				l.append("\t")
+			case 'r':
+				l.append("\r")
+			case '\\':
+				l.append("\\")
+			case '$':
+				l.append("$")
+			case '"':
+				l.append("\"")
+			default:
+				// Unknown escape sequence, append as-is
+				l.append(escaped)
+			}
+			return
+		}
+	}
+
+	// Regular text, whitespace, or newlines
+	l.append(c.GetText())
 }
 
 func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	fullText := c.GetText()
 	log.Debugf("ExitVariable: %s", fullText)
 
-	varToken := c.GetVar_()
-	switch varToken.GetTokenType() {
-	case valueparser.EnvLangValueParserSIMPLE_VAR:
-		vName := varToken.GetText()[1:]
+	// Check which type of variable token we have
+	switch {
+	case c.SIMPLE_VAR() != nil:
+		vName := fullText[1:] // Remove $
 		value, ok := l.d.Get(vName)
 		if ok && value != nil {
 			l.append(*value)
 		}
-	case valueparser.EnvLangValueParserSIMPLE_STRICT_VAR:
-		vName := strings.TrimSpace(varToken.GetText()[2 : len(varToken.GetText())-1])
+	case c.SIMPLE_STRICT_VAR() != nil:
+		vName := strings.TrimSpace(fullText[2 : len(fullText)-1]) // Remove ${ and }
 		value, ok := l.d.Get(vName)
 		if ok && value != nil {
 			l.append(*value)
 		}
-	case valueparser.EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY:
-		vName, defaultValue := l.getNameAndDefault(varToken)
+	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
+		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)
 		if !ok || value == nil || *value == "" {
 			l.append(defaultValue)
 			return
 		}
 		l.append(*value)
-	case valueparser.EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET:
-		vName, defaultValue := l.getNameAndDefault(varToken)
+	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET() != nil:
+		vName, defaultValue := l.getNameAndDefault(fullText, "-")
 		value, ok := l.d.Get(vName)
 		if !ok || value == nil {
 			l.append(defaultValue)
 			return
 		}
 		l.append(*value)
+	case c.DOLLAR() != nil:
+		// Lone dollar sign - append as-is (may include following char)
+		l.append(fullText)
 	default:
-		log.Debugln("unexpected token: " + varToken.GetText())
+		log.Debugln("unexpected variable token: " + fullText)
 	}
 }
 
-func (l *envLangValueListener) getNameAndDefault(token antlr.Token) (string, string) {
-	log.Debugf("Name with Default: %s", token.GetText())
-	splitter := ""
-	switch token.GetTokenType() {
-	case valueparser.EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY:
-		splitter = ":-"
-	case valueparser.EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET:
-		splitter = "-"
-	default:
-		log.Debugln("unexpected token: " + token.GetText())
-	}
+func (l *envLangValueListener) getNameAndDefault(text string, splitter string) (string, string) {
+	log.Debugf("Name with Default: %s", text)
 
-	vName := strings.TrimSpace(token.GetText()[2 : len(token.GetText())-1])
+	// Remove ${ and }
+	vName := strings.TrimSpace(text[2 : len(text)-1])
 	parts := strings.SplitN(vName, splitter, pair)
 	if len(parts) < pair {
-		return parts[0], ""
+		return strings.TrimSpace(parts[0]), ""
 	}
-	return parts[0], parts[1]
+	return strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1])
 }
