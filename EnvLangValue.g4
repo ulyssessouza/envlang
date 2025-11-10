@@ -1,75 +1,89 @@
 grammar EnvLangValue;
 
+// Parser rules
 dqstring
-	: content* (SPACE* | CRLF* | EOF)
-	;
+    : content* EOF
+    ;
 
 content
-	: variable
-	| STR
-	| SPACE
-	| CRLF
-	;
+    : variable
+    | escapedChar
+    | TEXT
+    | WS
+    | NEWLINE
+    ;
 
 variable
-	: var=
-	(
-	  STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
-	| STRICT_VAR_WITH_DEFAULT_IF_UNSET
-	| SIMPLE_STRICT_VAR
-	| SIMPLE_VAR
-	)
-	;
+    : STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
+    | STRICT_VAR_WITH_DEFAULT_IF_UNSET
+    | SIMPLE_STRICT_VAR
+    | SIMPLE_VAR
+    | DOLLAR  // Lone dollar sign
+    ;
 
+escapedChar
+    : ESCAPED_CHAR
+    ;
+
+// Lexer rules
+
+// Variable substitution with default if unset or empty: ${VAR:-default}
 STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
-	: '${' SPACE* VAR_ID ':-' STR SPACE* '}'
-	;
+    : '${' WS* VAR_NAME WS* ':-' DEFAULT_VALUE WS* '}'
+    ;
 
+// Variable substitution with default if unset: ${VAR-default}
 STRICT_VAR_WITH_DEFAULT_IF_UNSET
-	: '${' SPACE* VAR_ID '-' STR SPACE* '}'
-	;
+    : '${' WS* VAR_NAME WS* '-' DEFAULT_VALUE WS* '}'
+    ;
 
+// Simple strict variable: ${VAR}
 SIMPLE_STRICT_VAR
-	: '${' SPACE* VAR_ID SPACE* '}'
-	;
+    : '${' WS* VAR_NAME WS* '}'
+    ;
 
+// Simple variable: $VAR
 SIMPLE_VAR
-	: '$' VAR_ID
-	;
+    : '$' VAR_NAME
+    ;
 
-STR
-	: FIRST_CHAR REST_OF_STRING*
-	;
+// Lone dollar sign (not followed by valid variable name)
+DOLLAR
+    : '$' ~[a-zA-Z_0-9{]?
+    ;
 
-SPACE
-	: ' '
-	| '\t'
-	;
+// Escaped characters: \n, \t, \r, \\, \$, \"
+ESCAPED_CHAR
+    : '\\' [ntr\\$"]
+    ;
 
-CRLF
-	: '\r'? '\n'
-	| '\r'
-	;
+// Regular text: anything except special chars
+TEXT
+    : TEXT_CHAR+
+    ;
 
-// Catch all rule.
-// This is used to avoid the error message "no viable alternative at input '<EOF>'". Just for debugging.
-ANY
-	: .
-	;
+// Whitespace (preserve in values)
+WS
+    : [ \t]+
+    ;
 
-fragment FIRST_CHAR
-	: ~[,\\."'\r\n ]
-	;
+// Newlines (preserve in multiline values)
+NEWLINE
+    : '\r'? '\n'
+    | '\r'
+    ;
 
-fragment REST_OF_STRING
-	: ~[\\'"$\r\n ]
-	;
+// Fragment rules
 
-fragment NUMBER
-	: [0-9]+
-	;
+fragment VAR_NAME
+    : [a-zA-Z_][a-zA-Z_0-9]*  // Standard variable names
+    | [0-9]+                  // Numeric variables ($1, $2, etc.)
+    ;
 
-fragment VAR_ID
-	: NUMBER // Only numbers
-	| [a-zA-Z_][a-zA-Z_0-9]* // Start with letters, then letters, numbers and underscores
-	;
+fragment DEFAULT_VALUE
+    : ( ~[}] )*  // Everything until closing brace
+    ;
+
+fragment TEXT_CHAR
+    : ~[$\\\r\n \t]  // Anything except dollar, backslash, newline, or whitespace
+    ;
