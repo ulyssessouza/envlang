@@ -75,6 +75,50 @@ VAR4="default_value_for_unset"
 
 Please note that it used `%q` to print empty strings, as `%s` would not print anything.
 
+## godotenv Compatibility Layer
+
+Envlang includes a **100% API-compatible** drop-in replacement for [github.com/joho/godotenv](https://github.com/joho/godotenv), powered by our improved ANTLR4 grammar-based parser.
+
+### Quick Start: Drop-in Replacement
+
+Add this to your `go.mod`:
+
+```go
+replace github.com/joho/godotenv => github.com/ulyssessouza/envlang/compat/joho/godotenv v1.0.0
+```
+
+**That's it!** Your existing code using `github.com/joho/godotenv` will now use envlang's parser with **zero code changes**.
+
+### Why Use the Compatibility Layer?
+
+- ✅ **Better parsing**: ANTLR4 grammar instead of regex
+- ✅ **Clearer errors**: Grammar-based error messages
+- ✅ **More features**: Escape sequences (`\n`, `\t`, `\$`, etc.)
+- ✅ **Better tested**: 90%+ test coverage
+- ✅ **Same API**: All godotenv functions work identically
+
+### Example
+
+```go
+import "github.com/joho/godotenv"  // Works with replace directive!
+
+func main() {
+    godotenv.Load()
+    // Use your environment variables as usual
+}
+```
+
+### Supported Functions
+
+All godotenv functions are supported:
+- `Load()`, `Overload()`, `Read()`, `Parse()`
+- `Unmarshal()`, `UnmarshalBytes()`
+- `Marshal()`, `Write()`
+- `Exec()`
+- Plus bonus `*WithLookup()` variants for advanced use cases
+
+📖 **[Full documentation →](compat/joho/godotenv/README.md)**
+
 ## License
 
 This project is licensed under the [MIT](LICENSE) License - see the LICENSE.md file for details
