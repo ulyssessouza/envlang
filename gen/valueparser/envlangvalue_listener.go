@@ -16,6 +16,9 @@ type EnvLangValueListener interface {
 	// EnterVariable is called when entering the variable production.
 	EnterVariable(c *VariableContext)
 
+	// EnterEscapedChar is called when entering the escapedChar production.
+	EnterEscapedChar(c *EscapedCharContext)
+
 	// ExitDqstring is called when exiting the dqstring production.
 	ExitDqstring(c *DqstringContext)
 
@@ -24,4 +27,7 @@ type EnvLangValueListener interface {
 
 	// ExitVariable is called when exiting the variable production.
 	ExitVariable(c *VariableContext)
+
+	// ExitEscapedChar is called when exiting the escapedChar production.
+	ExitEscapedChar(c *EscapedCharContext)
 }

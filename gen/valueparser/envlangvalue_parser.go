@@ -33,29 +33,25 @@ func envlangvalueParserInit() {
 	staticData := &EnvLangValueParserStaticData
 	staticData.SymbolicNames = []string{
 		"", "STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY", "STRICT_VAR_WITH_DEFAULT_IF_UNSET",
-		"SIMPLE_STRICT_VAR", "SIMPLE_VAR", "STR", "SPACE", "CRLF", "ANY",
+		"SIMPLE_STRICT_VAR", "SIMPLE_VAR", "DOLLAR", "ESCAPED_CHAR", "TEXT",
+		"WS", "NEWLINE",
 	}
 	staticData.RuleNames = []string{
-		"dqstring", "content", "variable",
+		"dqstring", "content", "variable", "escapedChar",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 8, 36, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 1, 0, 5, 0, 8, 8, 0, 10,
-		0, 12, 0, 11, 9, 0, 1, 0, 5, 0, 14, 8, 0, 10, 0, 12, 0, 17, 9, 0, 1, 0,
-		5, 0, 20, 8, 0, 10, 0, 12, 0, 23, 9, 0, 1, 0, 3, 0, 26, 8, 0, 1, 1, 1,
-		1, 1, 1, 1, 1, 3, 1, 32, 8, 1, 1, 2, 1, 2, 1, 2, 0, 0, 3, 0, 2, 4, 0, 1,
-		1, 0, 1, 4, 40, 0, 9, 1, 0, 0, 0, 2, 31, 1, 0, 0, 0, 4, 33, 1, 0, 0, 0,
-		6, 8, 3, 2, 1, 0, 7, 6, 1, 0, 0, 0, 8, 11, 1, 0, 0, 0, 9, 7, 1, 0, 0, 0,
-		9, 10, 1, 0, 0, 0, 10, 25, 1, 0, 0, 0, 11, 9, 1, 0, 0, 0, 12, 14, 5, 6,
-		0, 0, 13, 12, 1, 0, 0, 0, 14, 17, 1, 0, 0, 0, 15, 13, 1, 0, 0, 0, 15, 16,
-		1, 0, 0, 0, 16, 26, 1, 0, 0, 0, 17, 15, 1, 0, 0, 0, 18, 20, 5, 7, 0, 0,
-		19, 18, 1, 0, 0, 0, 20, 23, 1, 0, 0, 0, 21, 19, 1, 0, 0, 0, 21, 22, 1,
-		0, 0, 0, 22, 26, 1, 0, 0, 0, 23, 21, 1, 0, 0, 0, 24, 26, 5, 0, 0, 1, 25,
-		15, 1, 0, 0, 0, 25, 21, 1, 0, 0, 0, 25, 24, 1, 0, 0, 0, 26, 1, 1, 0, 0,
-		0, 27, 32, 3, 4, 2, 0, 28, 32, 5, 5, 0, 0, 29, 32, 5, 6, 0, 0, 30, 32,
-		5, 7, 0, 0, 31, 27, 1, 0, 0, 0, 31, 28, 1, 0, 0, 0, 31, 29, 1, 0, 0, 0,
-		31, 30, 1, 0, 0, 0, 32, 3, 1, 0, 0, 0, 33, 34, 7, 0, 0, 0, 34, 5, 1, 0,
-		0, 0, 5, 9, 15, 21, 25, 31,
+		4, 1, 9, 28, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 1, 0, 5, 0,
+		10, 8, 0, 10, 0, 12, 0, 13, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 3, 1, 22, 8, 1, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 0, 0, 4, 0, 2, 4, 6, 0,
+		1, 1, 0, 1, 5, 28, 0, 11, 1, 0, 0, 0, 2, 21, 1, 0, 0, 0, 4, 23, 1, 0, 0,
+		0, 6, 25, 1, 0, 0, 0, 8, 10, 3, 2, 1, 0, 9, 8, 1, 0, 0, 0, 10, 13, 1, 0,
+		0, 0, 11, 9, 1, 0, 0, 0, 11, 12, 1, 0, 0, 0, 12, 14, 1, 0, 0, 0, 13, 11,
+		1, 0, 0, 0, 14, 15, 5, 0, 0, 1, 15, 1, 1, 0, 0, 0, 16, 22, 3, 4, 2, 0,
+		17, 22, 3, 6, 3, 0, 18, 22, 5, 7, 0, 0, 19, 22, 5, 8, 0, 0, 20, 22, 5,
+		9, 0, 0, 21, 16, 1, 0, 0, 0, 21, 17, 1, 0, 0, 0, 21, 18, 1, 0, 0, 0, 21,
+		19, 1, 0, 0, 0, 21, 20, 1, 0, 0, 0, 22, 3, 1, 0, 0, 0, 23, 24, 7, 0, 0,
+		0, 24, 5, 1, 0, 0, 0, 25, 26, 5, 6, 0, 0, 26, 7, 1, 0, 0, 0, 2, 11, 21,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -98,17 +94,19 @@ const (
 	EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET          = 2
 	EnvLangValueParserSIMPLE_STRICT_VAR                         = 3
 	EnvLangValueParserSIMPLE_VAR                                = 4
-	EnvLangValueParserSTR                                       = 5
-	EnvLangValueParserSPACE                                     = 6
-	EnvLangValueParserCRLF                                      = 7
-	EnvLangValueParserANY                                       = 8
+	EnvLangValueParserDOLLAR                                    = 5
+	EnvLangValueParserESCAPED_CHAR                              = 6
+	EnvLangValueParserTEXT                                      = 7
+	EnvLangValueParserWS                                        = 8
+	EnvLangValueParserNEWLINE                                   = 9
 )
 
 // EnvLangValueParser rules.
 const (
-	EnvLangValueParserRULE_dqstring = 0
-	EnvLangValueParserRULE_content  = 1
-	EnvLangValueParserRULE_variable = 2
+	EnvLangValueParserRULE_dqstring    = 0
+	EnvLangValueParserRULE_content     = 1
+	EnvLangValueParserRULE_variable    = 2
+	EnvLangValueParserRULE_escapedChar = 3
 )
 
 // IDqstringContext is an interface to support dynamic dispatch.
@@ -122,10 +120,6 @@ type IDqstringContext interface {
 	EOF() antlr.TerminalNode
 	AllContent() []IContentContext
 	Content(i int) IContentContext
-	AllSPACE() []antlr.TerminalNode
-	SPACE(i int) antlr.TerminalNode
-	AllCRLF() []antlr.TerminalNode
-	CRLF(i int) antlr.TerminalNode
 
 	// IsDqstringContext differentiates from other interfaces.
 	IsDqstringContext()
@@ -208,22 +202,6 @@ func (s *DqstringContext) Content(i int) IContentContext {
 	return t.(IContentContext)
 }
 
-func (s *DqstringContext) AllSPACE() []antlr.TerminalNode {
-	return s.GetTokens(EnvLangValueParserSPACE)
-}
-
-func (s *DqstringContext) SPACE(i int) antlr.TerminalNode {
-	return s.GetToken(EnvLangValueParserSPACE, i)
-}
-
-func (s *DqstringContext) AllCRLF() []antlr.TerminalNode {
-	return s.GetTokens(EnvLangValueParserCRLF)
-}
-
-func (s *DqstringContext) CRLF(i int) antlr.TerminalNode {
-	return s.GetToken(EnvLangValueParserCRLF, i)
-}
-
 func (s *DqstringContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -249,107 +227,34 @@ func (p *EnvLangValueParser) Dqstring() (localctx IDqstringContext) {
 	p.EnterRule(localctx, 0, EnvLangValueParserRULE_dqstring)
 	var _la int
 
-	var _alt int
-
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(9)
+	p.SetState(11)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 0, p.GetParserRuleContext())
-	if p.HasError() {
-		goto errorExit
-	}
-	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
-		if _alt == 1 {
-			{
-				p.SetState(6)
-				p.Content()
-			}
+	_la = p.GetTokenStream().LA(1)
 
-		}
-		p.SetState(11)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 0, p.GetParserRuleContext())
-		if p.HasError() {
-			goto errorExit
-		}
-	}
-	p.SetState(25)
-	p.GetErrorHandler().Sync(p)
-	if p.HasError() {
-		goto errorExit
-	}
-
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) {
-	case 1:
-		p.SetState(15)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		for _la == EnvLangValueParserSPACE {
-			{
-				p.SetState(12)
-				p.Match(EnvLangValueParserSPACE)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
-			}
-
-			p.SetState(17)
-			p.GetErrorHandler().Sync(p)
-			if p.HasError() {
-				goto errorExit
-			}
-			_la = p.GetTokenStream().LA(1)
-		}
-
-	case 2:
-		p.SetState(21)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		for _la == EnvLangValueParserCRLF {
-			{
-				p.SetState(18)
-				p.Match(EnvLangValueParserCRLF)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
-			}
-
-			p.SetState(23)
-			p.GetErrorHandler().Sync(p)
-			if p.HasError() {
-				goto errorExit
-			}
-			_la = p.GetTokenStream().LA(1)
-		}
-
-	case 3:
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1022) != 0 {
 		{
-			p.SetState(24)
-			p.Match(EnvLangValueParserEOF)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
+			p.SetState(8)
+			p.Content()
 		}
 
-	case antlr.ATNInvalidAltNumber:
-		goto errorExit
+		p.SetState(13)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+	}
+	{
+		p.SetState(14)
+		p.Match(EnvLangValueParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
 	}
 
 errorExit:
@@ -374,9 +279,10 @@ type IContentContext interface {
 
 	// Getter signatures
 	Variable() IVariableContext
-	STR() antlr.TerminalNode
-	SPACE() antlr.TerminalNode
-	CRLF() antlr.TerminalNode
+	EscapedChar() IEscapedCharContext
+	TEXT() antlr.TerminalNode
+	WS() antlr.TerminalNode
+	NEWLINE() antlr.TerminalNode
 
 	// IsContentContext differentiates from other interfaces.
 	IsContentContext()
@@ -430,16 +336,32 @@ func (s *ContentContext) Variable() IVariableContext {
 	return t.(IVariableContext)
 }
 
-func (s *ContentContext) STR() antlr.TerminalNode {
-	return s.GetToken(EnvLangValueParserSTR, 0)
+func (s *ContentContext) EscapedChar() IEscapedCharContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEscapedCharContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEscapedCharContext)
 }
 
-func (s *ContentContext) SPACE() antlr.TerminalNode {
-	return s.GetToken(EnvLangValueParserSPACE, 0)
+func (s *ContentContext) TEXT() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserTEXT, 0)
 }
 
-func (s *ContentContext) CRLF() antlr.TerminalNode {
-	return s.GetToken(EnvLangValueParserCRLF, 0)
+func (s *ContentContext) WS() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserWS, 0)
+}
+
+func (s *ContentContext) NEWLINE() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserNEWLINE, 0)
 }
 
 func (s *ContentContext) GetRuleContext() antlr.RuleContext {
@@ -465,47 +387,54 @@ func (s *ContentContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *EnvLangValueParser) Content() (localctx IContentContext) {
 	localctx = NewContentContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 2, EnvLangValueParserRULE_content)
-	p.SetState(31)
+	p.SetState(21)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET, EnvLangValueParserSIMPLE_STRICT_VAR, EnvLangValueParserSIMPLE_VAR:
+	case EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET, EnvLangValueParserSIMPLE_STRICT_VAR, EnvLangValueParserSIMPLE_VAR, EnvLangValueParserDOLLAR:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(27)
+			p.SetState(16)
 			p.Variable()
 		}
 
-	case EnvLangValueParserSTR:
+	case EnvLangValueParserESCAPED_CHAR:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(28)
-			p.Match(EnvLangValueParserSTR)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
+			p.SetState(17)
+			p.EscapedChar()
 		}
 
-	case EnvLangValueParserSPACE:
+	case EnvLangValueParserTEXT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(29)
-			p.Match(EnvLangValueParserSPACE)
+			p.SetState(18)
+			p.Match(EnvLangValueParserTEXT)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 
-	case EnvLangValueParserCRLF:
+	case EnvLangValueParserWS:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(30)
-			p.Match(EnvLangValueParserCRLF)
+			p.SetState(19)
+			p.Match(EnvLangValueParserWS)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case EnvLangValueParserNEWLINE:
+		p.EnterOuterAlt(localctx, 5)
+		{
+			p.SetState(20)
+			p.Match(EnvLangValueParserNEWLINE)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -537,17 +466,12 @@ type IVariableContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// GetVar_ returns the var_ token.
-	GetVar_() antlr.Token
-
-	// SetVar_ sets the var_ token.
-	SetVar_(antlr.Token)
-
 	// Getter signatures
 	STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() antlr.TerminalNode
 	STRICT_VAR_WITH_DEFAULT_IF_UNSET() antlr.TerminalNode
 	SIMPLE_STRICT_VAR() antlr.TerminalNode
 	SIMPLE_VAR() antlr.TerminalNode
+	DOLLAR() antlr.TerminalNode
 
 	// IsVariableContext differentiates from other interfaces.
 	IsVariableContext()
@@ -556,7 +480,6 @@ type IVariableContext interface {
 type VariableContext struct {
 	antlr.BaseParserRuleContext
 	parser antlr.Parser
-	var_   antlr.Token
 }
 
 func NewEmptyVariableContext() *VariableContext {
@@ -586,10 +509,6 @@ func NewVariableContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 
 func (s *VariableContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *VariableContext) GetVar_() antlr.Token { return s.var_ }
-
-func (s *VariableContext) SetVar_(v antlr.Token) { s.var_ = v }
-
 func (s *VariableContext) STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() antlr.TerminalNode {
 	return s.GetToken(EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY, 0)
 }
@@ -604,6 +523,10 @@ func (s *VariableContext) SIMPLE_STRICT_VAR() antlr.TerminalNode {
 
 func (s *VariableContext) SIMPLE_VAR() antlr.TerminalNode {
 	return s.GetToken(EnvLangValueParserSIMPLE_VAR, 0)
+}
+
+func (s *VariableContext) DOLLAR() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserDOLLAR, 0)
 }
 
 func (s *VariableContext) GetRuleContext() antlr.RuleContext {
@@ -633,21 +556,110 @@ func (p *EnvLangValueParser) Variable() (localctx IVariableContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(33)
-
-		var _lt = p.GetTokenStream().LT(1)
-
-		localctx.(*VariableContext).var_ = _lt
-
+		p.SetState(23)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&30) != 0) {
-			var _ri = p.GetErrorHandler().RecoverInline(p)
-
-			localctx.(*VariableContext).var_ = _ri
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&62) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
 			p.Consume()
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IEscapedCharContext is an interface to support dynamic dispatch.
+type IEscapedCharContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	ESCAPED_CHAR() antlr.TerminalNode
+
+	// IsEscapedCharContext differentiates from other interfaces.
+	IsEscapedCharContext()
+}
+
+type EscapedCharContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyEscapedCharContext() *EscapedCharContext {
+	var p = new(EscapedCharContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangValueParserRULE_escapedChar
+	return p
+}
+
+func InitEmptyEscapedCharContext(p *EscapedCharContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = EnvLangValueParserRULE_escapedChar
+}
+
+func (*EscapedCharContext) IsEscapedCharContext() {}
+
+func NewEscapedCharContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *EscapedCharContext {
+	var p = new(EscapedCharContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = EnvLangValueParserRULE_escapedChar
+
+	return p
+}
+
+func (s *EscapedCharContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *EscapedCharContext) ESCAPED_CHAR() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserESCAPED_CHAR, 0)
+}
+
+func (s *EscapedCharContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *EscapedCharContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *EscapedCharContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(EnvLangValueListener); ok {
+		listenerT.EnterEscapedChar(s)
+	}
+}
+
+func (s *EscapedCharContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(EnvLangValueListener); ok {
+		listenerT.ExitEscapedChar(s)
+	}
+}
+
+func (p *EnvLangValueParser) EscapedChar() (localctx IEscapedCharContext) {
+	localctx = NewEscapedCharContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 6, EnvLangValueParserRULE_escapedChar)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(25)
+		p.Match(EnvLangValueParserESCAPED_CHAR)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
 		}
 	}
 
