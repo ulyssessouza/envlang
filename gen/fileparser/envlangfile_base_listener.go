@@ -26,6 +26,12 @@ func (s *BaseEnvLangFileListener) EnterEnvFile(ctx *EnvFileContext) {}
 // ExitEnvFile is called when production envFile is exited.
 func (s *BaseEnvLangFileListener) ExitEnvFile(ctx *EnvFileContext) {}
 
+// EnterLine is called when production line is entered.
+func (s *BaseEnvLangFileListener) EnterLine(ctx *LineContext) {}
+
+// ExitLine is called when production line is exited.
+func (s *BaseEnvLangFileListener) ExitLine(ctx *LineContext) {}
+
 // EnterEntry is called when production entry is entered.
 func (s *BaseEnvLangFileListener) EnterEntry(ctx *EntryContext) {}
 
@@ -43,3 +49,15 @@ func (s *BaseEnvLangFileListener) EnterValue(ctx *ValueContext) {}
 
 // ExitValue is called when production value is exited.
 func (s *BaseEnvLangFileListener) ExitValue(ctx *ValueContext) {}
+
+// EnterComment is called when production comment is entered.
+func (s *BaseEnvLangFileListener) EnterComment(ctx *CommentContext) {}
+
+// ExitComment is called when production comment is exited.
+func (s *BaseEnvLangFileListener) ExitComment(ctx *CommentContext) {}
+
+// EnterInlineComment is called when production inlineComment is entered.
+func (s *BaseEnvLangFileListener) EnterInlineComment(ctx *InlineCommentContext) {}
+
+// ExitInlineComment is called when production inlineComment is exited.
+func (s *BaseEnvLangFileListener) ExitInlineComment(ctx *InlineCommentContext) {}

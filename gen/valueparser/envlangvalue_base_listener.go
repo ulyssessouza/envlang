@@ -37,3 +37,9 @@ func (s *BaseEnvLangValueListener) EnterVariable(ctx *VariableContext) {}
 
 // ExitVariable is called when production variable is exited.
 func (s *BaseEnvLangValueListener) ExitVariable(ctx *VariableContext) {}
+
+// EnterEscapedChar is called when production escapedChar is entered.
+func (s *BaseEnvLangValueListener) EnterEscapedChar(ctx *EscapedCharContext) {}
+
+// ExitEscapedChar is called when production escapedChar is exited.
+func (s *BaseEnvLangValueListener) ExitEscapedChar(ctx *EscapedCharContext) {}

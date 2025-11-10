@@ -10,6 +10,9 @@ type EnvLangFileListener interface {
 	// EnterEnvFile is called when entering the envFile production.
 	EnterEnvFile(c *EnvFileContext)
 
+	// EnterLine is called when entering the line production.
+	EnterLine(c *LineContext)
+
 	// EnterEntry is called when entering the entry production.
 	EnterEntry(c *EntryContext)
 
@@ -19,8 +22,17 @@ type EnvLangFileListener interface {
 	// EnterValue is called when entering the value production.
 	EnterValue(c *ValueContext)
 
+	// EnterComment is called when entering the comment production.
+	EnterComment(c *CommentContext)
+
+	// EnterInlineComment is called when entering the inlineComment production.
+	EnterInlineComment(c *InlineCommentContext)
+
 	// ExitEnvFile is called when exiting the envFile production.
 	ExitEnvFile(c *EnvFileContext)
+
+	// ExitLine is called when exiting the line production.
+	ExitLine(c *LineContext)
 
 	// ExitEntry is called when exiting the entry production.
 	ExitEntry(c *EntryContext)
@@ -30,4 +42,10 @@ type EnvLangFileListener interface {
 
 	// ExitValue is called when exiting the value production.
 	ExitValue(c *ValueContext)
+
+	// ExitComment is called when exiting the comment production.
+	ExitComment(c *CommentContext)
+
+	// ExitInlineComment is called when exiting the inlineComment production.
+	ExitInlineComment(c *InlineCommentContext)
 }
