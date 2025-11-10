@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/ulyssessouza/envlang"
 	"github.com/ulyssessouza/envlang/dao"
 )
+
+const defaultFileMode = 0o600
 
 //nolint:gocognit
 func GetEnvFromFile(currentEnv map[string]string, filenames []string) (map[string]string, error) {
@@ -84,6 +87,16 @@ func ParseWithLookup(r io.Reader, lookupFn dao.LookupFn) (map[string]string, err
 	return UnmarshalBytesWithLookup(data, lookupFn)
 }
 
+// Unmarshal parses env file from string, returning a map of keys and values.
+func Unmarshal(str string) (map[string]string, error) {
+	return UnmarshalWithLookup(str, nil)
+}
+
+// UnmarshalBytes parses env file from byte slice of chars, returning a map of keys and values.
+func UnmarshalBytes(src []byte) (map[string]string, error) {
+	return UnmarshalBytesWithLookup(src, nil)
+}
+
 // UnmarshalBytesWithLookup parses env file from byte slice of chars, returning a map of keys and values.
 func UnmarshalBytesWithLookup(src []byte, lookupFn dao.LookupFn) (map[string]string, error) {
 	return UnmarshalWithLookup(string(src), lookupFn)
@@ -105,10 +118,25 @@ func UnmarshalWithLookup(src string, lookupFn dao.LookupFn) (map[string]string, 
 	return m, nil
 }
 
+// Load reads env file(s) and loads them into ENV for this process.
+// It will NOT override an env variable that already exists.
 func Load(filenames ...string) error {
 	filenames = filenamesOrDefault(filenames)
 	for _, filename := range filenames {
-		err := loadFile(filename)
+		err := loadFile(filename, false)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Overload reads env file(s) and loads them into ENV for this process.
+// It WILL override an env variable that already exists.
+func Overload(filenames ...string) error {
+	filenames = filenamesOrDefault(filenames)
+	for _, filename := range filenames {
+		err := loadFile(filename, true)
 		if err != nil {
 			return err
 		}
@@ -123,7 +151,7 @@ func filenamesOrDefault(filenames []string) []string {
 	return filenames
 }
 
-func loadFile(filename string) error {
+func loadFile(filename string, overload bool) error {
 	defaultDAO := dao.NewDefaultDaoFromEnv(os.Environ())
 	f, err := os.Open(filename)
 	if err != nil {
@@ -132,8 +160,10 @@ func loadFile(filename string) error {
 	defer f.Close()
 	m := envlang.GetVariablesFromInputStream(defaultDAO, f)
 	for k, v := range m {
-		if _, ok := os.LookupEnv(k); ok {
-			continue
+		if !overload {
+			if _, ok := os.LookupEnv(k); ok {
+				continue
+			}
 		}
 		if v == nil {
 			v = new(string)
@@ -188,4 +218,57 @@ func ReadFile(filename string, lookupFn dao.LookupFn) (map[string]string, error)
 	defer file.Close()
 
 	return ParseWithLookup(file, lookupFn)
+}
+
+// Marshal outputs the given environment as a dotenv-formatted environment file.
+// Each line is in the format: KEY="value" where value is escaped.
+func Marshal(envMap map[string]string) (string, error) {
+	lines := make([]string, 0, len(envMap))
+	for k, v := range envMap {
+		lines = append(lines, fmt.Sprintf("%s=%s", k, doubleQuoteEscape(v)))
+	}
+	return fmt.Sprintf("%s\n", string(bytes.Join(convertStringsToBytes(lines), []byte("\n")))), nil
+}
+
+func convertStringsToBytes(strs []string) [][]byte {
+	result := make([][]byte, len(strs))
+	for i, s := range strs {
+		result[i] = []byte(s)
+	}
+	return result
+}
+
+func doubleQuoteEscape(s string) string {
+	s = fmt.Sprintf(`"%s"`, s)
+	s = fmt.Sprintf("%q", s[1:len(s)-1])
+	return s
+}
+
+// Write serializes the given environment and writes it to a file.
+func Write(envMap map[string]string, filename string) error {
+	content, err := Marshal(envMap)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filename, []byte(content), defaultFileMode)
+}
+
+// Exec loads env vars from .env files and then executes the given cmd with those environment variables.
+func Exec(filenames []string, cmd string, cmdArgs []string, overload bool) error {
+	if overload {
+		if err := Overload(filenames...); err != nil {
+			return err
+		}
+	} else {
+		if err := Load(filenames...); err != nil {
+			return err
+		}
+	}
+
+	// Execute the command with the current environment
+	command := exec.Command(cmd, cmdArgs...)
+	command.Stdin = os.Stdin
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	return command.Run()
 }
