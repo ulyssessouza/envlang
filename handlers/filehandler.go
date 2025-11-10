@@ -35,17 +35,18 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 		return
 	}
 
-	// TODO: Implement this logic in the grammar file
+	// Handle export prefix (grammar can't handle it due to lexer limitations)
 	id, _ = strings.CutPrefix(id, "export ")
 	id = strings.TrimSpace(id)
 	if strings.HasPrefix(id, "#") {
 		return
 	}
+
+	// Validate identifier format
 	re := regexp.MustCompile(`^[0-9a-zA-Z_\-.]+$`)
 	if !re.MatchString(id) {
 		return
 	}
-	// TODO: END
 
 	hasAssign := true
 	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
@@ -61,28 +62,29 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 		valuePtr = &v
 	}
 
-	toTrim := true
 	if c.Value() != nil {
 		v := strings.TrimSpace(c.Value().GetText())
-		switch c.Value().GetStr().GetTokenType() {
-		case fileparser.EnvLangFileParserSQSTRING: // Not evaluating variables inside single quoted values
-			v = v[1 : len(v)-1] // Removing quotes
+
+		// Check which type of value we have
+		switch {
+		case c.Value().SQSTRING() != nil:
+			// Single quoted - no variable expansion
+			v = v[1 : len(v)-1] // Remove quotes
 			valuePtr = &v
-		case fileparser.EnvLangFileParserDQSTRING:
-			v = v[1 : len(v)-1] // Removing quotes
-			toTrim = false
-			fallthrough
-		case fileparser.EnvLangFileParserTEXT:
-			if strings.Index(v, "#") != 0 {
-				v = strings.SplitN(v, "#", pair)[0]
-				if toTrim {
-					v = strings.TrimSpace(v)
-				}
-			}
+		case c.Value().DQSTRING() != nil:
+			// Double quoted - expand variables
+			v = v[1 : len(v)-1] // Remove quotes
+			v = GetValue(l.d, v)
+			valuePtr = &v
+		case c.Value().IDENTIFIER() != nil || c.Value().UNQUOTED_VALUE() != nil:
+			// Identifier or unquoted value - expand variables
+			// Grammar handles comments, so no need to check for #
+			// Trim trailing quotes that may appear in malformed input
+			v = strings.TrimRight(v, `"'`)
 			v = GetValue(l.d, v)
 			valuePtr = &v
 		default:
-			panic(fmt.Sprintf("unexpected string: %s", c.Value().GetStr().GetText()))
+			panic(fmt.Sprintf("unexpected value type: %s", v))
 		}
 	}
 
