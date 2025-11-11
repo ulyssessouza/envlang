@@ -121,9 +121,11 @@ func (d *DefaultStore) Put(k string, v *string) {
 	d.m[k] = v
 }
 
-func (d *DefaultStore) Remove(k string) {
+func (d *DefaultStore) Remove(k string) bool {
 	d.Lock()
 	defer d.Unlock()
 
+	_, ok := d.m[k]
 	delete(d.m, k)
+	return ok
 }

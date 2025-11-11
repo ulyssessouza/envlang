@@ -7,6 +7,6 @@ type Store interface {
 	ImportMap(map[string]string)
 	Get(string) (*string, bool)
 	Put(string, *string)
-	Remove(string)
+	Remove(string) bool
 	ExportMap() map[string]*string
 }

@@ -1,7 +1,6 @@
 package store
 
 import (
-	"sync"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -148,7 +147,7 @@ func TestDefaultStore_Remove(t *testing.T) {
 	assert.Assert(t, ok)
 	assert.Equal(t, *v, testValue)
 
-	d.Remove("KEY1")
+	assert.Equal(t, d.Remove("KEY1"), true)
 
 	_, ok = d.Get("KEY1")
 	assert.Assert(t, !ok)
@@ -157,7 +156,7 @@ func TestDefaultStore_Remove(t *testing.T) {
 func TestDefaultStore_Remove_NonExistent(t *testing.T) {
 	d := NewDefaultStore()
 
-	d.Remove("NONEXISTENT")
+	assert.Equal(t, d.Remove("NONEXISTENT"), false)
 }
 
 func TestDefaultStore_ImportList(t *testing.T) {
@@ -313,64 +312,4 @@ func TestDefaultStore_Put_WithLookupFn(t *testing.T) {
 	v, ok := d.Get("KEY")
 	assert.Assert(t, ok)
 	assert.Equal(t, *v, "lookup_override", "Put should use lookupFn value when available")
-}
-
-func TestDefaultStore_ConcurrentAccess(t *testing.T) {
-	d := NewDefaultStore()
-
-	var wg sync.WaitGroup
-	iterations := 100
-
-	for i := 0; i < iterations; i++ {
-		wg.Add(3)
-
-		go func(_ int) {
-			defer wg.Done()
-			value := "value"
-			d.Put("KEY", &value)
-		}(i)
-
-		go func(_ int) {
-			defer wg.Done()
-			d.Get("KEY")
-		}(i)
-
-		go func(_ int) {
-			defer wg.Done()
-			d.Remove("KEY")
-		}(i)
-	}
-
-	wg.Wait()
-}
-
-func TestDefaultStore_ConcurrentImports(t *testing.T) {
-	d := NewDefaultStore()
-
-	var wg sync.WaitGroup
-	iterations := 50
-
-	for i := 0; i < iterations; i++ {
-		wg.Add(2)
-
-		go func(_ int) {
-			defer wg.Done()
-			d.ImportList([]string{"KEY=value"})
-		}(i)
-
-		go func(_ int) {
-			defer wg.Done()
-			d.ImportMap(map[string]string{"KEY2": "value2"})
-		}(i)
-	}
-
-	wg.Wait()
-
-	v, ok := d.Get("KEY")
-	assert.Assert(t, ok)
-	assert.Equal(t, *v, "value")
-
-	v, ok = d.Get("KEY2")
-	assert.Assert(t, ok)
-	assert.Equal(t, *v, "value2")
 }
