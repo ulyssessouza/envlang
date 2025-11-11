@@ -305,7 +305,7 @@ func TestDefaultStore_Put_WithLookupFn(t *testing.T) {
 	}
 
 	d := NewDefaultStore()
-	WithLookupFn(lookupFn)(d.(Store))
+	WithLookupFn(lookupFn)(d)
 
 	originalValue := "original_value"
 	d.Put("KEY", &originalValue)
