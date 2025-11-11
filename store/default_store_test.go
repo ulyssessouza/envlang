@@ -131,7 +131,7 @@ func TestDefaultStore_Get_PriorityOrder(t *testing.T) {
 		}
 		return "", false
 	}
-	WithLookupFn(lookupFn)(d.(Store))
+	WithLookupFn(lookupFn)(d)
 
 	v, ok = d.Get("KEY")
 	assert.Assert(t, ok)
@@ -273,7 +273,7 @@ func TestDefaultStore_WithLookupFn(t *testing.T) {
 	}
 
 	d := NewDefaultStore()
-	WithLookupFn(lookupFn)(d.(Store))
+	WithLookupFn(lookupFn)(d)
 
 	v, ok := d.Get("LOOKUP_KEY")
 	assert.Assert(t, ok)
@@ -286,7 +286,7 @@ func TestDefaultStore_WithLookupFn_FallbackToMap(t *testing.T) {
 	}
 
 	d := NewDefaultStore()
-	WithLookupFn(lookupFn)(d.(Store))
+	WithLookupFn(lookupFn)(d)
 
 	mapVal := mapValue
 	d.Put("KEY", &mapVal)
