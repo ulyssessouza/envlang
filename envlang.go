@@ -6,18 +6,18 @@ import (
 	"strings"
 
 	antlr "github.com/antlr4-go/antlr/v4"
-	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/fileparser"
 	"github.com/ulyssessouza/envlang/handlers"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 const defaultEnvFile = ".env"
 
-func GetVariablesFromInputStream(d dao.EnvLangDao, r io.Reader) map[string]*string {
+func GetVariablesFromInputStream(d store.Store, r io.Reader) map[string]*string {
 	return getVariablesFromInputStream(d, antlr.NewIoStream(r))
 }
 
-func GetVariables(d dao.EnvLangDao, s string) map[string]*string {
+func GetVariables(d store.Store, s string) map[string]*string {
 	return getVariablesFromInputStream(d, antlr.NewInputStream(s))
 }
 
@@ -33,7 +33,7 @@ func Load(paths ...string) error {
 		if err != nil {
 			return err
 		}
-		m := GetVariablesFromInputStream(dao.NewDefaultDaoFromEnv(os.Environ()), f)
+		m := GetVariablesFromInputStream(store.NewDefaultStoreFromEnv(os.Environ()), f)
 		for k, v := range m {
 			if v == nil {
 				str := ""
@@ -46,7 +46,7 @@ func Load(paths ...string) error {
 	return nil
 }
 
-func getVariablesFromInputStream(d dao.EnvLangDao, ais *antlr.InputStream) map[string]*string {
+func getVariablesFromInputStream(d store.Store, ais *antlr.InputStream) map[string]*string {
 	lexer := fileparser.NewEnvLangFileLexer(ais)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
 	parser := fileparser.NewEnvLangFileParser(stream)

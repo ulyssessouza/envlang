@@ -65,11 +65,11 @@ All functions from the original godotenv are implemented:
 - `Exec(filenames []string, cmd string, cmdArgs []string, overload bool) error` - Load and execute command
 
 ### Bonus Features (Not in Original)
-- `ParseWithLookup(r io.Reader, lookupFn dao.LookupFn) (map[string]string, error)`
-- `UnmarshalWithLookup(src string, lookupFn dao.LookupFn) (map[string]string, error)`
-- `UnmarshalBytesWithLookup(src []byte, lookupFn dao.LookupFn) (map[string]string, error)`
-- `ReadWithLookup(_ dao.LookupFn, filenames ...string) (map[string]string, error)`
-- `ReadFile(filename string, lookupFn dao.LookupFn) (map[string]string, error)`
+- `ParseWithLookup(r io.Reader, lookupFn store.LookupFn) (map[string]string, error)`
+- `UnmarshalWithLookup(src string, lookupFn store.LookupFn) (map[string]string, error)`
+- `UnmarshalBytesWithLookup(src []byte, lookupFn store.LookupFn) (map[string]string, error)`
+- `ReadWithLookup(_ store.LookupFn, filenames ...string) (map[string]string, error)`
+- `ReadFile(filename string, lookupFn store.LookupFn) (map[string]string, error)`
 
 The `*WithLookup` variants allow custom variable resolution functions for advanced use cases.
 

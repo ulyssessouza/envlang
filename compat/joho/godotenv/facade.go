@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/ulyssessouza/envlang"
-	"github.com/ulyssessouza/envlang/dao"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 const defaultFileMode = 0o600
@@ -73,7 +73,7 @@ func Parse(r io.Reader) (map[string]string, error) {
 }
 
 // ParseWithLookup reads an env file from io.Reader, returning a map of keys and values.
-func ParseWithLookup(r io.Reader, lookupFn dao.LookupFn) (map[string]string, error) {
+func ParseWithLookup(r io.Reader, lookupFn store.LookupFn) (map[string]string, error) {
 	data, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
@@ -98,15 +98,15 @@ func UnmarshalBytes(src []byte) (map[string]string, error) {
 }
 
 // UnmarshalBytesWithLookup parses env file from byte slice of chars, returning a map of keys and values.
-func UnmarshalBytesWithLookup(src []byte, lookupFn dao.LookupFn) (map[string]string, error) {
+func UnmarshalBytesWithLookup(src []byte, lookupFn store.LookupFn) (map[string]string, error) {
 	return UnmarshalWithLookup(string(src), lookupFn)
 }
 
 // UnmarshalWithLookup parses env file from string, returning a map of keys and values.
-func UnmarshalWithLookup(src string, lookupFn dao.LookupFn) (map[string]string, error) {
+func UnmarshalWithLookup(src string, lookupFn store.LookupFn) (map[string]string, error) {
 	m := make(map[string]string)
-	defaultDAO := dao.NewDefaultDaoFromEnv(os.Environ(), dao.WithLookupFn(lookupFn))
-	srcMap := envlang.GetVariablesFromInputStream(defaultDAO, bytes.NewBufferString(src))
+	DefaultStore := store.NewDefaultStoreFromEnv(os.Environ(), store.WithLookupFn(lookupFn))
+	srcMap := envlang.GetVariablesFromInputStream(DefaultStore, bytes.NewBufferString(src))
 
 	for k, v := range srcMap {
 		value := ""
@@ -152,13 +152,13 @@ func filenamesOrDefault(filenames []string) []string {
 }
 
 func loadFile(filename string, overload bool) error {
-	defaultDAO := dao.NewDefaultDaoFromEnv(os.Environ())
+	DefaultStore := store.NewDefaultStoreFromEnv(os.Environ())
 	f, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	m := envlang.GetVariablesFromInputStream(defaultDAO, f)
+	m := envlang.GetVariablesFromInputStream(DefaultStore, f)
 	for k, v := range m {
 		if !overload {
 			if _, ok := os.LookupEnv(k); ok {
@@ -177,7 +177,7 @@ func Read(filenames ...string) (map[string]string, error) {
 	return ReadWithLookup(nil, filenames...)
 }
 
-func ReadWithLookup(_ dao.LookupFn, filenames ...string) (map[string]string, error) {
+func ReadWithLookup(_ store.LookupFn, filenames ...string) (map[string]string, error) {
 	filenames = filenamesOrDefault(filenames)
 	retMap := make(map[string]string)
 	for _, filename := range filenames {
@@ -193,13 +193,13 @@ func ReadWithLookup(_ dao.LookupFn, filenames ...string) (map[string]string, err
 }
 
 func lookupFile(filename string) (map[string]string, error) {
-	defaultDAO := dao.NewDefaultDaoFromEnv(os.Environ())
+	DefaultStore := store.NewDefaultStoreFromEnv(os.Environ())
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
-	m := envlang.GetVariablesFromInputStream(defaultDAO, f)
+	m := envlang.GetVariablesFromInputStream(DefaultStore, f)
 	retMap := make(map[string]string)
 	for k, v := range m {
 		if v == nil {
@@ -210,7 +210,7 @@ func lookupFile(filename string) (map[string]string, error) {
 	return retMap, nil
 }
 
-func ReadFile(filename string, lookupFn dao.LookupFn) (map[string]string, error) {
+func ReadFile(filename string, lookupFn store.LookupFn) (map[string]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err

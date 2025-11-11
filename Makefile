@@ -1,7 +1,7 @@
 all: clean vendor gen test lint
 	@echo "All done!"
 
-test:
+test: vendor
 	@gotestsum --format testname -- -failfast -race -covermode=atomic -coverprofile=coverage.out ./...
 
 gen:

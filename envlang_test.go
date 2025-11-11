@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gotest.tools/v3/assert"
 
-	"github.com/ulyssessouza/envlang/dao"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 func init() {
@@ -19,7 +19,7 @@ func TestGetFromReader(t *testing.T) {
 	expected := map[string]*string{
 		"A": strPtr("aaa"),
 	}
-	d := dao.NewDefaultDaoFromMap(nil)
+	d := store.NewDefaultStoreFromMap(nil)
 	assert.DeepEqual(t, expected, GetVariablesFromInputStream(d, strings.NewReader(`A=aaa`)))
 }
 
@@ -122,61 +122,61 @@ A = aaa
 		{
 			"SimpleWithSimpleVariable",
 			`
-A=$VAR_FROM_DAO
+A=$VAR_FROM_STORE
 `,
 			map[string]*string{
 				"A": strPtr("aaa"),
 			},
 			map[string]*string{
-				"VAR_FROM_DAO": strPtr("aaa"),
+				"VAR_FROM_STORE": strPtr("aaa"),
 			},
 		},
 		{
 			"SimpleWithSimpleVariableWithSpaces",
 			`
-A = $VAR_FROM_DAO
+A = $VAR_FROM_STORE
 		`,
 			map[string]*string{
 				"A": strPtr("aaa"),
 			},
 			map[string]*string{
-				"VAR_FROM_DAO": strPtr("aaa"),
+				"VAR_FROM_STORE": strPtr("aaa"),
 			},
 		},
 		{
 			"SimpleWithStrictVariable",
 			`
-A=${VAR_FROM_DAO}
+A=${VAR_FROM_STORE}
 `,
 			map[string]*string{
 				"A": strPtr("aaa"),
 			},
 			map[string]*string{
-				"VAR_FROM_DAO": strPtr("aaa"),
+				"VAR_FROM_STORE": strPtr("aaa"),
 			},
 		},
 		{
 			"SimpleWithStrictVariableWithSpaces",
 			`
-A = ${VAR_FROM_DAO}
+A = ${VAR_FROM_STORE}
 `,
 			map[string]*string{
 				"A": strPtr("aaa"),
 			},
 			map[string]*string{
-				"VAR_FROM_DAO": strPtr("aaa"),
+				"VAR_FROM_STORE": strPtr("aaa"),
 			},
 		},
 		{
 			"SimpleWithStrictVariableWithSpacesAndInternalSpaces",
 			`
-A = ${ VAR_FROM_DAO }
+A = ${ VAR_FROM_STORE }
 `,
 			map[string]*string{
 				"A": strPtr("aaa"),
 			},
 			map[string]*string{
-				"VAR_FROM_DAO": strPtr("aaa"),
+				"VAR_FROM_STORE": strPtr("aaa"),
 			},
 		},
 
@@ -250,7 +250,7 @@ A = "aaa ${B} ccc "
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			d := dao.NewDefaultDaoFromMap(tt.envState)
+			d := store.NewDefaultStoreFromMap(tt.envState)
 			assert.DeepEqual(t, tt.expected, GetVariables(d, tt.input))
 		})
 	}
@@ -368,7 +368,7 @@ export EQUALS='postgres://localhost:5432/database?sslmode=disable'
 		"SPECIAL_CHAR_E":               strPtr("unquoted phrase special è char"),
 	}
 
-	d := dao.NewDefaultDaoFromMap(map[string]*string{
+	d := store.NewDefaultStoreFromMap(map[string]*string{
 		"VAR_TO_BE_LOADED_FROM_OS_ENV": strPtr("loaded_from_os_env"),
 	})
 	assert.DeepEqual(t, expected, GetVariables(d, is))

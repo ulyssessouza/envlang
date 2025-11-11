@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/fileparser"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 var _ fileparser.EnvLangFileListener = &EnvLangFileListener{}
@@ -14,10 +14,10 @@ var _ fileparser.EnvLangFileListener = &EnvLangFileListener{}
 type EnvLangFileListener struct {
 	*fileparser.BaseEnvLangFileListener
 
-	d dao.EnvLangDao
+	d store.Store
 }
 
-func NewEnvLangFileListener(d dao.EnvLangDao) *EnvLangFileListener {
+func NewEnvLangFileListener(d store.Store) *EnvLangFileListener {
 	return &EnvLangFileListener{
 		d: d,
 	}
@@ -51,9 +51,9 @@ func (l *EnvLangFileListener) ExitEntry(c *fileparser.EntryContext) {
 	hasAssign := true
 	if c.ASSIGN() == nil || c.ASSIGN().GetText() == "" {
 		hasAssign = false
-		gotFromDAO, ok := l.d.Get(id)
-		if ok && gotFromDAO != nil {
-			l.d.Put(id, gotFromDAO)
+		gotFromStore, ok := l.d.Get(id)
+		if ok && gotFromStore != nil {
+			l.d.Put(id, gotFromStore)
 			return
 		}
 	}

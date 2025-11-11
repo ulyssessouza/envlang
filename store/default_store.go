@@ -1,4 +1,4 @@
-package dao
+package store
 
 import (
 	"strings"
@@ -10,9 +10,9 @@ const (
 	pairNumber    = 2
 )
 
-var _ EnvLangDao = &DefaultDao{}
+var _ Store = &DefaultStore{}
 
-type DefaultDao struct {
+type DefaultStore struct {
 	sync.RWMutex
 
 	env map[string]*string
@@ -21,25 +21,25 @@ type DefaultDao struct {
 	lookupFn LookupFn
 }
 
-func NewDefaultDao() EnvLangDao {
-	return &DefaultDao{
+func NewDefaultStore() Store {
+	return &DefaultStore{
 		m:   make(map[string]*string),
 		env: make(map[string]*string),
 	}
 }
 
-type EnvlangDaoOptionsFn func(d EnvLangDao)
+type StoreOptionsFn func(d Store)
 
-func WithLookupFn(fn LookupFn) EnvlangDaoOptionsFn {
-	return func(d EnvLangDao) {
-		if d, ok := d.(*DefaultDao); ok {
+func WithLookupFn(fn LookupFn) StoreOptionsFn {
+	return func(d Store) {
+		if d, ok := d.(*DefaultStore); ok {
 			d.lookupFn = fn
 		}
 	}
 }
 
-func NewDefaultDaoFromEnv(env []string, opts ...EnvlangDaoOptionsFn) EnvLangDao {
-	d := &DefaultDao{
+func NewDefaultStoreFromEnv(env []string, opts ...StoreOptionsFn) Store {
+	d := &DefaultStore{
 		m:   make(map[string]*string),
 		env: make(map[string]*string),
 	}
@@ -57,17 +57,17 @@ func NewDefaultDaoFromEnv(env []string, opts ...EnvlangDaoOptionsFn) EnvLangDao 
 	return d
 }
 
-func NewDefaultDaoFromMap(env map[string]*string) EnvLangDao {
+func NewDefaultStoreFromMap(env map[string]*string) Store {
 	if env == nil {
 		env = make(map[string]*string)
 	}
-	return &DefaultDao{
+	return &DefaultStore{
 		m:   make(map[string]*string),
 		env: env,
 	}
 }
 
-func (d *DefaultDao) ImportList(env []string) {
+func (d *DefaultStore) ImportList(env []string) {
 	d.Lock()
 	defer d.Unlock()
 
@@ -78,7 +78,7 @@ func (d *DefaultDao) ImportList(env []string) {
 	}
 }
 
-func (d *DefaultDao) ImportMap(m map[string]string) {
+func (d *DefaultStore) ImportMap(m map[string]string) {
 	d.Lock()
 	defer d.Unlock()
 
@@ -87,11 +87,11 @@ func (d *DefaultDao) ImportMap(m map[string]string) {
 	}
 }
 
-func (d *DefaultDao) ExportMap() map[string]*string {
+func (d *DefaultStore) ExportMap() map[string]*string {
 	return d.m
 }
 
-func (d *DefaultDao) Get(k string) (*string, bool) {
+func (d *DefaultStore) Get(k string) (*string, bool) {
 	d.RLock()
 	defer d.RUnlock()
 
@@ -108,7 +108,7 @@ func (d *DefaultDao) Get(k string) (*string, bool) {
 	return v, ok
 }
 
-func (d *DefaultDao) Put(k string, v *string) {
+func (d *DefaultStore) Put(k string, v *string) {
 	d.Lock()
 	defer d.Unlock()
 
@@ -121,7 +121,7 @@ func (d *DefaultDao) Put(k string, v *string) {
 	d.m[k] = v
 }
 
-func (d *DefaultDao) Remove(k string) {
+func (d *DefaultStore) Remove(k string) {
 	d.Lock()
 	defer d.Unlock()
 

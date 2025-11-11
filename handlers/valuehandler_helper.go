@@ -3,8 +3,8 @@ package handlers
 import (
 	antlr "github.com/antlr4-go/antlr/v4"
 	log "github.com/sirupsen/logrus"
-	"github.com/ulyssessouza/envlang/dao"
 	"github.com/ulyssessouza/envlang/gen/valueparser"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 const (
@@ -16,7 +16,7 @@ var _ valueparser.EnvLangValueListener = &envLangValueListener{}
 type envLangValueListener struct {
 	valueparser.BaseEnvLangValueListener
 
-	d      dao.EnvLangDao
+	d      store.Store
 	result string
 }
 
@@ -32,13 +32,13 @@ func (l *envLangValueListener) append(s string) {
 	l.result += s
 }
 
-func newEnvLangValueListener(d dao.EnvLangDao) *envLangValueListener {
+func newEnvLangValueListener(d store.Store) *envLangValueListener {
 	return &envLangValueListener{
 		d: d,
 	}
 }
 
-func GetValue(d dao.EnvLangDao, s string) string {
+func GetValue(d store.Store, s string) string {
 	is := antlr.NewInputStream(s)
 	lexer := valueparser.NewEnvLangValueLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)

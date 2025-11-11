@@ -1,8 +1,8 @@
-package dao
+package store
 
 type LookupFn func(string) (string, bool)
 
-type EnvLangDao interface {
+type Store interface {
 	ImportList([]string)
 	ImportMap(map[string]string)
 	Get(string) (*string, bool)

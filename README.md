@@ -3,7 +3,7 @@
 ## Description
 
 Envlang is a Go library that tries to treat environment variables as a proper language. By having a proper grammar, it can parse and evaluate expressions that are based on environment variables.
-It's meant to be configurable through a simple API that lets you define your own Data Access Objects (DAOs) and use them to access the environment variables you need so they can serve as connectors to anything you need.
+It's meant to be configurable through a simple API that lets you define your own Store and use them to access the environment variables you need so they can serve as connectors to anything you need.
 
 ## Getting Started
 
@@ -30,6 +30,7 @@ VAR4=${UNSET-default_value_for_unset}
 ```
 
 Example code:
+
 ```go
 package main
 
@@ -38,7 +39,7 @@ import (
 	"os"
 
 	"github.com/ulyssessouza/envlang"
-	"github.com/ulyssessouza/envlang/dao"
+	"github.com/ulyssessouza/envlang/store"
 )
 
 func main() {
@@ -46,7 +47,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	d := dao.NewDefaultDao()
+	d := store.NewDefaultStore()
 	vars := envlang.GetVariablesFromInputStream(d, file)
 	fmt.Printf("FOO=%q\n", *vars["FOO"])
 	fmt.Printf("BAR=%q\n", *vars["BAR"])
