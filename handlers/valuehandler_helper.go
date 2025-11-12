@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	antlr "github.com/antlr4-go/antlr/v4"
 	log "github.com/sirupsen/logrus"
 	"github.com/ulyssessouza/envlang/gen/valueparser"
@@ -10,6 +12,19 @@ import (
 const (
 	pair = 2
 )
+
+// ParameterExpansionError is raised when a parameter expansion error operator (? or :?) is triggered
+type ParameterExpansionError struct {
+	VarName string
+	Message string
+}
+
+func (e *ParameterExpansionError) Error() string {
+	if e.Message != "" {
+		return fmt.Sprintf("%s: %s", e.VarName, e.Message)
+	}
+	return fmt.Sprintf("%s: parameter not set", e.VarName)
+}
 
 var _ valueparser.EnvLangValueListener = &envLangValueListener{}
 

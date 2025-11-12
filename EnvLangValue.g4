@@ -18,6 +18,8 @@ variable
     | STRICT_VAR_WITH_ASSIGN_IF_UNSET
     | STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY
     | STRICT_VAR_WITH_ALTERNATE_IF_SET
+    | STRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY
+    | STRICT_VAR_WITH_ERROR_IF_UNSET
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET
     | SIMPLE_STRICT_VAR
@@ -49,6 +51,16 @@ STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY
 // Variable substitution with alternate if set: ${VAR+alternate}
 STRICT_VAR_WITH_ALTERNATE_IF_SET
     : '${' WS* VAR_NAME WS* '+' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable expansion with error if unset or empty: ${VAR:?message}
+STRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY
+    : '${' WS* VAR_NAME WS* ':?' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable expansion with error if unset: ${VAR?message}
+STRICT_VAR_WITH_ERROR_IF_UNSET
+    : '${' WS* VAR_NAME WS* '?' DEFAULT_VALUE WS* '}'
     ;
 
 // Variable substitution with default if unset or empty: ${VAR:-default}

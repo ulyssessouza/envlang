@@ -8,6 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gotest.tools/v3/assert"
 
+	"github.com/ulyssessouza/envlang/handlers"
 	"github.com/ulyssessouza/envlang/store"
 )
 
@@ -330,6 +331,84 @@ A = "aaa ${B} ccc "
 		t.Run(tt.name, func(t *testing.T) {
 			d := store.NewDefaultStoreFromMap(tt.envState)
 			assert.DeepEqual(t, tt.expected, GetVariables(d, tt.input))
+		})
+	}
+}
+
+func TestGetValueWithError(t *testing.T) {
+	tests := []struct {
+		name          string
+		input         string
+		envState      map[string]*string
+		expectedError string
+		expectedVar   string
+	}{
+		{
+			"ErrorForUnsetWithMessage",
+			`VAR_ERROR = "${UNSET_VAR:?custom error message}"`,
+			nil,
+			"UNSET_VAR: custom error message",
+			"UNSET_VAR",
+		},
+		{
+			"ErrorForEmptyWithMessage",
+			`VAR_ERROR = "${EMPTY_VAR:?variable is empty}"`,
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+			"EMPTY_VAR: variable is empty",
+			"EMPTY_VAR",
+		},
+		{
+			"ErrorForUnsetWithoutMessage",
+			`VAR_ERROR = "${UNSET_VAR?}"`,
+			nil,
+			"UNSET_VAR: parameter not set",
+			"UNSET_VAR",
+		},
+		{
+			"ErrorOperatorKeepsEmpty",
+			`VAR_ERROR = "${EMPTY_VAR?not unset}"`,
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+			"",
+			"",
+		},
+		{
+			"ErrorOperatorKeepsValue",
+			`VAR_NO_ERROR = "${EXISTING_VAR:?should not error}"`,
+			map[string]*string{
+				"EXISTING_VAR": strPtr("existing"),
+			},
+			"",
+			"",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			d := store.NewDefaultStoreFromMap(tt.envState)
+
+			if tt.expectedError == "" {
+				// Should not panic
+				result := GetVariables(d, tt.input)
+				assert.Assert(t, result != nil)
+			} else {
+				// Should panic with ParameterExpansionError
+				defer func() {
+					r := recover()
+					assert.Assert(t, r != nil, "expected panic but got none")
+
+					err, ok := r.(*handlers.ParameterExpansionError)
+					assert.Assert(t, ok, "expected ParameterExpansionError")
+					assert.Equal(t, tt.expectedVar, err.VarName)
+					assert.Equal(t, tt.expectedError, err.Error())
+				}()
+
+				GetVariables(d, tt.input)
+				t.Fatal("expected panic but execution continued")
+			}
 		})
 	}
 }
