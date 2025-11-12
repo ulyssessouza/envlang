@@ -147,6 +147,18 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 		if ok && value != nil {
 			l.append(removeShortestPrefixMatch(*value, pattern))
 		}
+	case c.STRICT_VAR_REMOVE_LONGEST_SUFFIX() != nil:
+		vName, pattern := l.getNameAndDefault(fullText, "%%")
+		value, ok := l.d.Get(vName)
+		if ok && value != nil {
+			l.append(removeLongestSuffixMatch(*value, pattern))
+		}
+	case c.STRICT_VAR_REMOVE_SHORTEST_SUFFIX() != nil:
+		vName, pattern := l.getNameAndDefault(fullText, "%")
+		value, ok := l.d.Get(vName)
+		if ok && value != nil {
+			l.append(removeShortestSuffixMatch(*value, pattern))
+		}
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
 		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)
@@ -241,6 +253,58 @@ func removeLongestPrefixMatch(value, pattern string) string {
 		prefix := value[:i]
 		if matchPattern(prefix, pattern) {
 			return value[i:]
+		}
+	}
+
+	return value
+}
+
+// removeShortestSuffixMatch removes the shortest match of pattern from the end of value
+func removeShortestSuffixMatch(value, pattern string) string {
+	if pattern == "" {
+		return value
+	}
+
+	// Simple literal match (no wildcards)
+	if !strings.Contains(pattern, "*") && !strings.Contains(pattern, "?") {
+		if strings.HasSuffix(value, pattern) {
+			return value[:len(value)-len(pattern)]
+		}
+		return value
+	}
+
+	// Pattern with wildcards - find shortest match from the end
+	// Try matching from shortest to longest suffix
+	for i := len(value); i >= 0; i-- {
+		suffix := value[i:]
+		if matchPattern(suffix, pattern) {
+			return value[:i]
+		}
+	}
+
+	return value
+}
+
+// removeLongestSuffixMatch removes the longest match of pattern from the end of value
+func removeLongestSuffixMatch(value, pattern string) string {
+	if pattern == "" {
+		return value
+	}
+
+	// Simple literal match (no wildcards)
+	if !strings.Contains(pattern, "*") && !strings.Contains(pattern, "?") {
+		if strings.HasSuffix(value, pattern) {
+			return value[:len(value)-len(pattern)]
+		}
+		return value
+	}
+
+	// Pattern with wildcards - find longest match from the end
+	// Try matching from longest to shortest suffix
+	for i := 0; i <= len(value); i++ {
+		suffix := value[i:]
+		if matchPattern(suffix, pattern) {
+			return value[:i]
 		}
 	}
 
