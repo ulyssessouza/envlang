@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -134,6 +135,18 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 			length = len(*value)
 		}
 		l.append(fmt.Sprintf("%d", length))
+	case c.STRICT_VAR_REMOVE_LONGEST_PREFIX() != nil:
+		vName, pattern := l.getNameAndDefault(fullText, "##")
+		value, ok := l.d.Get(vName)
+		if ok && value != nil {
+			l.append(removeLongestPrefixMatch(*value, pattern))
+		}
+	case c.STRICT_VAR_REMOVE_SHORTEST_PREFIX() != nil:
+		vName, pattern := l.getNameAndDefault(fullText, "#")
+		value, ok := l.d.Get(vName)
+		if ok && value != nil {
+			l.append(removeShortestPrefixMatch(*value, pattern))
+		}
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
 		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)
@@ -180,4 +193,80 @@ func (l *envLangValueListener) getVarNameFromLength(text string) string {
 		content = strings.TrimSpace(content[1:])
 	}
 	return content
+}
+
+// removeShortestPrefixMatch removes the shortest match of pattern from the beginning of value
+func removeShortestPrefixMatch(value, pattern string) string {
+	if pattern == "" {
+		return value
+	}
+
+	// Simple literal match (no wildcards)
+	if !strings.Contains(pattern, "*") && !strings.Contains(pattern, "?") {
+		if strings.HasPrefix(value, pattern) {
+			return value[len(pattern):]
+		}
+		return value
+	}
+
+	// Pattern with wildcards - find shortest match
+	// Try matching from shortest to longest prefix
+	for i := 0; i <= len(value); i++ {
+		prefix := value[:i]
+		if matchPattern(prefix, pattern) {
+			return value[i:]
+		}
+	}
+
+	return value
+}
+
+// removeLongestPrefixMatch removes the longest match of pattern from the beginning of value
+func removeLongestPrefixMatch(value, pattern string) string {
+	if pattern == "" {
+		return value
+	}
+
+	// Simple literal match (no wildcards)
+	if !strings.Contains(pattern, "*") && !strings.Contains(pattern, "?") {
+		if strings.HasPrefix(value, pattern) {
+			return value[len(pattern):]
+		}
+		return value
+	}
+
+	// Pattern with wildcards - find longest match
+	// Try matching from longest to shortest prefix
+	for i := len(value); i >= 0; i-- {
+		prefix := value[:i]
+		if matchPattern(prefix, pattern) {
+			return value[i:]
+		}
+	}
+
+	return value
+}
+
+// matchPattern performs simple glob-style pattern matching
+// Supports * (matches any sequence) and ? (matches single character)
+func matchPattern(text, pattern string) bool {
+	// Convert glob pattern to regex
+	regexPattern := "^"
+	for i := 0; i < len(pattern); i++ {
+		switch pattern[i] {
+		case '*':
+			regexPattern += ".*"
+		case '?':
+			regexPattern += "."
+		case '.', '+', '(', ')', '[', ']', '{', '}', '^', '$', '|', '\\':
+			// Escape regex special characters
+			regexPattern += "\\" + string(pattern[i])
+		default:
+			regexPattern += string(pattern[i])
+		}
+	}
+	regexPattern += "$"
+
+	matched, _ := regexp.MatchString(regexPattern, text)
+	return matched
 }

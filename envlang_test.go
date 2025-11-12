@@ -346,6 +346,46 @@ A = "aaa ${B} ccc "
 			nil,
 		},
 		{
+			"RemoveShortestPrefixLiteral",
+			`VAR_REMOVE = "${PATH#/usr/}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("local/bin"),
+			},
+			map[string]*string{
+				"PATH": strPtr("/usr/local/bin"),
+			},
+		},
+		{
+			"RemoveShortestPrefixWithWildcard",
+			`VAR_REMOVE = "${FILENAME#*.}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("tar.gz"),
+			},
+			map[string]*string{
+				"FILENAME": strPtr("archive.tar.gz"),
+			},
+		},
+		{
+			"RemoveLongestPrefixWithWildcard",
+			`VAR_REMOVE = "${FILENAME##*.}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("gz"),
+			},
+			map[string]*string{
+				"FILENAME": strPtr("archive.tar.gz"),
+			},
+		},
+		{
+			"RemovePrefixNoMatch",
+			`VAR_REMOVE = "${PATH#/var/}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("/usr/local/bin"),
+			},
+			map[string]*string{
+				"PATH": strPtr("/usr/local/bin"),
+			},
+		},
+		{
 			"PrefixExport",
 			`export A = aaa"`,
 			map[string]*string{
