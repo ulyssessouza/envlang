@@ -22,6 +22,7 @@ variable
     | STRICT_VAR_WITH_ERROR_IF_UNSET
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET
+    | STRICT_VAR_LENGTH
     | SIMPLE_STRICT_VAR
     | SIMPLE_VAR
     | DOLLAR  // Lone dollar sign
@@ -71,6 +72,11 @@ STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
 // Variable substitution with default if unset: ${VAR-default}
 STRICT_VAR_WITH_DEFAULT_IF_UNSET
     : '${' WS* VAR_NAME WS* '-' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable length: ${#VAR}
+STRICT_VAR_LENGTH
+    : '${' WS* '#' WS* VAR_NAME WS* '}'
     ;
 
 // Simple strict variable: ${VAR}

@@ -318,6 +318,34 @@ A = "aaa ${B} ccc "
 			},
 		},
 		{
+			"VariableLengthOfString",
+			`VAR_LENGTH = "${#EXISTING_VAR}"`,
+			map[string]*string{
+				"VAR_LENGTH": strPtr("5"),
+			},
+			map[string]*string{
+				"EXISTING_VAR": strPtr("hello"),
+			},
+		},
+		{
+			"VariableLengthOfEmpty",
+			`VAR_LENGTH = "${#EMPTY_VAR}"`,
+			map[string]*string{
+				"VAR_LENGTH": strPtr("0"),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
+			"VariableLengthOfUnset",
+			`VAR_LENGTH = "${#UNSET_VAR}"`,
+			map[string]*string{
+				"VAR_LENGTH": strPtr("0"),
+			},
+			nil,
+		},
+		{
 			"PrefixExport",
 			`export A = aaa"`,
 			map[string]*string{

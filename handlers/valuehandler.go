@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -125,6 +126,14 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 			})
 		}
 		l.append(*value)
+	case c.STRICT_VAR_LENGTH() != nil:
+		vName := l.getVarNameFromLength(fullText)
+		value, ok := l.d.Get(vName)
+		length := 0
+		if ok && value != nil {
+			length = len(*value)
+		}
+		l.append(fmt.Sprintf("%d", length))
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
 		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)
@@ -159,4 +168,16 @@ func (l *envLangValueListener) getNameAndDefault(text string, splitter string) (
 		return strings.TrimSpace(parts[0]), ""
 	}
 	return strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1])
+}
+
+func (l *envLangValueListener) getVarNameFromLength(text string) string {
+	log.Debugf("Variable Length: %s", text)
+
+	// Remove ${ and }
+	content := strings.TrimSpace(text[2 : len(text)-1])
+	// Remove the # prefix
+	if strings.HasPrefix(content, "#") {
+		content = strings.TrimSpace(content[1:])
+	}
+	return content
 }
