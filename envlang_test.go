@@ -279,6 +279,44 @@ A = "aaa ${B} ccc "
 			},
 		},
 		{
+			"VariableWithAlternateForSet",
+			`VAR_ALTERNATE_SET = "${EXISTING_VAR:+alternate}"`,
+			map[string]*string{
+				"VAR_ALTERNATE_SET": strPtr("alternate"),
+			},
+			map[string]*string{
+				"EXISTING_VAR": strPtr("existing"),
+			},
+		},
+		{
+			"VariableWithAlternateForUnset",
+			`VAR_ALTERNATE_UNSET = "${UNSET_VAR:+alternate}"`,
+			map[string]*string{
+				"VAR_ALTERNATE_UNSET": strPtr(""),
+			},
+			nil,
+		},
+		{
+			"VariableWithAlternateForEmpty",
+			`VAR_ALTERNATE_EMPTY = "${EMPTY_VAR:+alternate}"`,
+			map[string]*string{
+				"VAR_ALTERNATE_EMPTY": strPtr(""),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
+			"VariableWithAlternateForSetEvenEmpty",
+			`VAR_ALTERNATE_SET_EMPTY = "${EMPTY_VAR+alternate}"`,
+			map[string]*string{
+				"VAR_ALTERNATE_SET_EMPTY": strPtr("alternate"),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
 			"PrefixExport",
 			`export A = aaa"`,
 			map[string]*string{

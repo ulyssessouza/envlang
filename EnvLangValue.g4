@@ -16,6 +16,8 @@ content
 variable
     : STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_ASSIGN_IF_UNSET
+    | STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY
+    | STRICT_VAR_WITH_ALTERNATE_IF_SET
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET
     | SIMPLE_STRICT_VAR
@@ -37,6 +39,16 @@ STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY
 // Variable assignment with default if unset: ${VAR=default}
 STRICT_VAR_WITH_ASSIGN_IF_UNSET
     : '${' WS* VAR_NAME WS* '=' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable substitution with alternate if set and not empty: ${VAR:+alternate}
+STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY
+    : '${' WS* VAR_NAME WS* ':+' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable substitution with alternate if set: ${VAR+alternate}
+STRICT_VAR_WITH_ALTERNATE_IF_SET
+    : '${' WS* VAR_NAME WS* '+' DEFAULT_VALUE WS* '}'
     ;
 
 // Variable substitution with default if unset or empty: ${VAR:-default}
