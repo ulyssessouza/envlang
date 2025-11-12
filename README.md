@@ -139,7 +139,7 @@ Envlang includes a **100% API-compatible** drop-in replacement for [github.com/j
 Add this to your `go.mod`:
 
 ```go
-replace github.com/joho/godotenv => github.com/ulyssessouza/envlang/compat/joho/godotenv v1.0.0
+replace github.com/joho/godotenv => github.com/ulyssessouza/envlang/compat/joho/godotenv v0.1.3
 ```
 
 **That's it!** Your existing code using `github.com/joho/godotenv` will now use envlang's parser with **zero code changes**.
