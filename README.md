@@ -76,6 +76,60 @@ VAR4="default_value_for_unset"
 
 Please note that it used `%q` to print empty strings, as `%s` would not print anything.
 
+## Shell Parameter Expansion
+
+Envlang supports a comprehensive set of POSIX shell parameter expansion operators:
+
+### Default Values
+- `${VAR:-default}` - Use default value if variable is unset or empty
+- `${VAR-default}` - Use default value if variable is unset (keeps empty values)
+
+### Assignment
+- `${VAR:=default}` - Assign and return default if variable is unset or empty
+- `${VAR=default}` - Assign and return default if variable is unset
+
+### Alternate Values
+- `${VAR:+alternate}` - Use alternate value if variable is set and non-empty
+- `${VAR+alternate}` - Use alternate value if variable is set (even if empty)
+
+### Error Handling
+- `${VAR:?message}` - Panic with error if variable is unset or empty
+- `${VAR?message}` - Panic with error if variable is unset
+
+### String Operations
+- `${#VAR}` - Return the length of the variable's value
+
+### Pattern Matching
+- `${VAR#pattern}` - Remove shortest prefix match (supports glob patterns: `*`, `?`)
+- `${VAR##pattern}` - Remove longest prefix match
+- `${VAR%pattern}` - Remove shortest suffix match
+- `${VAR%%pattern}` - Remove longest suffix match
+
+### Example
+
+```go
+d := store.NewDefaultStoreFromMap(map[string]*string{
+    "PATH":     strPtr("/usr/local/bin"),
+    "FILENAME": strPtr("archive.tar.gz"),
+    "EMPTY":    strPtr(""),
+})
+
+// Default values
+vars := envlang.GetVariables(d, `DEFAULT="${UNSET:-fallback}"`)        // "fallback"
+vars = envlang.GetVariables(d, `DEFAULT="${EMPTY-fallback}"`)          // ""
+
+// Assignment
+vars = envlang.GetVariables(d, `ASSIGNED="${NEW:=value}"`)             // "value", NEW is now set
+
+// String length
+vars = envlang.GetVariables(d, `LENGTH="${#PATH}"`)                    // "15"
+
+// Pattern removal
+vars = envlang.GetVariables(d, `BASENAME="${FILENAME##*/}"`)           // "archive.tar.gz"
+vars = envlang.GetVariables(d, `NOEXT="${FILENAME%.*}"`)               // "archive.tar"
+vars = envlang.GetVariables(d, `NAME="${FILENAME%%.*}"`)               // "archive"
+```
+
 ## godotenv Compatibility Layer
 
 Envlang includes a **100% API-compatible** drop-in replacement for [github.com/joho/godotenv](https://github.com/joho/godotenv), powered by our improved ANTLR4 grammar-based parser.
