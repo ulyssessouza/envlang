@@ -73,6 +73,24 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 		if ok && value != nil {
 			l.append(*value)
 		}
+	case c.STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY() != nil:
+		vName, defaultValue := l.getNameAndDefault(fullText, ":=")
+		value, ok := l.d.Get(vName)
+		if !ok || value == nil || *value == "" {
+			l.d.Put(vName, &defaultValue)
+			l.append(defaultValue)
+			return
+		}
+		l.append(*value)
+	case c.STRICT_VAR_WITH_ASSIGN_IF_UNSET() != nil:
+		vName, defaultValue := l.getNameAndDefault(fullText, "=")
+		value, ok := l.d.Get(vName)
+		if !ok || value == nil {
+			l.d.Put(vName, &defaultValue)
+			l.append(defaultValue)
+			return
+		}
+		l.append(*value)
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
 		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)

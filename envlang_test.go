@@ -239,6 +239,46 @@ A = "aaa ${B} ccc "
 			},
 		},
 		{
+			"VariableWithAssignForUnsetOrEmpty",
+			`VAR_ASSIGN_UNSET_OR_EMPTY = "${EMPTY_VAR:=assigned}"`,
+			map[string]*string{
+				"VAR_ASSIGN_UNSET_OR_EMPTY": strPtr("assigned"),
+				"EMPTY_VAR":                 strPtr("assigned"),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
+			"VariableWithAssignForUnset",
+			`VAR_ASSIGN_UNSET = "${UNSET_VAR=assigned}"`,
+			map[string]*string{
+				"VAR_ASSIGN_UNSET": strPtr("assigned"),
+				"UNSET_VAR":        strPtr("assigned"),
+			},
+			nil,
+		},
+		{
+			"VariableWithAssignKeepsEmpty",
+			`VAR_ASSIGN_EMPTY = "${EMPTY_VAR=assigned}"`,
+			map[string]*string{
+				"VAR_ASSIGN_EMPTY": strPtr(""),
+			},
+			map[string]*string{
+				"EMPTY_VAR": strPtr(""),
+			},
+		},
+		{
+			"VariableWithAssignKeepsExisting",
+			`VAR_ASSIGN_EXISTING = "${EXISTING_VAR:=assigned}"`,
+			map[string]*string{
+				"VAR_ASSIGN_EXISTING": strPtr("existing"),
+			},
+			map[string]*string{
+				"EXISTING_VAR": strPtr("existing"),
+			},
+		},
+		{
 			"PrefixExport",
 			`export A = aaa"`,
 			map[string]*string{
