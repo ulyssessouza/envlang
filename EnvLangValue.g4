@@ -22,6 +22,8 @@ variable
     | STRICT_VAR_WITH_ERROR_IF_UNSET
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET
+    | STRICT_VAR_REMOVE_LONGEST_SUFFIX
+    | STRICT_VAR_REMOVE_SHORTEST_SUFFIX
     | STRICT_VAR_REMOVE_LONGEST_PREFIX
     | STRICT_VAR_REMOVE_SHORTEST_PREFIX
     | STRICT_VAR_LENGTH
@@ -89,6 +91,16 @@ STRICT_VAR_REMOVE_LONGEST_PREFIX
 // Remove shortest prefix match: ${VAR#pattern}
 STRICT_VAR_REMOVE_SHORTEST_PREFIX
     : '${' WS* VAR_NAME WS* '#' DEFAULT_VALUE WS* '}'
+    ;
+
+// Remove longest suffix match: ${VAR%%pattern}
+STRICT_VAR_REMOVE_LONGEST_SUFFIX
+    : '${' WS* VAR_NAME WS* '%%' DEFAULT_VALUE WS* '}'
+    ;
+
+// Remove shortest suffix match: ${VAR%pattern}
+STRICT_VAR_REMOVE_SHORTEST_SUFFIX
+    : '${' WS* VAR_NAME WS* '%' DEFAULT_VALUE WS* '}'
     ;
 
 // Simple strict variable: ${VAR}

@@ -386,6 +386,46 @@ A = "aaa ${B} ccc "
 			},
 		},
 		{
+			"RemoveShortestSuffixLiteral",
+			`VAR_REMOVE = "${PATH%/bin}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("/usr/local"),
+			},
+			map[string]*string{
+				"PATH": strPtr("/usr/local/bin"),
+			},
+		},
+		{
+			"RemoveShortestSuffixWithWildcard",
+			`VAR_REMOVE = "${FILENAME%.*}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("archive.tar"),
+			},
+			map[string]*string{
+				"FILENAME": strPtr("archive.tar.gz"),
+			},
+		},
+		{
+			"RemoveLongestSuffixWithWildcard",
+			`VAR_REMOVE = "${FILENAME%%.*}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("archive"),
+			},
+			map[string]*string{
+				"FILENAME": strPtr("archive.tar.gz"),
+			},
+		},
+		{
+			"RemoveSuffixNoMatch",
+			`VAR_REMOVE = "${PATH%/sbin}"`,
+			map[string]*string{
+				"VAR_REMOVE": strPtr("/usr/local/bin"),
+			},
+			map[string]*string{
+				"PATH": strPtr("/usr/local/bin"),
+			},
+		},
+		{
 			"PrefixExport",
 			`export A = aaa"`,
 			map[string]*string{
