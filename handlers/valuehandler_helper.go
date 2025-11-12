@@ -13,7 +13,7 @@ const (
 	pair = 2
 )
 
-// ParameterExpansionError is raised when a parameter expansion error operator (? or :?) is triggered
+// ParameterExpansionError is raised when a parameter expansion error operator (? or :?) is triggered.
 type ParameterExpansionError struct {
 	VarName string
 	Message string

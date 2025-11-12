@@ -64,123 +64,180 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	// Check which type of variable token we have
 	switch {
 	case c.SIMPLE_VAR() != nil:
-		vName := fullText[1:] // Remove $
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(*value)
-		}
+		l.handleSimpleVar(fullText)
 	case c.SIMPLE_STRICT_VAR() != nil:
-		vName := strings.TrimSpace(fullText[2 : len(fullText)-1]) // Remove ${ and }
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(*value)
-		}
+		l.handleSimpleStrictVar(fullText)
 	case c.STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY() != nil:
-		vName, defaultValue := l.getNameAndDefault(fullText, ":=")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil || *value == "" {
-			l.d.Put(vName, &defaultValue)
-			l.append(defaultValue)
-			return
-		}
-		l.append(*value)
+		l.handleAssignIfUnsetOrEmpty(fullText)
 	case c.STRICT_VAR_WITH_ASSIGN_IF_UNSET() != nil:
-		vName, defaultValue := l.getNameAndDefault(fullText, "=")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil {
-			l.d.Put(vName, &defaultValue)
-			l.append(defaultValue)
-			return
-		}
-		l.append(*value)
+		l.handleAssignIfUnset(fullText)
 	case c.STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY() != nil:
-		vName, alternateValue := l.getNameAndDefault(fullText, ":+")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil && *value != "" {
-			l.append(alternateValue)
-			return
-		}
+		l.handleAlternateIfSetAndNotEmpty(fullText)
 	case c.STRICT_VAR_WITH_ALTERNATE_IF_SET() != nil:
-		vName, alternateValue := l.getNameAndDefault(fullText, "+")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(alternateValue)
-			return
-		}
+		l.handleAlternateIfSet(fullText)
 	case c.STRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY() != nil:
-		vName, errorMessage := l.getNameAndDefault(fullText, ":?")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil || *value == "" {
-			panic(&ParameterExpansionError{
-				VarName: vName,
-				Message: errorMessage,
-			})
-		}
-		l.append(*value)
+		l.handleErrorIfUnsetOrEmpty(fullText)
 	case c.STRICT_VAR_WITH_ERROR_IF_UNSET() != nil:
-		vName, errorMessage := l.getNameAndDefault(fullText, "?")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil {
-			panic(&ParameterExpansionError{
-				VarName: vName,
-				Message: errorMessage,
-			})
-		}
-		l.append(*value)
+		l.handleErrorIfUnset(fullText)
 	case c.STRICT_VAR_LENGTH() != nil:
-		vName := l.getVarNameFromLength(fullText)
-		value, ok := l.d.Get(vName)
-		length := 0
-		if ok && value != nil {
-			length = len(*value)
-		}
-		l.append(fmt.Sprintf("%d", length))
+		l.handleVarLength(fullText)
 	case c.STRICT_VAR_REMOVE_LONGEST_PREFIX() != nil:
-		vName, pattern := l.getNameAndDefault(fullText, "##")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(removeLongestPrefixMatch(*value, pattern))
-		}
+		l.handleRemoveLongestPrefix(fullText)
 	case c.STRICT_VAR_REMOVE_SHORTEST_PREFIX() != nil:
-		vName, pattern := l.getNameAndDefault(fullText, "#")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(removeShortestPrefixMatch(*value, pattern))
-		}
+		l.handleRemoveShortestPrefix(fullText)
 	case c.STRICT_VAR_REMOVE_LONGEST_SUFFIX() != nil:
-		vName, pattern := l.getNameAndDefault(fullText, "%%")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(removeLongestSuffixMatch(*value, pattern))
-		}
+		l.handleRemoveLongestSuffix(fullText)
 	case c.STRICT_VAR_REMOVE_SHORTEST_SUFFIX() != nil:
-		vName, pattern := l.getNameAndDefault(fullText, "%")
-		value, ok := l.d.Get(vName)
-		if ok && value != nil {
-			l.append(removeShortestSuffixMatch(*value, pattern))
-		}
+		l.handleRemoveShortestSuffix(fullText)
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
-		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil || *value == "" {
-			l.append(defaultValue)
-			return
-		}
-		l.append(*value)
+		l.handleDefaultIfUnsetOrEmpty(fullText)
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET() != nil:
-		vName, defaultValue := l.getNameAndDefault(fullText, "-")
-		value, ok := l.d.Get(vName)
-		if !ok || value == nil {
-			l.append(defaultValue)
-			return
-		}
-		l.append(*value)
+		l.handleDefaultIfUnset(fullText)
 	case c.DOLLAR() != nil:
-		// Lone dollar sign - append as-is (may include following char)
 		l.append(fullText)
 	default:
 		log.Debugln("unexpected variable token: " + fullText)
 	}
+}
+
+func (l *envLangValueListener) handleSimpleVar(fullText string) {
+	vName := fullText[1:] // Remove $
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(*value)
+	}
+}
+
+func (l *envLangValueListener) handleSimpleStrictVar(fullText string) {
+	vName := strings.TrimSpace(fullText[2 : len(fullText)-1]) // Remove ${ and }
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(*value)
+	}
+}
+
+func (l *envLangValueListener) handleAssignIfUnsetOrEmpty(fullText string) {
+	vName, defaultValue := l.getNameAndDefault(fullText, ":=")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil || *value == "" {
+		l.d.Put(vName, &defaultValue)
+		l.append(defaultValue)
+		return
+	}
+	l.append(*value)
+}
+
+func (l *envLangValueListener) handleAssignIfUnset(fullText string) {
+	vName, defaultValue := l.getNameAndDefault(fullText, "=")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil {
+		l.d.Put(vName, &defaultValue)
+		l.append(defaultValue)
+		return
+	}
+	l.append(*value)
+}
+
+func (l *envLangValueListener) handleAlternateIfSetAndNotEmpty(fullText string) {
+	vName, alternateValue := l.getNameAndDefault(fullText, ":+")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil && *value != "" {
+		l.append(alternateValue)
+	}
+}
+
+func (l *envLangValueListener) handleAlternateIfSet(fullText string) {
+	vName, alternateValue := l.getNameAndDefault(fullText, "+")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(alternateValue)
+	}
+}
+
+func (l *envLangValueListener) handleErrorIfUnsetOrEmpty(fullText string) {
+	vName, errorMessage := l.getNameAndDefault(fullText, ":?")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil || *value == "" {
+		panic(&ParameterExpansionError{
+			VarName: vName,
+			Message: errorMessage,
+		})
+	}
+	l.append(*value)
+}
+
+func (l *envLangValueListener) handleErrorIfUnset(fullText string) {
+	vName, errorMessage := l.getNameAndDefault(fullText, "?")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil {
+		panic(&ParameterExpansionError{
+			VarName: vName,
+			Message: errorMessage,
+		})
+	}
+	l.append(*value)
+}
+
+func (l *envLangValueListener) handleVarLength(fullText string) {
+	vName := l.getVarNameFromLength(fullText)
+	value, ok := l.d.Get(vName)
+	length := 0
+	if ok && value != nil {
+		length = len(*value)
+	}
+	l.append(fmt.Sprintf("%d", length))
+}
+
+func (l *envLangValueListener) handleRemoveLongestPrefix(fullText string) {
+	vName, pattern := l.getNameAndDefault(fullText, "##")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(removeLongestPrefixMatch(*value, pattern))
+	}
+}
+
+func (l *envLangValueListener) handleRemoveShortestPrefix(fullText string) {
+	vName, pattern := l.getNameAndDefault(fullText, "#")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(removeShortestPrefixMatch(*value, pattern))
+	}
+}
+
+func (l *envLangValueListener) handleRemoveLongestSuffix(fullText string) {
+	vName, pattern := l.getNameAndDefault(fullText, "%%")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(removeLongestSuffixMatch(*value, pattern))
+	}
+}
+
+func (l *envLangValueListener) handleRemoveShortestSuffix(fullText string) {
+	vName, pattern := l.getNameAndDefault(fullText, "%")
+	value, ok := l.d.Get(vName)
+	if ok && value != nil {
+		l.append(removeShortestSuffixMatch(*value, pattern))
+	}
+}
+
+func (l *envLangValueListener) handleDefaultIfUnsetOrEmpty(fullText string) {
+	vName, defaultValue := l.getNameAndDefault(fullText, ":-")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil || *value == "" {
+		l.append(defaultValue)
+		return
+	}
+	l.append(*value)
+}
+
+func (l *envLangValueListener) handleDefaultIfUnset(fullText string) {
+	vName, defaultValue := l.getNameAndDefault(fullText, "-")
+	value, ok := l.d.Get(vName)
+	if !ok || value == nil {
+		l.append(defaultValue)
+		return
+	}
+	l.append(*value)
 }
 
 func (l *envLangValueListener) getNameAndDefault(text string, splitter string) (string, string) {
