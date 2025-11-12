@@ -36,25 +36,26 @@ func envlangvalueParserInit() {
 		"STRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY", "STRICT_VAR_WITH_ALTERNATE_IF_SET",
 		"STRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY", "STRICT_VAR_WITH_ERROR_IF_UNSET",
 		"STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY", "STRICT_VAR_WITH_DEFAULT_IF_UNSET",
-		"STRICT_VAR_LENGTH", "SIMPLE_STRICT_VAR", "SIMPLE_VAR", "DOLLAR", "ESCAPED_CHAR",
-		"TEXT", "WS", "NEWLINE",
+		"STRICT_VAR_LENGTH", "STRICT_VAR_REMOVE_LONGEST_PREFIX", "STRICT_VAR_REMOVE_SHORTEST_PREFIX",
+		"SIMPLE_STRICT_VAR", "SIMPLE_VAR", "DOLLAR", "ESCAPED_CHAR", "TEXT",
+		"WS", "NEWLINE",
 	}
 	staticData.RuleNames = []string{
 		"dqstring", "content", "variable", "escapedChar",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 16, 28, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 1, 0, 5,
+		4, 1, 18, 28, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 1, 0, 5,
 		0, 10, 8, 0, 10, 0, 12, 0, 13, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 3, 1, 22, 8, 1, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 0, 0, 4, 0, 2, 4, 6,
-		0, 1, 1, 0, 1, 12, 28, 0, 11, 1, 0, 0, 0, 2, 21, 1, 0, 0, 0, 4, 23, 1,
+		0, 1, 1, 0, 1, 14, 28, 0, 11, 1, 0, 0, 0, 2, 21, 1, 0, 0, 0, 4, 23, 1,
 		0, 0, 0, 6, 25, 1, 0, 0, 0, 8, 10, 3, 2, 1, 0, 9, 8, 1, 0, 0, 0, 10, 13,
 		1, 0, 0, 0, 11, 9, 1, 0, 0, 0, 11, 12, 1, 0, 0, 0, 12, 14, 1, 0, 0, 0,
 		13, 11, 1, 0, 0, 0, 14, 15, 5, 0, 0, 1, 15, 1, 1, 0, 0, 0, 16, 22, 3, 4,
-		2, 0, 17, 22, 3, 6, 3, 0, 18, 22, 5, 14, 0, 0, 19, 22, 5, 15, 0, 0, 20,
-		22, 5, 16, 0, 0, 21, 16, 1, 0, 0, 0, 21, 17, 1, 0, 0, 0, 21, 18, 1, 0,
+		2, 0, 17, 22, 3, 6, 3, 0, 18, 22, 5, 16, 0, 0, 19, 22, 5, 17, 0, 0, 20,
+		22, 5, 18, 0, 0, 21, 16, 1, 0, 0, 0, 21, 17, 1, 0, 0, 0, 21, 18, 1, 0,
 		0, 0, 21, 19, 1, 0, 0, 0, 21, 20, 1, 0, 0, 0, 22, 3, 1, 0, 0, 0, 23, 24,
-		7, 0, 0, 0, 24, 5, 1, 0, 0, 0, 25, 26, 5, 13, 0, 0, 26, 7, 1, 0, 0, 0,
+		7, 0, 0, 0, 24, 5, 1, 0, 0, 0, 25, 26, 5, 15, 0, 0, 26, 7, 1, 0, 0, 0,
 		2, 11, 21,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
@@ -103,13 +104,15 @@ const (
 	EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY      = 7
 	EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET               = 8
 	EnvLangValueParserSTRICT_VAR_LENGTH                              = 9
-	EnvLangValueParserSIMPLE_STRICT_VAR                              = 10
-	EnvLangValueParserSIMPLE_VAR                                     = 11
-	EnvLangValueParserDOLLAR                                         = 12
-	EnvLangValueParserESCAPED_CHAR                                   = 13
-	EnvLangValueParserTEXT                                           = 14
-	EnvLangValueParserWS                                             = 15
-	EnvLangValueParserNEWLINE                                        = 16
+	EnvLangValueParserSTRICT_VAR_REMOVE_LONGEST_PREFIX               = 10
+	EnvLangValueParserSTRICT_VAR_REMOVE_SHORTEST_PREFIX              = 11
+	EnvLangValueParserSIMPLE_STRICT_VAR                              = 12
+	EnvLangValueParserSIMPLE_VAR                                     = 13
+	EnvLangValueParserDOLLAR                                         = 14
+	EnvLangValueParserESCAPED_CHAR                                   = 15
+	EnvLangValueParserTEXT                                           = 16
+	EnvLangValueParserWS                                             = 17
+	EnvLangValueParserNEWLINE                                        = 18
 )
 
 // EnvLangValueParser rules.
@@ -246,7 +249,7 @@ func (p *EnvLangValueParser) Dqstring() (localctx IDqstringContext) {
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&131070) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&524286) != 0 {
 		{
 			p.SetState(8)
 			p.Content()
@@ -405,7 +408,7 @@ func (p *EnvLangValueParser) Content() (localctx IContentContext) {
 	}
 
 	switch p.GetTokenStream().LA(1) {
-	case EnvLangValueParserSTRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ASSIGN_IF_UNSET, EnvLangValueParserSTRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ALTERNATE_IF_SET, EnvLangValueParserSTRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ERROR_IF_UNSET, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET, EnvLangValueParserSTRICT_VAR_LENGTH, EnvLangValueParserSIMPLE_STRICT_VAR, EnvLangValueParserSIMPLE_VAR, EnvLangValueParserDOLLAR:
+	case EnvLangValueParserSTRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ASSIGN_IF_UNSET, EnvLangValueParserSTRICT_VAR_WITH_ALTERNATE_IF_SET_AND_NOT_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ALTERNATE_IF_SET, EnvLangValueParserSTRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_ERROR_IF_UNSET, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY, EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET, EnvLangValueParserSTRICT_VAR_LENGTH, EnvLangValueParserSTRICT_VAR_REMOVE_LONGEST_PREFIX, EnvLangValueParserSTRICT_VAR_REMOVE_SHORTEST_PREFIX, EnvLangValueParserSIMPLE_STRICT_VAR, EnvLangValueParserSIMPLE_VAR, EnvLangValueParserDOLLAR:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(16)
@@ -486,6 +489,8 @@ type IVariableContext interface {
 	STRICT_VAR_WITH_ERROR_IF_UNSET() antlr.TerminalNode
 	STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() antlr.TerminalNode
 	STRICT_VAR_WITH_DEFAULT_IF_UNSET() antlr.TerminalNode
+	STRICT_VAR_REMOVE_LONGEST_PREFIX() antlr.TerminalNode
+	STRICT_VAR_REMOVE_SHORTEST_PREFIX() antlr.TerminalNode
 	STRICT_VAR_LENGTH() antlr.TerminalNode
 	SIMPLE_STRICT_VAR() antlr.TerminalNode
 	SIMPLE_VAR() antlr.TerminalNode
@@ -559,6 +564,14 @@ func (s *VariableContext) STRICT_VAR_WITH_DEFAULT_IF_UNSET() antlr.TerminalNode 
 	return s.GetToken(EnvLangValueParserSTRICT_VAR_WITH_DEFAULT_IF_UNSET, 0)
 }
 
+func (s *VariableContext) STRICT_VAR_REMOVE_LONGEST_PREFIX() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserSTRICT_VAR_REMOVE_LONGEST_PREFIX, 0)
+}
+
+func (s *VariableContext) STRICT_VAR_REMOVE_SHORTEST_PREFIX() antlr.TerminalNode {
+	return s.GetToken(EnvLangValueParserSTRICT_VAR_REMOVE_SHORTEST_PREFIX, 0)
+}
+
 func (s *VariableContext) STRICT_VAR_LENGTH() antlr.TerminalNode {
 	return s.GetToken(EnvLangValueParserSTRICT_VAR_LENGTH, 0)
 }
@@ -605,7 +618,7 @@ func (p *EnvLangValueParser) Variable() (localctx IVariableContext) {
 		p.SetState(23)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&8190) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&32766) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
