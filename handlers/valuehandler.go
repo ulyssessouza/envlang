@@ -105,6 +105,26 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 			l.append(alternateValue)
 			return
 		}
+	case c.STRICT_VAR_WITH_ERROR_IF_UNSET_OR_EMPTY() != nil:
+		vName, errorMessage := l.getNameAndDefault(fullText, ":?")
+		value, ok := l.d.Get(vName)
+		if !ok || value == nil || *value == "" {
+			panic(&ParameterExpansionError{
+				VarName: vName,
+				Message: errorMessage,
+			})
+		}
+		l.append(*value)
+	case c.STRICT_VAR_WITH_ERROR_IF_UNSET() != nil:
+		vName, errorMessage := l.getNameAndDefault(fullText, "?")
+		value, ok := l.d.Get(vName)
+		if !ok || value == nil {
+			panic(&ParameterExpansionError{
+				VarName: vName,
+				Message: errorMessage,
+			})
+		}
+		l.append(*value)
 	case c.STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY() != nil:
 		vName, defaultValue := l.getNameAndDefault(fullText, ":-")
 		value, ok := l.d.Get(vName)
