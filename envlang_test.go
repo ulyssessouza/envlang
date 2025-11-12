@@ -590,6 +590,20 @@ VAR_DEFAULT_UNSET = "${UNSET_VAR-uuu}"
 VAR_DEFAULT_UNSET_OR_EMPTY = "${EMPTY_VAR-eee}"
 VAR_DEFAULT_EMPTY = "${EMPTY_VAR:-eee}"
 
+VAR_ASSIGN_UNSET = "${NEW_VAR1:=assigned}"
+VAR_ASSIGN_KEEPS_EMPTY = "${EMPTY_VAR=still_empty}"
+
+VAR_ALTERNATE_SET = "${A:+alternate}"
+VAR_ALTERNATE_UNSET = "${UNSET_VAR:+alternate}"
+
+VAR_LENGTH = "${#A}"
+
+TEST_PATH=/usr/local/bin
+VAR_PREFIX_REMOVE = "${TEST_PATH#/usr/}"
+
+TEST_FILE=archive.tar.gz
+VAR_SUFFIX_REMOVE = "${TEST_FILE%.*}"
+
 export EQUALS='postgres://localhost:5432/database?sslmode=disable'
 `
 	expected := map[string]*string{
@@ -621,6 +635,16 @@ export EQUALS='postgres://localhost:5432/database?sslmode=disable'
 		"VAR_DEFAULT_UNSET":            strPtr("uuu"),
 		"VAR_DEFAULT_UNSET_OR_EMPTY":   strPtr(""),
 		"VAR_DEFAULT_EMPTY":            strPtr("eee"),
+		"VAR_ASSIGN_UNSET":             strPtr("assigned"),
+		"NEW_VAR1":                     strPtr("assigned"),
+		"VAR_ASSIGN_KEEPS_EMPTY":       strPtr(""),
+		"VAR_ALTERNATE_SET":            strPtr("alternate"),
+		"VAR_ALTERNATE_UNSET":          strPtr(""),
+		"VAR_LENGTH":                   strPtr("3"),
+		"TEST_PATH":                    strPtr("/usr/local/bin"),
+		"VAR_PREFIX_REMOVE":            strPtr("local/bin"),
+		"TEST_FILE":                    strPtr("archive.tar.gz"),
+		"VAR_SUFFIX_REMOVE":            strPtr("archive.tar"),
 		"EXPORTED_VAR":                 strPtr("exported_value"),
 		"OPTION_B":                     strPtr("\\n"),
 		"EQUALS":                       strPtr("postgres://localhost:5432/database?sslmode=disable"),
