@@ -14,7 +14,9 @@ content
     ;
 
 variable
-    : STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
+    : STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY
+    | STRICT_VAR_WITH_ASSIGN_IF_UNSET
+    | STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
     | STRICT_VAR_WITH_DEFAULT_IF_UNSET
     | SIMPLE_STRICT_VAR
     | SIMPLE_VAR
@@ -26,6 +28,16 @@ escapedChar
     ;
 
 // Lexer rules
+
+// Variable assignment with default if unset or empty: ${VAR:=default}
+STRICT_VAR_WITH_ASSIGN_IF_UNSET_OR_EMPTY
+    : '${' WS* VAR_NAME WS* ':=' DEFAULT_VALUE WS* '}'
+    ;
+
+// Variable assignment with default if unset: ${VAR=default}
+STRICT_VAR_WITH_ASSIGN_IF_UNSET
+    : '${' WS* VAR_NAME WS* '=' DEFAULT_VALUE WS* '}'
+    ;
 
 // Variable substitution with default if unset or empty: ${VAR:-default}
 STRICT_VAR_WITH_DEFAULT_IF_UNSET_OR_EMPTY
