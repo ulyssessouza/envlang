@@ -207,7 +207,7 @@ func (l *envLangValueListener) getVarNameFromLength(text string) string {
 	return content
 }
 
-// removeShortestPrefixMatch removes the shortest match of pattern from the beginning of value
+// removeShortestPrefixMatch removes the shortest match of pattern from the beginning of value.
 func removeShortestPrefixMatch(value, pattern string) string {
 	if pattern == "" {
 		return value
@@ -233,7 +233,7 @@ func removeShortestPrefixMatch(value, pattern string) string {
 	return value
 }
 
-// removeLongestPrefixMatch removes the longest match of pattern from the beginning of value
+// removeLongestPrefixMatch removes the longest match of pattern from the beginning of value.
 func removeLongestPrefixMatch(value, pattern string) string {
 	if pattern == "" {
 		return value
@@ -259,7 +259,7 @@ func removeLongestPrefixMatch(value, pattern string) string {
 	return value
 }
 
-// removeShortestSuffixMatch removes the shortest match of pattern from the end of value
+// removeShortestSuffixMatch removes the shortest match of pattern from the end of value.
 func removeShortestSuffixMatch(value, pattern string) string {
 	if pattern == "" {
 		return value
@@ -285,7 +285,7 @@ func removeShortestSuffixMatch(value, pattern string) string {
 	return value
 }
 
-// removeLongestSuffixMatch removes the longest match of pattern from the end of value
+// removeLongestSuffixMatch removes the longest match of pattern from the end of value.
 func removeLongestSuffixMatch(value, pattern string) string {
 	if pattern == "" {
 		return value
@@ -311,8 +311,8 @@ func removeLongestSuffixMatch(value, pattern string) string {
 	return value
 }
 
-// matchPattern performs simple glob-style pattern matching
-// Supports * (matches any sequence) and ? (matches single character)
+// matchPattern performs simple glob-style pattern matching.
+// Supports * (matches any sequence) and ? (matches single character).
 func matchPattern(text, pattern string) bool {
 	// Convert glob pattern to regex
 	regexPattern := "^"
