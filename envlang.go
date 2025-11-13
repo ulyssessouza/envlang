@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	antlr "github.com/antlr4-go/antlr/v4"
+
 	"github.com/ulyssessouza/envlang/gen/fileparser"
 	"github.com/ulyssessouza/envlang/handlers"
 	"github.com/ulyssessouza/envlang/store"

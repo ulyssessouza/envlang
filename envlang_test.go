@@ -5,15 +5,15 @@ import (
 	"strings"
 	"testing"
 
-	log "github.com/sirupsen/logrus"
 	"gotest.tools/v3/assert"
 
 	"github.com/ulyssessouza/envlang/handlers"
+	"github.com/ulyssessouza/envlang/logger"
 	"github.com/ulyssessouza/envlang/store"
 )
 
 func init() {
-	log.SetLevel(log.DebugLevel)
+	logger.SetLevel(logger.DEBUG)
 }
 
 func TestGetFromReader(t *testing.T) {
@@ -523,7 +523,6 @@ func TestGetValueWithError(t *testing.T) {
 
 //nolint:funlen
 func TestFull(t *testing.T) {
-	log.SetLevel(log.DebugLevel)
 	is := `
 INVALID LINE
 

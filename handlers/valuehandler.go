@@ -5,15 +5,15 @@ import (
 	"regexp"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/ulyssessouza/envlang/gen/valueparser"
+	"github.com/ulyssessouza/envlang/logger"
 )
 
 func (l *envLangValueListener) ExitDqstring(c *valueparser.DqstringContext) {
 	fullText := c.GetText()
-	log.Debugf("ExitDqstring: %s", fullText)
+	logger.Debugf("ExitDqstring: %s", fullText)
 	if len(c.GetChildren()) == 0 {
-		log.Debugf("ExitDqstring in if: %s", c.GetText())
+		logger.Debugf("ExitDqstring in if: %s", c.GetText())
 		l.append(c.GetText())
 		return
 	}
@@ -21,7 +21,7 @@ func (l *envLangValueListener) ExitDqstring(c *valueparser.DqstringContext) {
 
 func (l *envLangValueListener) ExitContent(c *valueparser.ContentContext) {
 	fullText := c.GetText()
-	log.Debugf("ExitContent: %s", fullText)
+	logger.Debugf("ExitContent: %s", fullText)
 
 	// Variables are handled by ExitVariable
 	if c.Variable() != nil {
@@ -59,7 +59,7 @@ func (l *envLangValueListener) ExitContent(c *valueparser.ContentContext) {
 
 func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	fullText := c.GetText()
-	log.Debugf("ExitVariable: %s", fullText)
+	logger.Debugf("ExitVariable: %s", fullText)
 
 	// Check which type of variable token we have
 	switch {
@@ -96,7 +96,7 @@ func (l *envLangValueListener) ExitVariable(c *valueparser.VariableContext) {
 	case c.DOLLAR() != nil:
 		l.append(fullText)
 	default:
-		log.Debugln("unexpected variable token: " + fullText)
+		logger.Debugf("unexpected variable token: %s", fullText)
 	}
 }
 
@@ -241,7 +241,7 @@ func (l *envLangValueListener) handleDefaultIfUnset(fullText string) {
 }
 
 func (l *envLangValueListener) getNameAndDefault(text string, splitter string) (string, string) {
-	log.Debugf("Name with Default: %s", text)
+	logger.Debugf("Name with Default: %s", text)
 
 	// Remove ${ and }
 	vName := strings.TrimSpace(text[2 : len(text)-1])
@@ -253,7 +253,7 @@ func (l *envLangValueListener) getNameAndDefault(text string, splitter string) (
 }
 
 func (l *envLangValueListener) getVarNameFromLength(text string) string {
-	log.Debugf("Variable Length: %s", text)
+	logger.Debugf("Variable Length: %s", text)
 
 	// Remove ${ and }
 	content := strings.TrimSpace(text[2 : len(text)-1])

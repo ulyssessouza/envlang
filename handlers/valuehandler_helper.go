@@ -4,8 +4,9 @@ import (
 	"fmt"
 
 	antlr "github.com/antlr4-go/antlr/v4"
-	log "github.com/sirupsen/logrus"
+
 	"github.com/ulyssessouza/envlang/gen/valueparser"
+	"github.com/ulyssessouza/envlang/logger"
 	"github.com/ulyssessouza/envlang/store"
 )
 
@@ -36,11 +37,11 @@ type envLangValueListener struct {
 }
 
 func (l *envLangValueListener) ExitEveryRule(c antlr.ParserRuleContext) {
-	log.Debugf("ExitEveryRule: %s", c.GetText())
+	logger.Debugf("ExitEveryRule: %s", c.GetText())
 }
 
 func (l *envLangValueListener) EnterEveryRule(c antlr.ParserRuleContext) {
-	log.Debugf("EnterEveryRule: %s", c.GetText())
+	logger.Debugf("EnterEveryRule: %s", c.GetText())
 }
 
 func (l *envLangValueListener) append(s string) {
