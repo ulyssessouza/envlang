@@ -149,7 +149,6 @@ replace github.com/joho/godotenv => github.com/ulyssessouza/envlang/compat/joho/
 - ✅ **Better parsing**: ANTLR4 grammar instead of regex
 - ✅ **Clearer errors**: Grammar-based error messages
 - ✅ **More features**: Escape sequences (`\n`, `\t`, `\$`, etc.)
-- ✅ **Better tested**: 90%+ test coverage
 - ✅ **Same API**: All godotenv functions work identically
 
 ### Example
