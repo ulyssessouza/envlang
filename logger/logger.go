@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-// Level type for log levels
+// Level type for log levels.
 type Level int
 
 const (
@@ -39,7 +39,7 @@ type Logger struct {
 	std   *log.Logger
 }
 
-// New creates a new Logger instance
+// New creates a new Logger instance.
 func New(out io.Writer, level Level) *Logger {
 	l := &Logger{
 		level: level,
@@ -49,7 +49,7 @@ func New(out io.Writer, level Level) *Logger {
 	return l
 }
 
-// DefaultLogger is the default logger instance
+// DefaultLogger is the default logger instance.
 var DefaultLogger = New(os.Stderr, INFO)
 
 // SetOutput sets the output writer for the default logger
