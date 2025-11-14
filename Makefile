@@ -25,3 +25,6 @@ setup:
 
 vendor:
 	go mod vendor
+
+cli:
+	go build -o bin/envlang ./cmd/envlang
