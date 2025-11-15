@@ -76,6 +76,35 @@ VAR4="default_value_for_unset"
 
 Please note that it used `%q` to print empty strings, as `%s` would not print anything.
 
+## Custom Stores
+
+Envlang is designed to be extensible through a `store.Store` interface, allowing you to connect to any data source for your environment variables. This provides the flexibility to fetch variables from databases, cloud services, or any other configuration management system.
+
+### Implementing a New Store
+
+To create a custom store, you need to implement the `store.Store` interface:
+
+```go
+package store
+
+type Store interface {
+	ImportList([]string)
+	ImportMap(map[string]string)
+	Get(string) (*string, bool)
+	Put(string, *string)
+	Remove(string) bool
+	ExportMap() map[string]*string
+}
+```
+
+By implementing these methods, you can define how Envlang interacts with your chosen backend.
+
+### Example: Redis Store
+
+Envlang includes a ready-to-use Redis store as an example of a custom implementation. It allows you to use a Redis instance as a backend for storing and retrieving environment variables.
+
+You can find the implementation in the `store/redis` directory. This serves as a practical guide for building your own custom stores.
+
 ## Shell Parameter Expansion
 
 Envlang supports a comprehensive set of POSIX shell parameter expansion operators:
