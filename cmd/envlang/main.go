@@ -142,7 +142,7 @@ func generateTemplate(sourceFile string) error {
 
 	templateFile := sourceFile + ".template"
 	content := strings.Join(lines, "\n") + "\n"
-	if err := os.WriteFile(templateFile, []byte(content), 0o600); err != nil {
+	if err = os.WriteFile(templateFile, []byte(content), 0o600); err != nil { //nolint:govet
 		return fmt.Errorf("failed to write template file: %w", err)
 	}
 
@@ -181,7 +181,7 @@ func runInteractiveMode(opts options) {
 
 			switch command {
 			case "/print":
-				if len(parts) != 2 {
+				if len(parts) != 2 { //nolint:mnd
 					fmt.Fprintln(os.Stderr, "Usage: /print $VAR_NAME")
 					continue
 				}
