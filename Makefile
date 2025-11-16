@@ -24,7 +24,7 @@ setup:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.0
 
 vendor:
-	go mod vendor
+	go work vendor
 
 cli:
 	go build -o bin/envlang ./cmd/envlang
