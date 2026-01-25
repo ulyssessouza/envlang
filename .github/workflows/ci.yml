@@ -10,24 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.1.1
-
-    - name: Set up Go
-      uses: actions/setup-go@v5.0.0
-      with:
-        go-version-file: 'go.mod'
-
-    - name: Run golangci-lint
-      uses: golangci/golangci-lint-action@v9.0.0
-
-    - name: Gotestsum installer
-      uses: autero1/action-gotestsum@v2.0.0
-      with:
-        gotestsum_version: '1.11.0'
-
-    - name: Test
-      run: make test
-
+    - uses: actions/checkout@v4
+    - uses: jdx/mise-action@v2
+    - run: mise run all
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.0.1
       with:
