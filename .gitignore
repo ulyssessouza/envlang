@@ -1,3 +1,6 @@
 coverage.out
 vendor
 bin/envlang
+
+# Allow ANTLR jar (override global gitignore)
+!deps/*.jar
