@@ -1,0 +1,48 @@
+[env]
+ANTLR4_VERSION = '4.13.2-complete'
+ANTLR4 = "java -cp ./deps/antlr-{{env.ANTLR4_VERSION}}.jar:$CLASSPATH org.antlr.v4.Tool"
+
+[tools]
+go = "1.24.12"
+gotestsum = "1.13.0"
+golangci-lint = "2.8.0"
+java = "25"
+
+[tasks.all]
+depends = ["test", "lint"]
+description = "Clean, vendor dependencies, generate code, run tests and lint"
+run = "echo All done!"
+
+[tasks.clean]
+run = "rm -rf gen"
+description = "Remove generated code directory"
+
+[tasks.gen]
+silent = true
+depends = ["clean"]
+run = [
+    "$ANTLR4 -Dlanguage=Go -o gen/fileparser  -package fileparser  EnvLangFile.g4",
+    "$ANTLR4 -Dlanguage=Go -o gen/valueparser -package valueparser EnvLangValue.g4",
+]
+description = "Generate parser code from ANTLR grammars"
+
+[tasks.test]
+depends = ["vendor"]
+run = "gotestsum --format testname -- -failfast -race -covermode=atomic -coverprofile=coverage.out ./..."
+description = "Run tests with coverage"
+
+[tasks.lint]
+depends = ["vendor"]
+run = "golangci-lint run ./..."
+description = "Run linters"
+
+[tasks.vendor]
+silent = true
+depends = ["gen"]
+run = "go work vendor"
+description = "Vendor dependencies"
+
+[tasks.cli]
+silent = true
+run = "go build -o bin/envlang ./cmd/envlang"
+description = "Build the CLI application"
